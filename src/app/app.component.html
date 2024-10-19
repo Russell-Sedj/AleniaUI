@@ -1,3 +1,76 @@
 <main class="main">
+  <header>
+    <div class="nav-container">
+      <div class="logo-nav-container">
+        <div class="logo-container">
+          <img src="/assets/images/logo.png" alt="Logo ALENIA" class="logo" />
+          <span class="logo-text">ALENIA</span>
+        </div>
+        <nav>
+          <ul class="nav-list">
+            <li>
+              <a href="./app/page-accueil/page-accueil.component.html"
+                >Page d'accueil</a
+              >
+            </li>
+            <li>
+              <a
+                href="./app/ce-que-lon-propose/ce-que-lon-propose.component.html"
+                >Ce que l'on propose</a
+              >
+            </li>
+            <li>
+              <a href="./app/qui-sommes-nous/qui-sommes-nous.component.html"
+                >Qui sommes-nous</a
+              >
+            </li>
+            <li><a href="#">Établissements partenaires</a></li>
+            <li>
+              <a
+                href="./app/connexion/connexion.component.html"
+                class="blue-button"
+                >Se connecter</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
   <router-outlet></router-outlet>
+
+  <footer>
+    <img src="/assets/images/logo.png" alt="Logo" class="footer-logo" />
+    <!-- Ajoutez le chemin vers votre logo ici -->
+    <div class="footer-section2">
+      <p class="footer-text">© 2021 All rights reserved</p>
+      <p class="footer-text">Mentions légales</p>
+      <p class="footer-text">Conditions générales d'utilisation</p>
+      <p class="footer-text">Politique de protection des données</p>
+      <p class="footer-text">Banque et opérations de services bancaires</p>
+    </div>
+    <div class="footer-section">
+      <p class="section-title">Pages</p>
+      <p class="footer-text">Nos clients</p>
+      <p class="footer-text">Solutions</p>
+      <p class="footer-text">Opportunités d'emploi</p>
+      <p class="footer-text">Ressources</p>
+      <p class="footer-text">Nouveautés</p>
+    </div>
+    <div class="footer-section">
+      <p class="section-title">Social</p>
+      <p class="footer-text">LinkedIn</p>
+      <p class="footer-text">Instagram</p>
+      <p class="footer-text">YouTube!</p>
+      <p class="footer-text">Twitter</p>
+    </div>
+    <div class="footer-section">
+      <p class="section-title">Contact</p>
+      <p class="footer-text">Email!</p>
+      <p class="footer-text">FAQ!</p>
+      <p class="footer-text">Unsubscribe!</p>
+      <p class="footer-text">Écrivez-nous!</p>
+    </div>
+  </footer>
 </main>

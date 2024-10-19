@@ -5,6 +5,5 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './inscription.component.html',
-  // styleUrl: './../../assets/Css/style.css'
 })
 export class InscriptionComponent {}
