@@ -9,26 +9,42 @@
         <nav>
           <ul class="nav-list">
             <li>
-              <a href="./app/page-accueil/page-accueil.component.html"
-                >Page d'accueil</a
+              <a
+                routerLink="page-accueil"
+                routerLinkActive="router-link-active"
+                ariaCurrentWhenActive="page"
+                >Page d'acceuil</a
               >
             </li>
             <li>
               <a
-                href="./app/ce-que-lon-propose/ce-que-lon-propose.component.html"
+                routerLink="ce-que-lon-propose"
+                routerLinkActive="router-link-active"
+                ariaCurrentWhenActive="page"
                 >Ce que l'on propose</a
               >
             </li>
             <li>
-              <a href="./app/qui-sommes-nous/qui-sommes-nous.component.html"
+              <a
+                routerLink="qui-sommes-nous"
+                routerLinkActive="router-link-active"
+                ariaCurrentWhenActive="page"
                 >Qui sommes-nous</a
               >
             </li>
-            <li><a href="#">Établissements partenaires</a></li>
             <li>
               <a
-                href="./app/connexion/connexion.component.html"
-                class="blue-button"
+                routerLink="#"
+                routerLinkActive="router-link-active"
+                ariaCurrentWhenActive="page"
+                >Établissements partenaires</a
+              >
+            </li>
+            <li>
+              <a
+                routerLink="connexion"
+                routerLinkActive="router-link-active"
+                ariaCurrentWhenActive="page"
                 >Se connecter</a
               >
             </li>
