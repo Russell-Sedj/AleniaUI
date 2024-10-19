@@ -1,5 +1,5 @@
 <main class="main">
-  <header>
+  <header *ngIf="currentUrl !== '/connexion'">
     <div class="nav-container">
       <div class="logo-nav-container">
         <div class="logo-container">
@@ -51,6 +51,13 @@
           </ul>
         </nav>
       </div>
+    </div>
+  </header>
+
+  <header *ngIf="currentUrl === '/connexion'">
+    <div class="logo">
+      <img src="/assets/images/logo.png" alt="Logo de Lénia" />
+      <h1>Lénia</h1>
     </div>
   </header>
 
