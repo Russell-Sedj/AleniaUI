@@ -1,0 +1,90 @@
+.content-section {
+  background-color: #6fa4f2; /* Couleur de fond de la section */
+  padding: 20px 20px; /* Espacement intérieur pour le contenu */
+  text-align: center; /* Centrer le contenu horizontalement */
+  margin: 150px; /* Ajoute de la marge sur les côtés */
+  border-radius: 20px;
+}
+
+.content-container {
+  position: relative;
+  max-width: 800px; /* Largeur maximale de la zone de contenu */
+  margin: 0 auto; /* Centre le contenu horizontalement */
+  padding: 25px 25px; /* Ajoute de l'espace sur les côtés */
+}
+
+h1 {
+  color: #000000; /* Couleur du titre */
+  font-family: "Inria Serif", serif; /* Police Inria Serif pour le titre */
+  font-size: 48px; /* Taille de la police du titre */
+  text-shadow: 2px 2px 4px rgba(94, 138, 204, 0.7); /* Effet de surlignage */
+}
+
+.content-container p {
+  color: #000000; /* Couleur du texte */
+  font-family: "Inter", sans-serif; /* Police Inter pour le texte */
+  font-size: 18px; /* Taille de la police du texte */
+}
+
+.pictogramme1,
+.pictogramme2 {
+  position: absolute;
+  width: 100px; /* Largeur de l'image */
+  height: 100px; /* Hauteur de l'image ajustée automatiquement */
+}
+.pictogramme1 {
+  position: absolute;
+  top: -50px; /* Position verticale du pictogramme */
+  left: 1015px; /* Position horizontale du pictogramme */
+  z-index: -1; /* Positionne l'image en arrière-plan */
+}
+
+.pictogramme2 {
+  position: absolute;
+  bottom: -50px; /* Position verticale du pictogramme */
+  right: 1000px; /* Position horizontale du pictogramme */
+}
+/* Styles pour le conteneur du nouveau titre */
+.new-title-container {
+  text-align: center; /* Centre le contenu horizontalement */
+  margin-top: 20px; /* Espacement depuis le paragraphe précédent */
+}
+
+/* Styles pour l'image en dessous à gauche */
+.new-image {
+  position: relative; /* Changement de position relative */
+  margin-top: 20px; /* Espacement depuis le paragraphe précédent */
+  margin-right: auto; /* Pour aligner l'image à droite */
+  display: block; /* Pour que les marges automatiques fonctionnent */
+}
+.container {
+  display: flex;
+  align-items: center; /* Centrer verticalement les éléments enfants */
+}
+
+.images {
+  margin-right: 50px; /* Espacement entre les images et le rectangle */
+}
+
+.rectangle {
+  background-color: #6fa4f2; /* Couleur de fond du rectangle */
+  border-radius: 10px; /* Coins arrondis du rectangle */
+  padding: 100px; /* Espacement intérieur du rectangle */
+  flex-grow: 1; /* Permet au rectangle de remplir l'espace restant */
+  margin-right: -20px; /* Pour que le rectangle morde la marge à droite */
+  box-shadow: 0 0 0 2px #90ade1, 0 0 0 6px transparent;
+}
+.rectangle2 {
+  background-color: #6fa4f2; /* Couleur de fond du rectangle */
+  border-radius: 10px; /* Coins arrondis du rectangle */
+  padding: 100px; /* Espacement intérieur du rectangle */
+  flex-grow: 1; /* Permet au rectangle de remplir l'espace restant */
+  margin-left: -20px; /* Pour que le rectangle morde la marge à droite */
+  box-shadow: 0 0 0 5px #90ade1, 0 0 0 6px transparent;
+}
+.text-zone p {
+  margin: 0; /* Supprime les marges par défaut */
+  color: #000000; /* Couleur du texte */
+  font-family: "Inter", sans-serif; /* Police Inter pour le texte */
+  font-size: 18px; /* Taille de la police du texte */
+}

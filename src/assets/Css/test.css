@@ -1,0 +1,154 @@
+/************ Styles pour le header *************/
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+img {
+  max-width: 80px;
+}
+
+.logo-text {
+  font-family: "Newsreader", sans-serif; /* Police d'écriture professionnelle */
+  color: rgb(105, 155, 247); /* Couleur bleue */
+  margin-left: 10px; /* Espacement entre le logo et le texte */
+  font-size: 50px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: center; /* Centrer les éléments horizontalement */
+  align-items: center; /* Centrer les éléments verticalement */
+  gap: 100px; /* Espacement uniforme entre les éléments */
+}
+.nav-list a {
+  font-family: "Inter", sans-serif; /* Police Inter */
+  color: black; /* Couleur des liens */
+  text-decoration: none; /* Supprime le soulignage des liens */
+}
+nav li {
+  font-family: "Roboto", sans-serif; /* Police d'écriture professionnelle */
+  margin-right: 20px;
+}
+
+/******** Styles pour les boutons *********/
+
+.blue-button {
+  background-color: rgb(105, 155, 247); /* Couleur de fond bleue */
+  color: white; /* Couleur du texte blanc */
+  padding: 15px 30px;
+  border-radius: 5px;
+  text-decoration: none;
+  border: none; /* Supprimer le contour */
+  font-family: "Inter", sans-serif; /* Police Inter */
+}
+
+.blue-button[href="#"] {
+  color: white; /* Couleur du texte blanc pour le lien "Se connecter" */
+}
+
+/*********** section "mission-section" ************/
+
+.mission-section {
+  padding: 20px; /* Espacement intérieur */
+  text-align: center; /* Centrer les éléments horizontalement */
+}
+
+.register-button {
+  padding: 30px 60px; /* Ajuster le padding pour augmenter la taille du bouton "S'inscrire" */
+  font-size: 22px; /* Ajuster la taille de la police pour augmenter la taille du bouton "S'inscrire" */
+  margin-bottom: 20px;
+}
+
+.mission-text {
+  text-indent: 30px; /* Retrait de la première ligne */
+  line-height: 1.5; /* Hauteur de ligne pour une meilleure lisibilité */
+  text-align: center;
+  font-size: 48px; /* Taille de police en gros */
+  font-family: "Newsreader", sans-serif; /* Police Newsreader pour tout le texte */
+}
+
+.mission-text span {
+  font-family: "Nothing You Could Do", sans-serif; /* Police spécifique pour certains mots */
+}
+
+/********** section "image-text-container" ***********/
+
+.image-text-container {
+  display: flex; /* Utiliser le modèle de boîte flexible */
+  align-items: flex-start; /* Aligner les éléments verticalement au début du conteneur */
+  margin-top: 50px;
+}
+
+.image-text-container img {
+  max-width: 2000px; /* Ajuster la largeur maximale de l'image selon vos besoins */
+  margin-right: 30px; /* Espacement à droite de l'image */
+}
+
+.text-container {
+  flex-grow: 1; /* Permettre au conteneur de texte de s'étendre pour occuper tout l'espace restant */
+  text-align: left; /* Aligner le texte à gauche */
+}
+
+.text-container p {
+  font-family: "Inter", sans-serif; /* Police Inter */
+  color: black; /* Couleur du texte noir */
+  font-size: 16px; /* Taille de la police */
+}
+.text-container h2 {
+  font-size: 24px; /* Taille de la police en gros */
+  font-family: Italiana, sans-serif; /* Police italienne "Italiana" */
+}
+
+.no-bullets {
+  list-style-type: none; /* Supprime les puces */
+}
+.welcome-text,
+.no-bullets li {
+  font-family: "Inter", sans-serif; /* Utilisation de la police Inter */
+  line-height: 1.5; /* Augmentation de l'espacement entre les lignes */
+}
+
+/********* section "reverse-section" *********/
+
+.reverse-section {
+  display: flex;
+  flex-direction: row-reverse; /* Inverser l'ordre des éléments */
+  align-items: center; /* Aligner les éléments verticalement */
+}
+
+.reverse-section .text-container {
+  flex-grow: 1;
+  text-align: right; /* Aligner le texte à droite */
+  margin-right: 30px; /* Ajouter de l'espace à droite du texte */
+}
+
+.reverse-section .left-align {
+  text-align: right; /* Aligner le texte du paragraphe à droite */
+}
+
+.reverse-section .italic-text {
+  font-family: Italiana, sans-serif; /* Police italienne "Italiana" */
+  font-size: 24px; /* Taille de la police en gros */
+}
+
+.reverse-section .blue-button {
+  margin-top: 20px; /* Ajouter une marge en haut pour créer de l'espace entre le texte et le bouton */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  max-width: 50px; /* Taille maximale du logo */
+}

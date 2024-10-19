@@ -1,0 +1,68 @@
+header {
+  padding: 20px;
+  display: flex;
+  justify-content: center; /* Centrer horizontalement */
+  align-items: center; /* Centrer verticalement */
+}
+
+.logo {
+  width: 60px; /* Nouvelle taille du logo */
+  /* Autres styles si nécessaire */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-family: "PT Serif", sans-serif; /* Police d'écriture professionnelle */
+  color: rgb(105, 155, 247); /* Couleur bleue */
+  margin-left: 10px; /* Espacement entre le logo et le texte */
+  font-size: 50px;
+}
+
+.nav-container {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Effet d'ombre */
+  padding: 10px; /* Marge intérieure pour l'effet d'ombre */
+  border-radius: 10px; /* Coins arrondis */
+}
+
+.logo-nav-container {
+  display: flex;
+  align-items: center;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: center; /* Centrer les éléments horizontalement */
+  align-items: center; /* Centrer les éléments verticalement */
+  gap: 100px; /* Espacement uniforme entre les éléments */
+}
+
+.nav-list a {
+  font-family: "Inter", sans-serif; /* Police Inter */
+  color: black; /* Couleur des liens */
+  text-decoration: none; /* Supprime le soulignage des liens */
+}
+
+nav li {
+  font-family: "Roboto", sans-serif; /* Police d'écriture professionnelle */
+}
+
+/******** Styles pour les boutons *********/
+
+.blue-button {
+  background-color: rgb(105, 155, 247); /* Couleur de fond bleue */
+  color: white; /* Couleur du texte blanc */
+  padding: 15px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  border: none; /* Supprimer le contour */
+  font-family: "Inter", sans-serif; /* Police Inter */
+}
+
+.blue-button[href="#"] {
+  color: white; /* Couleur du texte blanc pour le lien "Se connecter" */
+}

@@ -1,0 +1,252 @@
+/******** Styles pour les boutons *********/
+
+.buttoninscrire {
+  background-color: rgba(255, 107, 107, 0.71);
+  color: white;
+  padding: 25px 45px;
+  border-radius: 25px;
+  display: inline-block; /* Pour que le bouton prenne seulement la largeur nécessaire */
+  position: absolute; /* Position absolue pour superposer le bouton sur l'image */
+  top: 60%; /* Déplacer le bouton vers le centre vertical */
+  left: 50%; /* Déplacer le bouton vers le centre horizontal */
+  transform: translate(-50%, -50%); /* Centrer le bouton exactement au milieu */
+  text-decoration: none;
+  font-size: 20px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1); /* Ajouter une ombre au bouton */
+}
+
+/*********** section "mission-section" ************/
+.imagesanté {
+  max-width: 100%; /* Ajuster la largeur de l'image pour s'adapter à la largeur du conteneur */
+  margin: 0 auto; /* Center the image horizontally */
+  width: 80%; /* Set the image width to 70% of its container */
+  height: auto; /* Allow the image to scale proportionally */
+}
+
+.mission-section {
+  position: relative; /* Ajoutez cette ligne */
+  padding: 20px;
+  text-align: center;
+}
+
+.mission-text1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-indent: 30px;
+  line-height: 1.5;
+  text-align: center;
+  font-size: 37px;
+  font-family: "Newsreader", sans-serif;
+  margin-top: -70px;
+  display: inline-block;
+  color: black;
+  z-index: index 1;
+  white-space: nowrap; /* Empêcher le texte de se retourner */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Ajouter une ombre au texte */
+}
+
+.mission-text2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-indent: 37px;
+  line-height: 1.5;
+  text-align: center;
+  font-size: 35px;
+  font-family: "Inter", sans-serif;
+  margin-top: 10px;
+  display: inline-block;
+  color: black;
+  z-index: 2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Ajouter une ombre au texte */
+}
+
+.mission-text1 span {
+  font-family: "Nothing You Could Do", sans-serif; /* Police spécifique pour certains mots */
+}
+.mission-text2 span {
+  font-family: "Nothing You Could Do", sans-serif; /* Police spécifique pour certains mots */
+}
+
+.blocbleu {
+  max-width: 100%; /* Ajuster la largeur de l'image pour s'adapter à la largeur du conteneur */
+  margin: 0 auto; /* Center the image horizontally */
+  width: 80%; /* Set the image width to 70% of its container */
+  height: auto; /* Allow the image to scale proportionally */
+}
+
+/********** section "image-text-container" ***********/
+
+.text-container {
+  flex-grow: 1; /* Permettre au conteneur de texte de s'étendre pour occuper tout l'espace restant */
+  text-align: center; /* Aligner le texte au centre */
+}
+.text-container h1 {
+  font-size: 30px; /* Augmenter la taille du texte */
+  margin-top: 50px; /* Ajouter de l'espace en haut du titre */
+  font-family: "Italiana", sans-serif; /* Police Inter */
+  color: black; /* Couleur du texte noir */
+}
+
+.bordure1 {
+  position: relative;
+  max-width: 70%; /* Ajuster la largeur de l'image pour s'adapter à la largeur du conteneur */
+  margin: auto; /* Centrer l'image horizontalement */
+  width: auto; /* Réinitialiser la largeur à la taille normale de l'image */
+  height: auto; /* Permettre à l'image de se redimensionner proportionnellement */
+  order: 2;
+}
+
+.text-container p {
+  font-family: "Inter", sans-serif; /* Police Inter */
+  color: black; /* Couleur du texte noir */
+  order: 1;
+}
+.welcome-text1 {
+  font-family: "Inter", sans-serif;
+  font-size: 18px; /* Taille de la police en gros */
+  text-align: center;
+  white-space: normal;
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1.5;
+}
+.text-container h2 {
+  font-size: 24px; /* Taille de la police en gros */
+  font-family: Italiana, sans-serif; /* Police italienne "Italiana" */
+}
+
+.welcome-text {
+  font-family: "Inter", sans-serif; /* Police Newsreader */
+  font-size: 37px; /* Taille de la police en gros */
+  text-align: center;
+  text-overflow: ellipsis;
+  line-height: 2;
+  white-space: normal;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 50px; /* Espacement uniforme entre les éléments */
+  margin-top: 50px;
+}
+
+.rectangle {
+  position: relative;
+  background-color: rgba(255, 211, 211, 1); /* Couleur de fond du rectangle */
+  border-radius: 10px; /* Coins arrondis du rectangle */
+  padding: 100px; /* Espacement intérieur du rectangle */
+  box-shadow: 0 0 0 2px #05060900, 0 0 0 6px transparent;
+  margin-bottom: -50px;
+  margin-right: -5px;
+  order: 2; /* Ajoutez ceci */
+  flex-grow: 1;
+  margin-top: -150px;
+}
+
+.img {
+  position: absolute; /* Ajoutez ceci */
+  top: 150px; /* Ajoutez ceci */
+  right: 200px; /* Ajoutez ceci */
+  max-width: 100%;
+  width: 35%;
+  height: 40;
+  order: 1;
+}
+
+/********* section "reverse-section" *********/
+.title-valeurs {
+  font-size: 33px;
+  font-family: Italiana, sans-serif; /* Police italienne "Italiana" */
+  text-align: left;
+  margin-top: 50px;
+}
+
+.texte-valeurs {
+  font-family: "Inter", sans-serif; /* Police Inter pour le texte */
+  font-size: 18px; /* Taille de la police du texte */
+  text-align: left;
+  line-height: 1;
+  order: 1;
+}
+
+.welcome-text2 {
+  font-family: "Inter", sans-serif; /* Police Newsreader */
+  font-size: 20px; /* Taille de la police en gros */
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.reverse-section .italic-text {
+  font-family: Italiana, sans-serif; /* Police italienne "Italiana" */
+  font-size: 24px; /* Taille de la police en gros */
+}
+
+.reverse-section .blue-button {
+  margin-top: 20px; /* Ajouter une marge en haut pour créer de l'espace entre le texte et le bouton */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  max-width: 50px; /* Taille maximale du logo */
+}
+
+/********FOOTER*********/
+
+footer {
+  display: flex;
+  padding: 20px;
+  background-color: #90ade1;
+  margin-right: -20px;
+  margin-left: -20px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  /* Fond bleu clair gris */
+}
+
+.footer-logo {
+  position: absolute;
+  left: 50;
+  width: 50px;
+  height: auto;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  margin-right: 50px;
+}
+
+.footer-section2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 25%;
+}
+
+.footer-section:first-child {
+  margin-left: 40px;
+}
+
+.footer-text {
+  margin-bottom: 10px;
+  font-family: Inter, sans-serif;
+  /* Police d'écriture agréable à l'œil */
+}
+
+.section-title {
+  font-family: "Inria Serif", serif; /* Police Inria Serif pour le titre */
+  font-weight: bold;
+  font-size: 1.2em;
+}

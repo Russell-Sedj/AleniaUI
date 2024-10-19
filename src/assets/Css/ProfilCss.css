@@ -1,0 +1,312 @@
+/**************************************************************************************************************/
+
+.sidebar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  /* border: 1px solid #000; Suppression de la bordure */
+  padding: 20px;
+  background-color: #ffffff; /* Fond blanc */
+  text-decoration: none;
+  font-size: 1em; /* Texte agrandi */
+  font-weight: bold; /* Texte en gras */
+  color: black;
+}
+
+/* ----------*/
+
+.sidebar2 {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.5); /* Ajout d'un fond transparent */
+}
+
+.section-title2 {
+  font-weight: bold; /* Texte en gras */
+  font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
+}
+
+.nav-item2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  text-decoration: none; /* Suppression du soulignement du lien */
+  color: black; /* Couleur du texte du lien */
+  font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
+}
+
+.nav-item2:hover {
+  background-color: rgb(140, 173, 213); /* Changement de couleur au survol */
+}
+
+.logout {
+  color: red;
+  text-align: center;
+  cursor: pointer; /* Change le curseur en main au survol */
+  border-radius: 10%;
+  text-decoration: none;
+  border: none;
+}
+/*--------*/
+
+.cv-item {
+  position: absolute;
+  top: 80%; /* Position à 80% du haut de la page */
+  left: 50%; /* Position au milieu de la page */
+  transform: translate(-50%, -50%); /* Centrer l'élément */
+  display: inline-block;
+  background-color: rgb(140, 173, 213); /* Fond bleu clair */
+  border-radius: 15px; /* Contours arrondis */
+  padding: 10px;
+  text-decoration: none; /* Suppression du soulignement du lien */
+  color: black; /* Couleur du texte du lien */
+  font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
+}
+
+.cv-container {
+  position: absolute;
+  top: 60%; /* Position ajustée pour être plus haut */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgb(140, 173, 213); /* Bordure en pointillés */
+  padding: 40px; /* Augmentation de l'espacement intérieur pour un encadré plus grand */
+  width: 30%; /* Largeur de 50% de la page */
+  height: 30%; /* Hauteur de 30% de la page */
+}
+
+.nav-text {
+  font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
+}
+/*-------------*/
+
+.navbar3 {
+  position: absolute;
+  top: 10%; /* Position à 10% du haut de la page */
+  left: 18%; /* Position au milieu de la page */
+  transform: translateY(-50%);
+  width: 70%; /* Largeur de 70% */
+  display: flex;
+  justify-content: space-around; /* Espacement uniforme entre les éléments */
+}
+
+.nav-item3 {
+  text-decoration: none; /* Suppression du soulignement du lien */
+  color: black; /* Couleur du texte du lien */
+  font-family: Arial, sans-serif; /* Police d'écriture professionnelle */
+  position: relative; /* Position relative pour le pseudo-élément ::after */
+}
+
+.nav-item3::after {
+  content: ""; /* Contenu vide pour le pseudo-élément ::after */
+  position: absolute;
+  left: 0;
+  bottom: -5%; /* Position à 5% en dessous du texte */
+  height: 3px; /* Hauteur du séparateur */
+  width: 100%; /* Largeur du séparateur */
+  background-color: lightblue; /* Couleur bleu clair du séparateur */
+  opacity: 0; /* Séparateur invisible par défaut */
+}
+
+.nav-item3:hover::after {
+  opacity: 1; /* Séparateur visible au survol */
+}
+
+.logo-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  height: 75px; /* Hauteur du logo */
+  width: auto; /* Largeur automatique pour conserver les proportions de l'image */
+}
+
+.logo-container .logo-text {
+  font-size: 2em; /* Texte du logo plus petit */
+  margin-left: 10px;
+  font-family: "PT Serif", sans-serif; /* Police d'écriture professionnelle */
+  color: rgb(105, 155, 247); /* Couleur bleue */
+  margin-left: 10px; /* Espacement entre le logo et le texte */
+  font-size: 50px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center; /* Centrer l'image horizontalement */
+  margin-top: 110px; /* Espacement entre l'image et l'encadré en pointillé */
+}
+
+.image-container img {
+  max-width: 10%; /* Réduction de la largeur maximale de l'image à 30% de la largeur de la page */
+  height: auto; /* Hauteur automatique pour conserver les proportions de l'image */
+}
+
+/**********************************************************************************************************************/
+
+.center-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  width: 70%; /* Largeur de 70% de la page */
+  height: 50%; /* Hauteur de 50% de la page */
+}
+
+.center-container img {
+  max-width: 10%; /* Largeur maximale de l'image à 30% de la largeur de la page */
+  height: auto; /* Hauteur automatique pour conserver les proportions de l'image */
+  margin-bottom: 20px; /* Espacement entre l'image et le texte */
+}
+
+.center-container p {
+  font-size: 1.5em; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  margin-bottom: 20px; /* Espacement entre le texte et le séparateur */
+}
+
+.divider {
+  width: 50%; /* Largeur du séparateur à 70% de la largeur de la page */
+  border-top: 1px solid rgb(140, 173, 213, 0.5); /* Bordure supérieure pour le séparateur */
+}
+
+.zone-text {
+  position: absolute;
+  top: 20%; /* Position ajustée pour être juste au-dessus de l'encadré */
+  left: 50%;
+  transform: translate(
+    -50%,
+    -60%
+  ); /* Décalage vers le haut pour être au-dessus de l'encadré */
+  font-size: 3em; /* Taille du texte deux fois plus grande que le reste */
+  font-weight: bold; /* Texte en gras */
+  text-decoration: underline; /* Texte souligné */
+  text-decoration-color: rgb(
+    140,
+    173,
+    213,
+    0.5
+  ); /* Couleur de soulignement en gris */
+  font-family: "Inter", sans-serif; /* Police d'écriture agréable à l'oeil */
+}
+
+/* Le reste du code CSS... */
+
+/**************************************************************************************************************************************************/
+
+.center-container2 {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  padding: 20px;
+  width: 70%; /* Largeur de 70% de la page */
+  height: 50%; /* Hauteur de 50% de la page */
+}
+
+.option {
+  display: flex; /* Utilisation de flexbox pour organiser les éléments */
+  align-items: center; /* Centrer verticalement les éléments */
+  margin-bottom: 20px; /* Marge inférieure pour séparer les options */
+  cursor: pointer; /* Curseur pointeur pour indiquer l'interactivité */
+  font-family: "Inter", sans-serif; /* Police d'écriture agréable à l'oeil */
+  font-size: 1.5em; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+}
+
+textarea {
+  margin-left: auto;
+}
+.delete {
+  color: red; /* Texte en rouge pour l'option "Supprimer mon compte" */
+}
+
+/*****************************************************************************************************************************************/
+
+.navbar4 {
+  position: absolute;
+  top: 10%; /* Position à 10% du haut de la page */
+  left: 8%; /* Position au milieu de la page */
+  transform: translateY(-50%);
+  width: 70%; /* Largeur de 70% */
+  display: flex;
+  justify-content: space-around;
+}
+
+.nav-item4 {
+  text-decoration: none; /* Suppression du soulignement du lien */
+  color: black; /* Couleur du texte du lien */
+  font-family: Arial, sans-serif; /* Police d'écriture professionnelle */
+  position: relative; /* Position relative pour le pseudo-élément ::after */
+}
+
+.nav-item4::after {
+  content: ""; /* Contenu vide pour le pseudo-élément ::after */
+  position: absolute;
+  left: 0;
+  bottom: -30%; /* Position à 5% en dessous du texte */
+  height: 3px; /* Hauteur du séparateur */
+  width: 100%; /* Largeur du séparateur */
+  background-color: lightblue; /* Couleur bleu clair du séparateur */
+  opacity: 0; /* Séparateur invisible par défaut */
+}
+
+.nav-item4:hover::after {
+  opacity: 1; /* Séparateur visible au survol */
+}
+.logout2 {
+  color: lightblue;
+  text-align: center;
+  cursor: pointer; /* Change le curseur en main au survol */
+  border-radius: 10%;
+  text-decoration: none;
+  border: none;
+}
+
+.grey-box2 {
+  background-color: lightgrey;
+  margin-left: 150px; /* Augmentez cette valeur pour rendre l'encadré plus large sur le côté gauche */
+  padding: 20px;
+  height: calc(
+    90vh - 50px
+  ); /* Diminuez cette valeur pour réduire légèrement la hauteur de l'encadré */
+  display: flex;
+  align-items: center; /* Centre le texte verticalement */
+  justify-content: center; /* Centre le texte horizontalement */
+  margin-top: 85px;
+}
+
+.grey-box2 p {
+  color: white; /* Changez la couleur du texte selon vos besoins */
+  text-align: center; /* Centre le texte dans son conteneur */
+  line-height: 2;
+}

@@ -1,0 +1,284 @@
+body {
+  font-family: "Nunito", sans-serif;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 350px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+h2 {
+  font-size: 38px;
+}
+
+.input-group {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.country-code {
+  margin-right: 10px;
+}
+
+.input-group select {
+  width: 120px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+}
+
+.input-group input {
+  width: calc(130% - 142px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 0 5px 5px 0;
+}
+
+.input-group button {
+  margin-left: auto;
+  width: 100%;
+  padding: 12px;
+  background-color: #699bf7;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-group button:hover {
+  background-color: #0056b3;
+}
+
+.back {
+  margin-right: 10px;
+  text-decoration: none;
+  color: #000000;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.signup-link {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.signup-link a {
+  color: #699bf7;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+body,
+h2,
+.input-group input,
+.signup-link a {
+  font-family: "Nunito", sans-serif;
+}
+
+.input-group button[type="submit"] {
+  font-family: "Inter", sans-serif;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 50px; /* Ajustez la taille du logo selon vos besoins */
+  height: auto;
+  margin-right: 10px;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #699bf7; /* Couleur du texte du nom de la marque */
+  font-family: "Newsreader", Times, serif;
+}
+
+.forgot-password,
+.forgot-password:visited {
+  color: #699bf7; /* Couleur du lien */
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.forgot-password:hover {
+  text-decoration: underline; /* Souligner le lien au survol */
+}
+/**************************************************************************************************************/
+
+.sidebar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  /* border: 1px solid #000; Suppression de la bordure */
+  padding: 20px;
+  background-color: #ffffff; /* Fond blanc */
+  text-decoration: none;
+  font-size: 1.5em; /* Texte agrandi */
+  font-weight: bold; /* Texte en gras */
+  color: black;
+}
+
+.nav-icon {
+  margin-right: 10px;
+}
+
+/* ----------*/
+
+.sidebar2 {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.5); /* Ajout d'un fond transparent */
+}
+
+.section-title2 {
+  font-weight: bold; /* Texte en gras */
+  text-decoration: underline; /* Texte souligné */
+}
+
+.nav-item2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f9f9f9; /* Ajout d'un fond gris */
+  text-decoration: none; /* Suppression du soulignement du lien */
+  color: black; /* Couleur du texte du lien */
+}
+
+.nav-item2:hover {
+  background-color: #e0e0e0; /* Changement de couleur au survol */
+}
+
+.logout {
+  background-color: red;
+  color: white;
+  text-align: center;
+  cursor: pointer; /* Change le curseur en main au survol */
+}
+/*--------*/
+
+.cv-item {
+  position: absolute;
+  top: 80%; /* Position à 80% du haut de la page */
+  left: 50%; /* Position au milieu de la page */
+  transform: translate(-50%, -50%); /* Centrer l'élément */
+  display: inline-block;
+  background-color: lightblue; /* Fond bleu clair */
+  border-radius: 15px; /* Contours arrondis */
+  padding: 10px;
+  text-decoration: none; /* Suppression du soulignement du lien */
+  color: black; /* Couleur du texte du lien */
+}
+
+.cv-container {
+  position: absolute;
+  top: 60%; /* Position ajustée pour être plus haut */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #000; /* Bordure en pointillés */
+  padding: 40px; /* Augmentation de l'espacement intérieur pour un encadré plus grand */
+  background-color: #f0f0f0; /* Fond gris */
+  width: 50%; /* Largeur de 50% de la page */
+  height: 30%; /* Hauteur de 30% de la page */
+}
+
+.cv-icon,
+.cv-text,
+.cv-warning {
+  margin-bottom: 20px; /* Augmentation de l'espacement entre les éléments */
+}
+
+/*-------------*/
+
+.navbar3 {
+  position: absolute;
+  top: 10%; /* Position à 10% du haut de la page */
+  left: 18%; /* Position au milieu de la page */
+  transform: translateY(-50%);
+  width: 70%; /* Largeur de 70% */
+  display: flex;
+  justify-content: space-around; /* Espacement uniforme entre les éléments */
+}
+
+.nav-item3 {
+  text-decoration: none; /* Suppression du soulignement du lien */
+  color: black; /* Couleur du texte du lien */
+  font-family: Arial, sans-serif; /* Police d'écriture professionnelle */
+  position: relative; /* Position relative pour le pseudo-élément ::after */
+}
+
+.nav-item3::after {
+  content: ""; /* Contenu vide pour le pseudo-élément ::after */
+  position: absolute;
+  left: 0;
+  bottom: -5%; /* Position à 5% en dessous du texte */
+  height: 1px; /* Hauteur du séparateur */
+  width: 100%; /* Largeur du séparateur */
+  background-color: lightblue; /* Couleur bleu clair du séparateur */
+  opacity: 0; /* Séparateur invisible par défaut */
+}
+
+.nav-item3:hover::after {
+  opacity: 1; /* Séparateur visible au survol */
+}
+
+.logo-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding: 10px; /* Espacement intérieur pour éviter que le logo ne touche les bords de la page */
+}
+
+.logo-container img {
+  height: 75px; /* Hauteur du logo */
+  width: auto; /* Largeur automatique pour conserver les proportions de l'image */
+}
+
+.logo-container .logo-text {
+  margin-left: 10px; /* Espacement entre le logo et le texte */
+  font-size: 1.5em; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+}
+/***************************************************************************************************************/

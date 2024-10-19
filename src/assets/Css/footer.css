@@ -1,0 +1,49 @@
+/********FOOTER*********/
+
+footer {
+  display: flex;
+  padding: 20px;
+  background-color: #90ade1;
+  margin-right: -20px;
+  margin-left: -20px;
+  margin-bottom: -20px;
+  margin-top: -20px;
+  margin-top: 50px;
+  /* Fond bleu clair gris */
+}
+
+.footer-logo {
+  position: absolute;
+  left: -5px;
+  width: 50px;
+  height: auto;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  margin-right: 50px;
+}
+
+.footer-section2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 25%;
+}
+
+.footer-section:first-child {
+  margin-left: 40px;
+}
+
+.footer-text {
+  margin-bottom: 10px;
+  font-family: Inter, sans-serif;
+  /* Police d'écriture agréable à l'œil */
+}
+
+.section-title {
+  font-family: "Inria Serif", serif; /* Police Inria Serif pour le titre */
+  font-weight: bold;
+  font-size: 1.2em;
+}

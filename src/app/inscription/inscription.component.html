@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page d'inscription'</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./../../assets/Css/styles.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <img src="./../../assets/images/logo.png" alt="Logo de Lénia" />
+        <h1>Lénia</h1>
+      </div>
+    </header>
+    <div class="container">
+      <div class="header" class="logo">
+        <a href="PageAccueil.html" class="back">&lt; Retour</a>
+        <img
+          src="./../../assets/images/Rectangle 6.png"
+          alt="Rectangle 6"
+          class="image1"
+        />
+      </div>
+      <h2>Inscription</h2>
+      <div class="signup-link">
+        <p>Déjà un compte ? <a href="Connexion.html">Se connecter</a></p>
+      </div>
+      <form action="#" method="post">
+        <div class="input-group">
+          <input
+            type="text"
+            name="firstName"
+            id="firstName"
+            placeholder="Prénom"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <input
+            type="text"
+            name="lastName"
+            id="lastName"
+            placeholder="Nom"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <div class="country-code">
+            <select name="countryCode" id="countryCode">
+              <option value="+33">+33</option>
+              <!-- Ajoutez ici d'autres options de pays si nécessaire -->
+            </select>
+          </div>
+          <input
+            type="text"
+            name="phoneNumber"
+            id="phoneNumber"
+            placeholder="numéro de téléphone"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Adresse email"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Mot de passe"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            placeholder="Confirmer le mot de passe"
+            required
+          />
+        </div>
+        <div class="signup-link">
+          <input
+            type="checkbox"
+            name="termsAndConditions"
+            id="termsAndConditions"
+            required
+          />
+          <label for="termsAndConditions"
+            >J'accepte les
+            <a href="#">conditions générales d'utilisation</a> *</label
+          >
+        </div>
+        <div class="input-group">
+          <button type="submit">Créer mon compte</button>
+        </div>
+        <img
+          src="./../../assets/images/Rectangle 7.png"
+          alt="Rectangle 7"
+          class="image1"
+        />
+      </form>
+    </div>
+  </body>
+</html>
