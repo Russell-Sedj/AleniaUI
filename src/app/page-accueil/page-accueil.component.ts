@@ -5,6 +5,12 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './page-accueil.component.html',
-  // styleUrl: './page-accueil.component.css'
+  // styleUrl: './page-accueil.component.css',
+  // styleUrls: ['./page-accueil.component.css'],
+  styleUrls: [
+    '../../../public/assets/Css/style.css',
+    '../../../public/assets/Css/footer.css',
+    '../../../public/assets/Css/navigation_barre.css',
+  ],
 })
 export class PageAccueilComponent {}

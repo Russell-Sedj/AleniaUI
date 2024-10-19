@@ -1,1 +1,60 @@
-<p>connexion works!</p>
+<div class="container">
+  <div class="header">
+    <a routerLink="connexion" class="back">&lt; Retour</a>
+    <img
+      src="/assets/images/Rectangle 6.png"
+      alt="Rectangle 6"
+      class="image1"
+    />
+  </div>
+  <h2>Connexion</h2>
+  <div class="signup-link">
+    <p>
+      Pas encore de compte ?
+      <a
+        routerLink="inscription"
+        routerLinkActive="router-link-active"
+        ariaCurrentWhenActive="page"
+        >Inscrivez-vous</a
+      >
+    </p>
+  </div>
+  <form action="#" method="post">
+    <div class="input-group">
+      <div class="country-code">
+        <select name="countryCode" id="countryCode">
+          <option value="+33">+33</option>
+          <!-- Ajoutez ici d'autres options de pays si nécessaire -->
+        </select>
+      </div>
+      <input
+        type="text"
+        name="phoneNumber"
+        id="phoneNumber"
+        placeholder="numéro de téléphone"
+        required
+      />
+    </div>
+    <div class="input-group">
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Mot de passe"
+        required
+      />
+    </div>
+
+    <div class="signup-link">
+      <a href="#">mot de passe oublié ?</a>
+    </div>
+    <div class="input-group">
+      <button type="submit">Se connecter</button>
+    </div>
+    <img
+      src="/assets/images/Rectangle 7.png"
+      alt="Rectangle 7"
+      class="image1"
+    />
+  </form>
+</div>
