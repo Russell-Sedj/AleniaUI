@@ -1,5 +1,11 @@
 <main class="main">
-  <header *ngIf="currentUrl !== '/connexion' && currentUrl !== '/inscription'">
+  <header
+    *ngIf="
+      currentUrl === '/page-accueil' ||
+      currentUrl === '/ce-que-lon-propose' ||
+      currentUrl === '/qui-sommes-nous'
+    "
+  >
     <div class="nav-container">
       <div class="logo-nav-container">
         <div class="logo-container">
@@ -60,6 +66,66 @@
       <h1>Lénia</h1>
     </div>
   </header>
+
+  <div
+    *ngIf="
+      currentUrl === '/disponibilite' ||
+      currentUrl === '/mission-detail-hilguegue'
+    "
+  >
+    <header>
+      <div class="logo-container">
+        <img src="/assets/images/logo.png" alt="Logo Lénia" />
+        <span class="logo-text">ALINIA</span>
+      </div>
+    </header>
+
+    <div *ngIf="currentUrl === '/mission-detail-hilguegue'" class="sidebar">
+      <a routerLink="missions" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/offres_icon.png" alt="Search" />
+        </div>
+        <div class="nav-text">Offres</div>
+      </a>
+      <a routerLink="disponibilite" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/dispo_icon (2).png" alt="Calendar" />
+        </div>
+        <div class="nav-text">Disponibilités</div>
+      </a>
+      <a routerLink="missions-venir" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/mission_icon.png" alt="Portfolio" />
+        </div>
+        <div class="nav-text">Missions</div>
+      </a>
+      <a routerLink="" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/profil_icon.png" alt="User" />
+        </div>
+        <div class="nav-text">Profil</div>
+      </a>
+    </div>
+
+    <div *ngIf="currentUrl === '/disponibilite'" class="sidebar">
+      <a routerLink="missions" class="nav-item">
+        <div class="nav-icon">🔍</div>
+        <div class="nav-text">Offres</div>
+      </a>
+      <a routerLink="disponibilite" class="nav-item">
+        <div class="nav-icon">🗓️</div>
+        <div class="nav-text">Disponibilités</div>
+      </a>
+      <a routerLink="missions-venir" class="nav-item">
+        <div class="nav-icon">💼</div>
+        <div class="nav-text">Missions</div>
+      </a>
+      <a routerLink="profil" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-text">Profil</div>
+      </a>
+    </div>
+  </div>
 
   <router-outlet></router-outlet>
 

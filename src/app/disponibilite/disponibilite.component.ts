@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './disponibilite.component.html',
-  styleUrl: './disponibilite.component.css'
+  styleUrls: ['../../../public/assets/Css/style3.css'],
 })
-export class DisponibiliteComponent {
-
-}
+export class DisponibiliteComponent {}

@@ -8,7 +8,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css', '../../public/assets/Css/styles.css'],
+  styleUrls: [
+    './app.component.css',
+    '../../public/assets/Css/styles.css',
+    '../../public/assets/Css/style3.css',
+    '../../public/assets/Css/style4.css',
+  ],
 })
 export class AppComponent implements OnInit {
   title = 'essai';
