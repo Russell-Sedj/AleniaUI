@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-missions-venir',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './missions-venir.component.html',
-  styleUrl: './missions-venir.component.css'
+  styleUrls: ['../../../public/assets/Css/style3.css'],
 })
-export class MissionsVenirComponent {
-
-}
+export class MissionsVenirComponent {}
