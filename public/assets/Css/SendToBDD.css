@@ -11,16 +11,51 @@
   width: 200px;
   text-align: center;
   margin-top: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
-.deleteBtn,
-.applyBtn {
-  margin-top: 10px;
+.jobPost h2 {
+  margin-top: 0;
 }
 
-.jobPost input,
-.jobPost textarea {
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group textarea {
   display: block;
   width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
   margin-top: 10px;
+}
+
+.form-group button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.deleteBtn {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.applyBtn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.deleteBtn:hover {
+  background-color: #ff1a1a;
+}
+
+.applyBtn:hover {
+  background-color: #45a049;
 }
