@@ -71,7 +71,8 @@
     *ngIf="
       currentUrl === '/disponibilite' ||
       currentUrl === '/mission-detail-hilguegue' ||
-      currentUrl === '/missions'
+      currentUrl === '/missions' ||
+      currentUrl === '/missions-passes'
     "
   >
     <header>
@@ -83,7 +84,9 @@
 
     <div
       *ngIf="
-        currentUrl === '/mission-detail-hilguegue' || currentUrl === '/missions'
+        currentUrl === '/mission-detail-hilguegue' ||
+        currentUrl === '/missions' ||
+        currentUrl === '/missions-passes'
       "
       class="sidebar"
     >
@@ -135,7 +138,7 @@
 
   <router-outlet></router-outlet>
 
-  <footer>
+  <footer style="margin-top: 700px">
     <img src="/assets/images/logo.png" alt="Logo" class="footer-logo" />
     <!-- Ajoutez le chemin vers votre logo ici -->
     <div class="footer-section2">
