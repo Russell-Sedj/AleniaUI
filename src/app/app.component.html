@@ -70,7 +70,8 @@
   <div
     *ngIf="
       currentUrl === '/disponibilite' ||
-      currentUrl === '/mission-detail-hilguegue'
+      currentUrl === '/mission-detail-hilguegue' ||
+      currentUrl === '/missions'
     "
   >
     <header>
@@ -80,7 +81,12 @@
       </div>
     </header>
 
-    <div *ngIf="currentUrl === '/mission-detail-hilguegue'" class="sidebar">
+    <div
+      *ngIf="
+        currentUrl === '/mission-detail-hilguegue' || currentUrl === '/missions'
+      "
+      class="sidebar"
+    >
       <a routerLink="missions" class="nav-item">
         <div class="nav-icon">
           <img src="/assets/images/offres_icon.png" alt="Search" />
