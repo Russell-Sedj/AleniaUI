@@ -1,12 +1,6 @@
-<header>
-  <div class="logo">
-    <img src="/assets/images/logo.png" alt="Logo de Lénia" />
-    <h1>Lénia</h1>
-  </div>
-</header>
 <div class="container">
   <div class="header" class="logo">
-    <a href="PageAccueil.html" class="back">&lt; Retour</a>
+    <a routerLink="/page-accueil" class="back">&lt; Retour</a>
     <img
       src="/assets/images/Rectangle 6.png"
       alt="Rectangle 6"
@@ -15,7 +9,7 @@
   </div>
   <h2>Inscription</h2>
   <div class="signup-link">
-    <p>Déjà un compte ? <a href="Connexion.html">Se connecter</a></p>
+    <p>Déjà un compte ? <a routerLink="/connexion">Se connecter</a></p>
   </div>
   <form action="#" method="post">
     <div class="input-group">
@@ -88,7 +82,7 @@
       />
       <label for="termsAndConditions"
         >J'accepte les
-        <a href="#">conditions générales d'utilisation</a> *</label
+        <a routerLink="#">conditions générales d'utilisation</a> *</label
       >
     </div>
     <div class="input-group">

@@ -6,11 +6,6 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './connexion.component.html',
-  // styleUrl: './connexion.component.css'
-  styleUrls: [
-    '../../../public/assets/Css/styles.css',
-    '../../../public/assets/Css/footer.css',
-    '../../../public/assets/Css/navigation_barre.css',
-  ],
+  styleUrls: ['../../../public/assets/Css/styles.css'],
 })
 export class ConnexionComponent {}

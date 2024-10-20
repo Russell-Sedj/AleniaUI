@@ -7,10 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './page-accueil.component.html',
   // styleUrl: './page-accueil.component.css',
   // styleUrls: ['./page-accueil.component.css'],
-  styleUrls: [
-    '../../../public/assets/Css/style.css',
-    '../../../public/assets/Css/footer.css',
-    '../../../public/assets/Css/navigation_barre.css',
-  ],
+  styleUrls: ['../../../public/assets/Css/style.css'],
 })
 export class PageAccueilComponent {}
