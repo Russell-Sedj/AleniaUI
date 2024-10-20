@@ -1,5 +1,5 @@
 <main class="main">
-  <header *ngIf="currentUrl !== '/connexion'">
+  <header *ngIf="currentUrl !== '/connexion' && currentUrl !== '/inscription'">
     <div class="nav-container">
       <div class="logo-nav-container">
         <div class="logo-container">
@@ -54,7 +54,7 @@
     </div>
   </header>
 
-  <header *ngIf="currentUrl === '/connexion'">
+  <header *ngIf="currentUrl === '/connexion' || currentUrl === '/inscription'">
     <div class="logo">
       <img src="/assets/images/logo.png" alt="Logo de Lénia" />
       <h1>Lénia</h1>
