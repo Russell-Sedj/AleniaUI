@@ -13,6 +13,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     '../../public/assets/Css/styles.css',
     '../../public/assets/Css/style3.css',
     '../../public/assets/Css/style4.css',
+    '../../public/assets/Css/ProfilCss.css',
   ],
 })
 export class AppComponent implements OnInit {

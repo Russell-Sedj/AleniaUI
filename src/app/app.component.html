@@ -75,7 +75,8 @@
       currentUrl === '/missions-passes' ||
       currentUrl === '/missions-venir' ||
       currentUrl === '/offres1' ||
-      currentUrl === '/offres2'
+      currentUrl === '/offres2' ||
+      currentUrl === '/prestation'
     "
   >
     <header>
@@ -120,6 +121,28 @@
         </div>
         <div class="nav-text">Profil</div>
       </a>
+    </div>
+
+    <div *ngIf="currentUrl === '/prestation'">
+      <div class="sidebar2">
+        <div class="nav-item2">planning</div>
+        <div class="nav-item2">préstations</div>
+        <a href="Profil2.html" class="nav-item2">fiches de poste</a>
+        <a href="Profil2.html" class="nav-item2">Contrats</a>
+        <a href="Profil2.html" class="nav-item2">Relevés d'heures</a>
+        <a href="Profil3.html" class="nav-item2">factures</a>
+        <div class="nav-item2">Paramètres</div>
+        <hr />
+        <button class="nav-item2 logout2" onclick="deconnexion()">
+          + Nouvelle demande
+        </button>
+        <hr />
+      </div>
+      <div class="navbar4">
+        <a routerLink="/missions" class="nav-item4">Missions</a>
+        <a routerLink="#" class="nav-item4">Brouillon</a>
+        <a routerLink="#" class="nav-item4">Terminé</a>
+      </div>
     </div>
 
     <div *ngIf="currentUrl === '/disponibilite'" class="sidebar">
