@@ -1,6 +1,6 @@
 /**************************************************************************************************************/
 
-.sidebar {
+.profil-sidebar {
   position: fixed;
   top: 50%;
   right: 0;
@@ -8,7 +8,7 @@
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.nav-item {
+.profil-nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,7 +24,7 @@
 
 /* ----------*/
 
-.sidebar2 {
+.profil-sidebar2 {
   position: fixed;
   top: 50%;
   left: 0;
@@ -32,12 +32,12 @@
   background-color: rgba(255, 255, 255, 0.5); /* Ajout d'un fond transparent */
 }
 
-.section-title2 {
+.profil-section-title2 {
   font-weight: bold; /* Texte en gras */
   font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
 }
 
-.nav-item2 {
+.profil-nav-item2 {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -47,11 +47,11 @@
   font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
 }
 
-.nav-item2:hover {
+.profil-nav-item2:hover {
   background-color: rgb(140, 173, 213); /* Changement de couleur au survol */
 }
 
-.logout {
+.profil-logout {
   color: red;
   text-align: center;
   cursor: pointer; /* Change le curseur en main au survol */
@@ -61,7 +61,7 @@
 }
 /*--------*/
 
-.cv-item {
+.profil-cv-item {
   position: absolute;
   top: 80%; /* Position à 80% du haut de la page */
   left: 50%; /* Position au milieu de la page */
@@ -75,7 +75,7 @@
   font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
 }
 
-.cv-container {
+.profil-cv-container {
   position: absolute;
   top: 60%; /* Position ajustée pour être plus haut */
   left: 50%;
@@ -90,12 +90,12 @@
   height: 30%; /* Hauteur de 30% de la page */
 }
 
-.nav-text {
+.profil-nav-text {
   font-family: "Inter", sans-serif; /* Police d'écriture professionnelle */
 }
 /*-------------*/
 
-.navbar3 {
+.profil-navbar3 {
   position: absolute;
   top: 10%; /* Position à 10% du haut de la page */
   left: 18%; /* Position au milieu de la page */
@@ -105,14 +105,14 @@
   justify-content: space-around; /* Espacement uniforme entre les éléments */
 }
 
-.nav-item3 {
+.profil-nav-item3 {
   text-decoration: none; /* Suppression du soulignement du lien */
   color: black; /* Couleur du texte du lien */
   font-family: Arial, sans-serif; /* Police d'écriture professionnelle */
   position: relative; /* Position relative pour le pseudo-élément ::after */
 }
 
-.nav-item3::after {
+.profil-nav-item3::after {
   content: ""; /* Contenu vide pour le pseudo-élément ::after */
   position: absolute;
   left: 0;
@@ -123,11 +123,11 @@
   opacity: 0; /* Séparateur invisible par défaut */
 }
 
-.nav-item3:hover::after {
+.profil-nav-item3:hover::after {
   opacity: 1; /* Séparateur visible au survol */
 }
 
-.logo-container {
+.profil-logo-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -135,12 +135,12 @@
   align-items: center;
 }
 
-.logo-container img {
+.profil-logo-container img {
   height: 75px; /* Hauteur du logo */
   width: auto; /* Largeur automatique pour conserver les proportions de l'image */
 }
 
-.logo-container .logo-text {
+.profil-logo-container .profil-logo-text {
   font-size: 2em; /* Texte du logo plus petit */
   margin-left: 10px;
   font-family: "PT Serif", sans-serif; /* Police d'écriture professionnelle */
@@ -149,20 +149,20 @@
   font-size: 50px;
 }
 
-.image-container {
+.profil-image-container {
   display: flex;
   justify-content: center; /* Centrer l'image horizontalement */
   margin-top: 110px; /* Espacement entre l'image et l'encadré en pointillé */
 }
 
-.image-container img {
+.profil-image-container img {
   max-width: 10%; /* Réduction de la largeur maximale de l'image à 30% de la largeur de la page */
   height: auto; /* Hauteur automatique pour conserver les proportions de l'image */
 }
 
 /**********************************************************************************************************************/
 
-.center-container {
+.profil-center-container {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -177,24 +177,24 @@
   height: 50%; /* Hauteur de 50% de la page */
 }
 
-.center-container img {
+.profil-center-container img {
   max-width: 10%; /* Largeur maximale de l'image à 30% de la largeur de la page */
   height: auto; /* Hauteur automatique pour conserver les proportions de l'image */
   margin-bottom: 20px; /* Espacement entre l'image et le texte */
 }
 
-.center-container p {
+.profil-center-container p {
   font-size: 1.5em; /* Taille du texte */
   font-weight: bold; /* Texte en gras */
   margin-bottom: 20px; /* Espacement entre le texte et le séparateur */
 }
 
-.divider {
+.profil-divider {
   width: 50%; /* Largeur du séparateur à 70% de la largeur de la page */
   border-top: 1px solid rgb(140, 173, 213, 0.5); /* Bordure supérieure pour le séparateur */
 }
 
-.zone-text {
+.profil-zone-text {
   position: absolute;
   top: 20%; /* Position ajustée pour être juste au-dessus de l'encadré */
   left: 50%;
@@ -218,7 +218,7 @@
 
 /**************************************************************************************************************************************************/
 
-.center-container2 {
+.profil-center-container2 {
   display: flex;
   position: absolute;
   top: 50%;
@@ -233,7 +233,7 @@
   height: 50%; /* Hauteur de 50% de la page */
 }
 
-.option {
+.profil-option {
   display: flex; /* Utilisation de flexbox pour organiser les éléments */
   align-items: center; /* Centrer verticalement les éléments */
   margin-bottom: 20px; /* Marge inférieure pour séparer les options */
@@ -243,16 +243,16 @@
   font-weight: bold; /* Texte en gras */
 }
 
-textarea {
+.profil-textarea {
   margin-left: auto;
 }
-.delete {
+.profil-delete {
   color: red; /* Texte en rouge pour l'option "Supprimer mon compte" */
 }
 
 /*****************************************************************************************************************************************/
 
-.navbar4 {
+.profil-navbar4 {
   position: absolute;
   top: 10%; /* Position à 10% du haut de la page */
   left: 8%; /* Position au milieu de la page */
@@ -262,14 +262,14 @@ textarea {
   justify-content: space-around;
 }
 
-.nav-item4 {
+.profil-nav-item4 {
   text-decoration: none; /* Suppression du soulignement du lien */
   color: black; /* Couleur du texte du lien */
   font-family: Arial, sans-serif; /* Police d'écriture professionnelle */
   position: relative; /* Position relative pour le pseudo-élément ::after */
 }
 
-.nav-item4::after {
+.profil-nav-item4::after {
   content: ""; /* Contenu vide pour le pseudo-élément ::after */
   position: absolute;
   left: 0;
@@ -280,10 +280,10 @@ textarea {
   opacity: 0; /* Séparateur invisible par défaut */
 }
 
-.nav-item4:hover::after {
+.profil-nav-item4:hover::after {
   opacity: 1; /* Séparateur visible au survol */
 }
-.logout2 {
+.profil-logout2 {
   color: lightblue;
   text-align: center;
   cursor: pointer; /* Change le curseur en main au survol */
@@ -292,7 +292,7 @@ textarea {
   border: none;
 }
 
-.grey-box2 {
+.profil-grey-box2 {
   background-color: lightgrey;
   margin-left: 150px; /* Augmentez cette valeur pour rendre l'encadré plus large sur le côté gauche */
   padding: 20px;
@@ -305,7 +305,7 @@ textarea {
   margin-top: 85px;
 }
 
-.grey-box2 p {
+.profil-grey-box2 p {
   color: white; /* Changez la couleur du texte selon vos besoins */
   text-align: center; /* Centre le texte dans son conteneur */
   line-height: 2;
