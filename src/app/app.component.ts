@@ -9,7 +9,6 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.component.html',
   styleUrls: [
-    './app.component.css',
     '../../public/assets/Css/styles.css',
     '../../public/assets/Css/style3.css',
     '../../public/assets/Css/style4.css',

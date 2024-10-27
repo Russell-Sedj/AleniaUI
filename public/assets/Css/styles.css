@@ -1,11 +1,11 @@
-body {
+body-connect {
   font-family: "Nunito", sans-serif;
   background-color: #fff;
   margin: 0;
   padding: 0;
 }
 
-.container {
+.container-connect {
   width: 350px;
   margin: 50px auto;
   display: flex;
@@ -15,25 +15,25 @@ body {
   border-radius: 5px;
 }
 
-.header {
+.header-connect {
   display: flex;
   align-items: center;
 }
 
-h2 {
+h2-connect {
   font-size: 38px;
 }
 
-.input-group {
+.input-group-connect {
   display: flex;
   margin-bottom: 15px;
 }
 
-.country-code {
+.country-code-connect {
   margin-right: 10px;
 }
 
-.input-group select {
+.input-group-connect select {
   width: 120px;
   padding: 8px;
   border: 1px solid #ccc;
@@ -41,14 +41,14 @@ h2 {
   border-radius: 5px 0 0 5px;
 }
 
-.input-group input {
+.input-group-connect input {
   width: calc(130% - 142px);
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 0 5px 5px 0;
 }
 
-.input-group button {
+.input-group-connect button {
   margin-left: auto;
   width: 100%;
   padding: 12px;
@@ -59,11 +59,11 @@ h2 {
   cursor: pointer;
 }
 
-.input-group button:hover {
+.input-group-connect button:hover {
   background-color: #0056b3;
 }
 
-.back {
+.back-connect {
   margin-right: 10px;
   text-decoration: none;
   color: #000000;
@@ -71,66 +71,68 @@ h2 {
   margin-bottom: 20px;
 }
 
-.back:hover {
+.back-connect:hover {
   text-decoration: underline;
 }
 
-.signup-link {
+.signup-link-connect {
   margin-bottom: 20px;
   font-size: 16px;
 }
 
-.signup-link a {
+.signup-link-connect a {
   color: #699bf7;
   text-decoration: none;
   font-size: 16px;
 }
 
-.signup-link a:hover {
+.signup-link-connect a:hover {
   text-decoration: underline;
 }
 
-body,
-h2,
-.input-group input,
-.signup-link a {
+body-connect,
+h2-connect,
+.input-group-connect input,
+.signup-link-connect a {
   font-family: "Nunito", sans-serif;
 }
 
-.input-group button[type="submit"] {
+.input-group-connect button[type="submit"] {
   font-family: "Inter", sans-serif;
 }
-.logo {
+
+.logo-connect {
   display: flex;
   align-items: center;
 }
 
-.logo img {
+.logo-img-connect {
   width: 50px; /* Ajustez la taille du logo selon vos besoins */
   height: auto;
   margin-right: 10px;
 }
 
-.logo h1 {
+.logo-text-connect {
   margin: 0;
   font-size: 24px;
   color: #699bf7; /* Couleur du texte du nom de la marque */
   font-family: "Newsreader", Times, serif;
 }
 
-.forgot-password,
-.forgot-password:visited {
+.forgot-password-connect,
+.forgot-password-connect:visited {
   color: #699bf7; /* Couleur du lien */
   text-decoration: none;
   font-size: 16px;
 }
 
-.forgot-password:hover {
+.forgot-password-connect:hover {
   text-decoration: underline; /* Souligner le lien au survol */
 }
+
 /**************************************************************************************************************/
 
-.sidebar {
+.sidebar-connect {
   position: fixed;
   top: 50%;
   right: 0;
@@ -138,7 +140,7 @@ h2,
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.nav-item {
+.nav-item-connect {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -152,13 +154,13 @@ h2,
   color: black;
 }
 
-.nav-icon {
+.nav-icon-connect {
   margin-right: 10px;
 }
 
 /* ----------*/
 
-.sidebar2 {
+.sidebar2-connect {
   position: fixed;
   top: 50%;
   left: 0;
@@ -166,12 +168,12 @@ h2,
   background-color: rgba(255, 255, 255, 0.5); /* Ajout d'un fond transparent */
 }
 
-.section-title2 {
+.section-title2-connect {
   font-weight: bold; /* Texte en gras */
   text-decoration: underline; /* Texte souligné */
 }
 
-.nav-item2 {
+.nav-item2-connect {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -181,11 +183,11 @@ h2,
   color: black; /* Couleur du texte du lien */
 }
 
-.nav-item2:hover {
+.nav-item2-connect:hover {
   background-color: #e0e0e0; /* Changement de couleur au survol */
 }
 
-.logout {
+.logout-connect {
   background-color: red;
   color: white;
   text-align: center;
@@ -193,7 +195,7 @@ h2,
 }
 /*--------*/
 
-.cv-item {
+.cv-item-connect {
   position: absolute;
   top: 80%; /* Position à 80% du haut de la page */
   left: 50%; /* Position au milieu de la page */
@@ -206,7 +208,7 @@ h2,
   color: black; /* Couleur du texte du lien */
 }
 
-.cv-container {
+.cv-container-connect {
   position: absolute;
   top: 60%; /* Position ajustée pour être plus haut */
   left: 50%;
@@ -222,15 +224,15 @@ h2,
   height: 30%; /* Hauteur de 30% de la page */
 }
 
-.cv-icon,
-.cv-text,
-.cv-warning {
+.cv-icon-connect,
+.cv-text-connect,
+.cv-warning-connect {
   margin-bottom: 20px; /* Augmentation de l'espacement entre les éléments */
 }
 
 /*-------------*/
 
-.navbar3 {
+.navbar3-connect {
   position: absolute;
   top: 10%; /* Position à 10% du haut de la page */
   left: 18%; /* Position au milieu de la page */
@@ -240,14 +242,14 @@ h2,
   justify-content: space-around; /* Espacement uniforme entre les éléments */
 }
 
-.nav-item3 {
+.nav-item3-connect {
   text-decoration: none; /* Suppression du soulignement du lien */
   color: black; /* Couleur du texte du lien */
   font-family: Arial, sans-serif; /* Police d'écriture professionnelle */
   position: relative; /* Position relative pour le pseudo-élément ::after */
 }
 
-.nav-item3::after {
+.nav-item3-connect::after {
   content: ""; /* Contenu vide pour le pseudo-élément ::after */
   position: absolute;
   left: 0;
@@ -258,11 +260,11 @@ h2,
   opacity: 0; /* Séparateur invisible par défaut */
 }
 
-.nav-item3:hover::after {
+.nav-item3-connect:hover::after {
   opacity: 1; /* Séparateur visible au survol */
 }
 
-.logo-container {
+.logo-container-connect {
   position: absolute;
   top: 0;
   left: 0;
@@ -271,12 +273,12 @@ h2,
   padding: 10px; /* Espacement intérieur pour éviter que le logo ne touche les bords de la page */
 }
 
-.logo-container img {
+.logo-container-connect img {
   height: 75px; /* Hauteur du logo */
   width: auto; /* Largeur automatique pour conserver les proportions de l'image */
 }
 
-.logo-container .logo-text {
+.logo-container-connect .logo-text-connect {
   margin-left: 10px; /* Espacement entre le logo et le texte */
   font-size: 1.5em; /* Taille du texte */
   font-weight: bold; /* Texte en gras */

@@ -1,38 +1,40 @@
-<div class="container">
-  <div class="header" class="logo">
-    <a routerLink="/page-accueil" class="back">&lt; Retour</a>
+<div class="container-connect">
+  <div class="header-connect logo-connect">
+    <a routerLink="/page-accueil" class="back-connect">&lt; Retour</a>
     <img
       src="/assets/images/Rectangle 6.png"
       alt="Rectangle 6"
-      class="image1"
+      class="image1-connect"
     />
   </div>
-  <h2>Inscription</h2>
-  <div class="signup-link">
+  <h2 class="h2-connect">Inscription</h2>
+  <div class="signup-link-connect">
     <p>Déjà un compte ? <a routerLink="/connexion">Se connecter</a></p>
   </div>
   <form action="#" method="post">
-    <div class="input-group">
+    <div class="input-group-connect">
       <input
         type="text"
         name="firstName"
         id="firstName"
         placeholder="Prénom"
         required
+        class="input-connect"
       />
     </div>
-    <div class="input-group">
+    <div class="input-group-connect">
       <input
         type="text"
         name="lastName"
         id="lastName"
         placeholder="Nom"
         required
+        class="input-connect"
       />
     </div>
-    <div class="input-group">
-      <div class="country-code">
-        <select name="countryCode" id="countryCode">
+    <div class="input-group-connect">
+      <div class="country-code-connect">
+        <select name="countryCode" id="countryCode" class="select-connect">
           <option value="+33">+33</option>
           <!-- Ajoutez ici d'autres options de pays si nécessaire -->
         </select>
@@ -43,55 +45,59 @@
         id="phoneNumber"
         placeholder="numéro de téléphone"
         required
+        class="input-connect"
       />
     </div>
-    <div class="input-group">
+    <div class="input-group-connect">
       <input
         type="email"
         name="email"
         id="email"
         placeholder="Adresse email"
         required
+        class="input-connect"
       />
     </div>
-
-    <div class="input-group">
+    <div class="input-group-connect">
       <input
         type="password"
         name="password"
         id="password"
         placeholder="Mot de passe"
         required
+        class="input-connect"
       />
     </div>
-    <div class="input-group">
+    <div class="input-group-connect">
       <input
         type="password"
         name="confirmPassword"
         id="confirmPassword"
         placeholder="Confirmer le mot de passe"
         required
+        class="input-connect"
       />
     </div>
-    <div class="signup-link">
+    <div class="signup-link-connect">
       <input
         type="checkbox"
         name="termsAndConditions"
         id="termsAndConditions"
         required
+        class="checkbox-connect"
       />
-      <label for="termsAndConditions"
+      <label for="termsAndConditions" class="label-connect"
         >J'accepte les
         <a routerLink="#">conditions générales d'utilisation</a> *</label
       >
     </div>
-    <div class="input-group">
-      <button type="submit">Créer mon compte</button>
+    <div class="input-group-connect">
+      <button type="submit" class="button-connect">Créer mon compte</button>
     </div>
     <img
       src="/assets/images/Rectangle 7.png"
       alt="Rectangle 7"
-      class="image1"
+      class="image1-connect"
     />
   </form>
 </div>

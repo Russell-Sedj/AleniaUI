@@ -1,22 +1,22 @@
-<div class="container">
-  <div class="header">
-    <a routerLink="/inscription" class="back">&lt; Retour</a>
+<div class="container-connect">
+  <div class="header-connect">
+    <a routerLink="/page-accueil" class="back-connect">&lt; Retour</a>
     <img
       src="/assets/images/Rectangle 6.png"
       alt="Rectangle 6"
-      class="image1"
+      class="image1-connect"
     />
   </div>
-  <h2>Connexion</h2>
-  <div class="signup-link">
+  <h2 class="h2-connect">Connexion</h2>
+  <div class="signup-link-connect">
     <p>
       Pas encore de compte ?
       <a routerLink="/inscription">Inscrivez-vous</a>
     </p>
   </div>
   <form action="#" method="post">
-    <div class="input-group">
-      <div class="country-code">
+    <div class="input-group-connect">
+      <div class="country-code-connect">
         <select name="countryCode" id="countryCode">
           <option value="+33">+33</option>
           <!-- Ajoutez ici d'autres options de pays si nécessaire -->
@@ -28,27 +28,29 @@
         id="phoneNumber"
         placeholder="numéro de téléphone"
         required
+        class="input-connect"
       />
     </div>
-    <div class="input-group">
+    <div class="input-group-connect">
       <input
         type="password"
         name="password"
         id="password"
         placeholder="Mot de passe"
         required
+        class="input-connect"
       />
     </div>
-    <div class="signup-link">
-      <a href="#">mot de passe oublié ?</a>
+    <div class="signup-link-connect">
+      <a href="#" class="forgot-password-connect">mot de passe oublié ?</a>
     </div>
-    <div class="input-group">
-      <button type="submit">Se connecter</button>
+    <div class="input-group-connect">
+      <button type="submit" class="button-connect">Se connecter</button>
     </div>
     <img
       src="/assets/images/Rectangle 7.png"
       alt="Rectangle 7"
-      class="image1"
+      class="image1-connect"
     />
   </form>
 </div>
