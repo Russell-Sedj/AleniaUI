@@ -1,4 +1,5 @@
 <main class="main">
+  <!-- hearder uniquement pour acceuil, ce que l'on propose, qui sommes nous -->
   <header
     *ngIf="
       currentUrl === '/page-accueil' ||
@@ -60,6 +61,7 @@
     </div>
   </header>
 
+  <!-- header uniquement pour connexion, inscription -->
   <header *ngIf="currentUrl === '/connexion' || currentUrl === '/inscription'">
     <div class="logo">
       <img src="/assets/images/logo.png" alt="Logo de Lénia" />
@@ -67,6 +69,8 @@
     </div>
   </header>
 
+  <!-- header unquement pour disponibilite, mission-detail-hilguegue, 
+   missions, missions passes, missions venir, offres, prestation -->
   <div
     *ngIf="
       currentUrl === '/disponibilite' ||
@@ -86,6 +90,7 @@
       </div>
     </header>
 
+    <!-- sidebar pour mission detail, missions, missions passes, missions venir, offres -->
     <div
       *ngIf="
         currentUrl === '/mission-detail-hilguegue' ||
@@ -123,14 +128,15 @@
       </a>
     </div>
 
+    <!-- sidebar de prestation -->
     <div *ngIf="currentUrl === '/prestation'">
       <div class="sidebar2">
-        <div class="nav-item2">planning</div>
-        <div class="nav-item2">préstations</div>
-        <a href="Profil2.html" class="nav-item2">fiches de poste</a>
-        <a href="Profil2.html" class="nav-item2">Contrats</a>
-        <a href="Profil2.html" class="nav-item2">Relevés d'heures</a>
-        <a href="Profil3.html" class="nav-item2">factures</a>
+        <div class="nav-item2">Planning</div>
+        <div class="nav-item2">Préstations</div>
+        <a routerLink="/profil2" class="nav-item2">Fiches de poste</a>
+        <a routerLink="/profil2" class="nav-item2">Contrats</a>
+        <a routerLink="/profil2" class="nav-item2">Relevés d'heures</a>
+        <a routerLink="/profil3" class="nav-item2">factures</a>
         <div class="nav-item2">Paramètres</div>
         <hr />
         <button class="nav-item2 logout2" onclick="deconnexion()">
@@ -145,6 +151,7 @@
       </div>
     </div>
 
+    <!-- sidebar de disponibilite -->
     <div *ngIf="currentUrl === '/disponibilite'" class="sidebar">
       <a routerLink="missions" class="nav-item">
         <div class="nav-icon">🔍</div>
@@ -167,7 +174,7 @@
 
   <router-outlet></router-outlet>
 
-  <footer>
+  <footer *ngIf="currentUrl !== '/prestation'">
     <img src="/assets/images/logo.png" alt="Logo" class="footer-logo" />
     <!-- Ajoutez le chemin vers votre logo ici -->
     <div class="footer-section2">
