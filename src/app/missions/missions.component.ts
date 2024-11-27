@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Missions } from '../../models/missions.model';
+import { MissionsService } from '../services/missions.service';
 // import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -12,16 +13,17 @@ import { Missions } from '../../models/missions.model';
   templateUrl: './missions.component.html',
   styleUrls: ['../../../public/assets/Css/style3.css'],
 })
-export class MissionsComponent {
-  http = inject(HttpClient);
+export class MissionsComponent implements OnInit {
+  missionsList: Missions[] = [];
 
-  Missions$ = this.getMissions();
+  constructor(private missionsService: MissionsService) {}
 
-  // ngOnInit() {
-  //   this.getMissions().subscribe((missions) => console.log(missions));
-  // }
-
-  private getMissions(): Observable<Missions[]> {
-    return this.http.get<Missions[]>('https://localhost:7134/api/Missions');
+  ngOnInit(): void {
+    this.missionsService.getMissions().subscribe((items) => {
+      this.missionsList = items;
+    });
+    this.missionsService.getMissions().subscribe((items) => {
+      console.log(items);
+    });
   }
 }

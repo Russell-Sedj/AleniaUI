@@ -8,11 +8,14 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 
+import { MissionsService } from './services/missions.service';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    MissionsService,
   ],
 };
