@@ -14,16 +14,14 @@ import { MissionsService } from '../services/missions.service';
   styleUrls: ['../../../public/assets/Css/style3.css'],
 })
 export class MissionsComponent implements OnInit {
-  missionsList: Missions[] = [];
+  missions: any[] = [];
 
-  constructor(private missionsService: MissionsService) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.missionsService.getMissions().subscribe((items) => {
-      this.missionsList = items;
-    });
-    this.missionsService.getMissions().subscribe((items) => {
-      console.log(items);
-    });
+    this.http.get<any[]>('https://localhost:7134/api/missions')
+      .subscribe(data => {
+        this.missions = data;
+      });
   }
 }

@@ -1,25 +1,12 @@
-<div class="content">
-  <div class="mission-detail">
-    <img
-      src="/assets/images/ephad1.jpg"
-      alt="Établissement Hilguegue"
-      class="mission-image"
-    />
-    <h2 class="center">Établissement Hilguegue</h2>
-    <h3 class="center poste">Médecin de santé préventive (F/H)</h3>
+<div class="content" *ngIf="missions.length > 0">
+  <div class="mission-detail" *ngFor="let mission of missions">
+    <h2 class="center">{{ mission.name }}</h2>
+    <h3 class="center poste">{{ mission.status }}</h3>
 
     <!-- Petite barre grise sous le poste -->
     <hr class="divider" />
 
-    <p class="center"><strong>Taux horaire:</strong> 35€ / heure</p>
-    <p class="center"><strong>Date de début:</strong> 1er Novembre 2024</p>
-    <p class="center"><strong>Date de fin:</strong> 30 Avril 2025</p>
-
-    <p class="description center">
-      <strong>Description:</strong> Lorem ipsum dolor sit amet, consectetur
-      adipisicing elit. Unde voluptatibus temporibus ipsam similique facere
-      sequi praesentium assumenda.
-    </p>
+    <p class="center"><strong>Établissement:</strong> {{ mission.etablissement }}</p>
 
     <!-- Bouton postuler centré -->
     <div class="center button-container">
