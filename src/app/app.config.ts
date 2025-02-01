@@ -8,7 +8,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 
-import { MissionsService } from './services/missions.service';
+import { MissionService } from './services/mission/mission.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    MissionsService,
+    MissionService,
   ],
 };

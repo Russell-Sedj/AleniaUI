@@ -1,0 +1,13 @@
+<div class="content">
+  <div class="card" *ngFor="let mission of missionList">
+    <img src="/assets/images/ephad1.jpg" alt="Image de l'établissement" />
+    <h2>Établissement {{ mission.etablissementId }}</h2>
+    <p class="poste">{{ mission.adresse }}</p>
+    <p class="description">
+      {{ mission.description || "Aucune description disponible" }}
+    </p>
+    <a [routerLink]="'/mission-detail/' + mission.id">
+      <button>Voir la mission</button>
+    </a>
+  </div>
+</div>

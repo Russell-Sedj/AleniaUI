@@ -18,7 +18,6 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   ],
 })
 export class AppComponent implements OnInit {
-  title = 'essai';
   currentUrl: string = ''; // Initialisation de currentUrl avec une chaîne vide
 
   constructor(private router: Router) {}
