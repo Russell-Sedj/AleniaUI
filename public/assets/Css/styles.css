@@ -5,6 +5,10 @@ body-connect {
   padding: 0;
 }
 
+header {
+  font-size: small;
+}
+
 .container-connect {
   width: 350px;
   margin: 50px auto;
