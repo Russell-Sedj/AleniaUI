@@ -15,6 +15,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     '../../public/assets/Css/ProfilCss.css',
     '../../public/assets/Css/navigation_barre.css',
     '../../public/assets/Css/footer.css',
+    './app.component.css',
   ],
 })
 export class AppComponent implements OnInit {

@@ -1,6 +1,13 @@
 <main class="main">
   <!-- hearder pour acceuil, ce que l'on propose, qui sommes nous -->
-  <header class="header-first">
+  <header
+    *ngIf="
+      currentUrl === '/page-accueil' ||
+      currentUrl === '/ce-que-lon-propose' ||
+      currentUrl === '/qui-sommes-nous'
+    "
+    class="header-first"
+  >
     <div class="nav-container-first">
       <div class="logo-nav-container-first">
         <a routerLink="page-accueil">
@@ -16,7 +23,7 @@
 
         <nav class="nav-first">
           <ul class="nav-list-first">
-            <li *ngIf="currentUrl === '/page-accueil'">
+            <li>
               <a
                 routerLink="page-accueil"
                 routerLinkActive="router-link-active"
@@ -49,12 +56,18 @@
               >
             </li>
             <li>
-              <a
-                routerLink="connexion"
-                routerLinkActive="router-link-active"
-                ariaCurrentWhenActive="page"
-                >Se connecter</a
-              >
+              <a routerLink="connexion">Se connecter</a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropbtn">S'inscrire</a>
+              <div class="dropdown-content">
+                <a routerLink="inscription-interimaire"
+                  >S'inscrire en tant qu'intérimaire</a
+                >
+                <a routerLink="inscription-etablissement"
+                  >S'inscrire en tant qu'établissement</a
+                >
+              </div>
             </li>
           </ul>
         </nav>
@@ -67,11 +80,125 @@
     *ngIf="currentUrl === '/connexion' || currentUrl === '/inscription'"
     class="header-connect"
   >
-    <div class="logo-container-first">
-      <img src="/assets/images/logo.png" alt="Logo ALENIA" class="logo-first" />
-      <span class="logo-text-first">ALENIA</span>
+    <div class="logo-connect">
+      <img
+        src="/assets/images/logo.png"
+        alt="Logo de Lénia"
+        class="logo-img-connect"
+      />
+      <h1 class="logo-text-connect">Lénia</h1>
     </div>
   </header>
+
+  <!-- header pour disponibilite, mission-detail-hilguegue, 
+   missions, missions passes, missions venir, offres, prestation -->
+  <div
+    *ngIf="
+      currentUrl === '/disponibilite' ||
+      currentUrl === '/mission-detail-hilguegue' ||
+      currentUrl === '/missions' ||
+      currentUrl === '/missions-passes' ||
+      currentUrl === '/missions-venir' ||
+      currentUrl === '/offres1' ||
+      currentUrl === '/offres2' ||
+      currentUrl === '/prestation' ||
+      currentUrl === '/profil1' ||
+      currentUrl === '/profil2' ||
+      currentUrl === '/profil3'
+    "
+  >
+    <header>
+      <div class="logo-container">
+        <img src="/assets/images/logo.png" alt="Logo Lénia" />
+        <span class="logo-text">ALENIA</span>
+      </div>
+    </header>
+
+    <!-- sidebar pour mission detail, missions, missions passes, missions venir, offres, profils -->
+    <div
+      *ngIf="
+        currentUrl === '/mission-detail-hilguegue' ||
+        currentUrl === '/missions' ||
+        currentUrl === '/missions-passes' ||
+        currentUrl === '/missions-venir' ||
+        currentUrl === '/offres1' ||
+        currentUrl === '/offres2' ||
+        currentUrl === '/profil1' ||
+        currentUrl === '/profil2' ||
+        currentUrl === '/profil3'
+      "
+      class="sidebar"
+    >
+      <a routerLink="missions" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/offres_icon.png" alt="Search" />
+        </div>
+        <div class="nav-text">Offres</div>
+      </a>
+      <a routerLink="disponibilite" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/dispo_icon (2).png" alt="Calendar" />
+        </div>
+        <div class="nav-text">Disponibilités</div>
+      </a>
+      <a routerLink="missions-venir" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/mission_icon.png" alt="Portfolio" />
+        </div>
+        <div class="nav-text">Missions</div>
+      </a>
+      <a routerLink="profil1" class="nav-item">
+        <div class="nav-icon">
+          <img src="/assets/images/profil_icon.png" alt="User" />
+        </div>
+        <div class="nav-text">Profil</div>
+      </a>
+    </div>
+
+    <!-- sidebar de disponibilite -->
+    <div *ngIf="currentUrl === '/disponibilite'" class="sidebar">
+      <a routerLink="missions" class="nav-item">
+        <div class="nav-icon">🔍</div>
+        <div class="nav-text">Offres</div>
+      </a>
+      <a routerLink="disponibilite" class="nav-item">
+        <div class="nav-icon">🗓️</div>
+        <div class="nav-text">Disponibilités</div>
+      </a>
+      <a routerLink="missions-venir" class="nav-item">
+        <div class="nav-icon">💼</div>
+        <div class="nav-text">Missions</div>
+      </a>
+      <a routerLink="profil" class="nav-item">
+        <div class="nav-icon">👤</div>
+        <div class="nav-text">Profil</div>
+      </a>
+    </div>
+
+    <!-- sidebar des profils -->
+    <div
+      class="profil-sidebar2"
+      *ngIf="
+        currentUrl === '/profil1' ||
+        currentUrl === '/profil2' ||
+        currentUrl === '/profil3'
+      "
+    >
+      <p class="profil-section-title2">Informations personnelles</p>
+      <div class="profil-nav-item2">Établissements</div>
+      <div class="profil-nav-item2">Métiers</div>
+      <a routerLink="/profil2" class="profil-nav-item2">Documents</a>
+      <p class="profil-section-title2">Paramètres</p>
+      <a routerLink="/profil2" class="profil-nav-item2">Compte</a>
+      <div class="profil-nav-item2">Notifications</div>
+      <p class="profil-section-title2">Besoin d'aide ?</p>
+      <a routerLink="/profil2" class="profil-nav-item2">Aide & Support</a>
+      <hr />
+      <button class="profil-nav-item2 profil-logout" onclick="deconnexion()">
+        Déconnexion
+      </button>
+    </div>
+  </div>
 
   <router-outlet></router-outlet>
 
