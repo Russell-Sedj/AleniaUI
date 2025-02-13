@@ -1,7 +1,7 @@
 <div class="content">
   <div class="card" *ngFor="let mission of missionList">
     <img src="/assets/images/ephad1.jpg" alt="Image de l'établissement" />
-    <h2>Établissement {{ mission.etablissementId }}</h2>
+    <h2>{{ mission.etablissement?.nom || 'Établissement inconnu' }}</h2>
     <p class="poste">{{ mission.adresse }}</p>
     <p class="description">
       {{ mission.description || "Aucune description disponible" }}
