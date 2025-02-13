@@ -28,10 +28,6 @@ export const routes: Routes = [
   { path: 'contrat', component: ContratComponent },
   { path: 'disponibilite', component: DisponibiliteComponent },
   { path: 'fiche-poste', component: FichePosteComponent },
-  {
-    path: 'mission-detail-hilguegue',
-    component: MissionDetailHilguegueComponent,
-  },
   { path: 'inscription', component: InscriptionComponent },
   { path: 'missions', component: MissionsComponent },
   { path: 'missions-passes', component: MissionsPassesComponent },
@@ -47,4 +43,5 @@ export const routes: Routes = [
   { path: 'profil3', component: Profil3Component },
   { path: 'questions-frequentes', component: QuestionsFrequentesComponent },
   { path: 'qui-sommes-nous', component: QuiSommesNousComponent },
+  { path: 'mission-detail-hilguegue/:id', component: MissionDetailHilguegueComponent }, // Route dynamique pour les détails de la mission
 ];

@@ -1,6 +1,12 @@
-export interface Missions {
+export interface Etablissement {
+  id: string;
+  name: string;
+}
+
+export interface Mission {
   id: string;
   name: string;
   status: string;
-  etablissement: string;
+  etablissementId: string;
+  etablissement?: Etablissement; // Facultatif
 }

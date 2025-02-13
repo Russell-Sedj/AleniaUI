@@ -1,4 +1,23 @@
-<div class="content">
+<div class="content" *ngIf="missions.length > 0">
+  <div class="card" *ngFor="let mission of missions">
+    <img src="/assets/images/ephad1.jpg" alt="Property Image" />
+    <h2>{{ mission.etablissement?.name }}</h2>
+    <p class="poste">{{ mission.name }}</p>
+    <p class="description">
+      Description du poste, Lorem ipsum dolor sit amet consectetur adipisicing
+      elit. Unde voluptatibus temporibus ipsam similique facere sequi
+      praesentium assumenda, placeat totam adipisci rerum omnis neque sit
+      asperiores, pariatur, officia quo. Voluptas, iusto?
+    </p>
+    <!-- Link to the new detail page -->
+    <a [routerLink]="['/mission-detail-hilguegue', mission.id]">
+      <button>Voir la mission</button>
+    </a>
+  </div>
+</div>
+
+
+<!-- <div class="content">
   <div class="card">
     <img src="/assets/images/ephad1.jpg" alt="Property Image" />
     <h2>Établissement Hilguegue</h2>
@@ -9,7 +28,7 @@
       praesentium assumenda, placeat totam adipisci rerum omnis neque sit
       asperiores, pariatur, officia quo. Voluptas, iusto?
     </p>
-    <!-- Link to the new detail page -->
+    
     <a routerLink="/mission-detail-hilguegue"
       ><button>Voir la mission</button></a
     >
@@ -28,7 +47,7 @@
       porro, nihil omnis mollitia ut assumenda sint? Asperiores, mollitia.
       Veniam, accusantium facere.
     </p>
-    <!-- Link to another detail page -->
+    
     <a routerLink="#"><button>Voir la mission</button></a>
   </div>
 
@@ -42,7 +61,7 @@
       commodi beatae libero sunt excepturi quam autem, earum voluptate eligendi,
       quia possimus.
     </p>
-    <!-- Link to another detail page -->
+    
     <a routerLink="#"><button>Voir la mission</button></a>
   </div>
 
@@ -56,7 +75,8 @@
       inventore necessitatibus labore sit non. Nisi alias ea dolore, saepe quia
       architecto repudiandae.
     </p>
-    <!-- Link to another detail page -->
+    
     <a routerLink="#"><button>Voir la mission</button></a>
   </div>
 </div>
+ -->

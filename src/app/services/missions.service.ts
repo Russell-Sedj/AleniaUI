@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Missions } from '../../models/missions.model';
+import { Mission } from '../models/missions.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,19 +11,19 @@ export class MissionsService {
 
   constructor(private http: HttpClient) {}
 
-  getMissions(): Observable<Missions[]> {
-    return this.http.get<Missions[]>(this.apiUrl);
+  getMissions(): Observable<Mission[]> {
+    return this.http.get<Mission[]>(this.apiUrl);
   }
 
-  getMission(id: string): Observable<Missions> {
-    return this.http.get<Missions>(`${this.apiUrl}/${id}`);
+  getMissionById(id: string): Observable<Mission> {
+    return this.http.get<Mission>(`${this.apiUrl}/${id}`);
   }
 
-  addMission(mission: Missions): Observable<Missions> {
-    return this.http.post<Missions>(this.apiUrl, mission);
+  addMission(mission: Mission): Observable<Mission> {
+    return this.http.post<Mission>(this.apiUrl, mission);
   }
 
-  updateMission(mission: Missions): Observable<void> {
+  updateMission(mission: Mission): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${mission.id}`, mission);
   }
 
