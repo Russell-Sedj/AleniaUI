@@ -30,3 +30,12 @@ button {
 button:disabled {
   background-color: #ccc;
 }
+
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+  background-color: #ffebee;
+  border-radius: 4px;
+}

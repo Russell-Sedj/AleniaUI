@@ -1,5 +1,8 @@
 <div class="auth-container">
   <h2>Connexion</h2>
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
   <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <div class="form-group">
       <label for="email">Email</label>
