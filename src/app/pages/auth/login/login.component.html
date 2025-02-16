@@ -1,0 +1,27 @@
+<div class="auth-container">
+  <h2>Connexion</h2>
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="model.email"
+        required
+        email
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        name="motDePass"
+        [(ngModel)]="model.motDePass"
+        required
+      />
+    </div>
+    <button type="submit" [disabled]="!loginForm.valid">Se connecter</button>
+  </form>
+</div>

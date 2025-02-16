@@ -20,10 +20,12 @@ import { Profil2Component } from './pages/profil2/profil2.component';
 import { Profil3Component } from './pages/profil3/profil3.component';
 import { QuestionsFrequentesComponent } from './pages/questions-frequentes/questions-frequentes.component';
 import { QuiSommesNousComponent } from './pages/qui-sommes-nous/qui-sommes-nous.component';
+import { LoginComponent } from './pages/auth/login/login.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/page-accueil', pathMatch: 'full' },
   { path: 'ce-que-lon-propose', component: CeQueLonProposeComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'connexion', component: ConnexionComponent },
   { path: 'contrat', component: ContratComponent },
   { path: 'disponibilite', component: DisponibiliteComponent },
