@@ -23,13 +23,15 @@ export class LoginComponent {
 
   onSubmit(form: any) {
     if (form.valid) {
+      console.log('Tentative de connexion avec:', this.model);
       this.authService.login(this.model).subscribe({
-        next: () => {
-          this.router.navigate(['/dashboard']);
+        next: (response) => {
+          console.log('Connexion réussie:', response);
+          this.router.navigate(['/']);
         },
         error: (error) => {
+          console.error('Erreur détaillée:', error);
           this.errorMessage = error.error.message || 'Erreur de connexion';
-          console.error('Erreur de connexion:', error);
         },
       });
     }
