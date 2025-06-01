@@ -34,6 +34,10 @@ export const routes: Routes = [
     path: 'mission-detail-hilguegue',
     component: MissionDetailHilguegueComponent,
   },
+  {
+    path: 'mission-detail/:id',
+    component: MissionDetailHilguegueComponent,
+  },
   { path: 'inscription', component: InscriptionComponent },
   { path: 'missions', component: MissionsComponent },
   { path: 'missions-passes', component: MissionsPassesComponent },
