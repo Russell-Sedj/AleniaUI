@@ -1,9 +1,7 @@
 .content-section {
   background-color: #6fa4f2; /* Couleur de fond de la section */
-  padding: 20px 20px; /* Espacement intérieur pour le contenu */
-  text-align: center; /* Centrer le contenu horizontalement */
-  margin: 150px; /* Ajoute de la marge sur les côtés */
-  border-radius: 20px;
+    padding: 20px 20px; /* Espacement intérieur pour le contenu */
+    text-align: center; /* Centrer le contenu horizontalement */
 }
 
 .content-container {
