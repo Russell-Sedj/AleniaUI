@@ -1,14 +1,19 @@
 .content-section {
-  background-color: #6fa4f2; /* Couleur de fond de la section */
+   background-color: #88b3f3; /* Couleur de fond de la section */
     padding: 20px 20px; /* Espacement intérieur pour le contenu */
+    padding-top: 70px;
+    padding-bottom: 70px;
     text-align: center; /* Centrer le contenu horizontalement */
 }
 
 .content-container {
-  position: relative;
-  max-width: 800px; /* Largeur maximale de la zone de contenu */
-  margin: 0 auto; /* Centre le contenu horizontalement */
-  padding: 25px 25px; /* Ajoute de l'espace sur les côtés */
+   background: #ffffff;
+    border-radius: 16px;
+    padding: 40px 24px;
+    box-shadow: 0 4px 24px 0 rgba(34, 60, 136, 0.10);
+    border: 4px dashed #90ade1;
+    margin: 0 auto 32px auto;
+    max-width: 900px;
 }
 
 h1 {
@@ -64,14 +69,16 @@ h1 {
   margin-right: 50px; /* Espacement entre les images et le rectangle */
 }
 
-.rectangle {
-  background-color: #6fa4f2; /* Couleur de fond du rectangle */
-  border-radius: 10px; /* Coins arrondis du rectangle */
-  padding: 100px; /* Espacement intérieur du rectangle */
-  flex-grow: 1; /* Permet au rectangle de remplir l'espace restant */
-  margin-right: -20px; /* Pour que le rectangle morde la marge à droite */
-  box-shadow: 0 0 0 2px #90ade1, 0 0 0 6px transparent;
+/* Ombre plus marquée pour le rectangle bleu principal */
+.rectangle-ombre {
+  background-color: #6fa4f2;
+  border-radius: 16px;
+  padding: 60px 30px;
+  box-shadow: 0 8px 32px 0 rgba(34, 60, 136, 0.25), 0 0 0 4px #90ade1;
+  margin: 0 auto 32px auto;
+  max-width: 900px;
 }
+
 .rectangle2 {
   background-color: #6fa4f2; /* Couleur de fond du rectangle */
   border-radius: 10px; /* Coins arrondis du rectangle */
@@ -80,9 +87,93 @@ h1 {
   margin-left: -20px; /* Pour que le rectangle morde la marge à droite */
   box-shadow: 0 0 0 5px #90ade1, 0 0 0 6px transparent;
 }
+
 .text-zone p {
   margin: 0; /* Supprime les marges par défaut */
   color: #000000; /* Couleur du texte */
   font-family: "Inter", sans-serif; /* Police Inter pour le texte */
   font-size: 18px; /* Taille de la police du texte */
 }
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+  .content-section {
+    padding: 10px 10px;
+  }
+  .content-container, .rectangle-ombre, .rectangle2 {
+    max-width: 98%;
+    padding: 30px 10px;
+  }
+  h1 {
+    font-size: 32px;
+  }
+  .pictogramme1, .pictogramme2 {
+    width: 70px;
+    height: 70px;
+  }
+  .pictogramme1 {
+    left: 80%;
+    top: -35px;
+  }
+  .pictogramme2 {
+    right: 80%;
+    bottom: -35px;
+  }
+  .images {
+    margin-right: 20px;
+  }
+  .rectangle2 {
+    padding: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .content-section {
+    padding: 5px 0;
+  }
+  .content-container, .rectangle-ombre, .rectangle2 {
+    max-width: 100%;
+    padding: 10px 0;
+    border-radius: 8px;
+  }
+  h1 {
+    font-size: 20px;
+  }
+  .content-container p, .text-zone p {
+    font-size: 15px;
+  }
+  .pictogramme1, .pictogramme2 {
+    width: 40px;
+    height: 40px;
+  }
+  .pictogramme1 {
+    left: 70%;
+    top: -20px;
+  }
+  .pictogramme2 {
+    right: 70%;
+    bottom: -20px;
+  }
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .images {
+    margin: 0 0 10px 0;
+    text-align: center;
+  }
+  .rectangle-ombre, .rectangle2 {
+    padding: 15px;
+    margin: 0 0 16px 0;
+    box-shadow: 0 0 0 2px #90ade1, 0 0 0 3px transparent;
+  }
+  .new-title-container {
+    margin-top: 10px;
+  }
+  .new-image {
+    margin-top: 10px;
+    width: 100%;
+    height: auto;
+  }
+}
+
