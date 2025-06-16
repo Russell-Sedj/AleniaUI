@@ -95,6 +95,10 @@ h1 {
   font-size: 18px; /* Taille de la police du texte */
 }
 
+.jolie {
+  margin-top: 50px;
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
   .content-section {
