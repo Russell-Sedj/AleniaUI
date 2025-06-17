@@ -60,7 +60,16 @@ h1 {
   margin-right: auto; /* Pour aligner l'image à droite */
   display: block; /* Pour que les marges automatiques fonctionnent */
 }
+
+.new-image2 {
+  position: relative; /* Changement de position relative */
+  margin-top: 20px; /* Espacement depuis le paragraphe précédent */
+  margin-left: auto; /* Pour aligner l'image à gauche */
+  display: block; /* Pour que les marges automatiques fonctionnent */
+}
+
 .container {
+  margin: auto; /* Espacement automatique */
   display: flex;
   align-items: center; /* Centrer verticalement les éléments enfants */
 }
@@ -95,9 +104,6 @@ h1 {
   font-size: 18px; /* Taille de la police du texte */
 }
 
-.jolie {
-  margin-top: 50px;
-}
 
 /* --- Responsive Design --- */
 @media (max-width: 1024px) {
