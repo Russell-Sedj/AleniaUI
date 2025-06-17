@@ -1,0 +1,78 @@
+<div class="min-h-screen bg-white font-inter pt-20">
+  <main 
+    class="container mx-auto max-w-2xl px-4 py-8"
+    aria-labelledby="main-heading"
+  >
+    <!-- Bouton retour -->
+    <div class="mb-6">
+      <button 
+        routerLink="/page-accueil"
+        class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 font-medium"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Retour à l'accueil
+      </button>
+    </div>
+
+    <h1 
+      id="main-heading" 
+      class="text-3xl font-bold text-gray-800 mb-6"
+    >
+      Déclaration d'accessibilité
+    </h1>
+    
+    <section class="prose prose-lg max-w-none space-y-6">
+      <p class="text-gray-700 leading-relaxed">
+        Nous nous engageons à rendre notre site web accessible à tous, y compris aux personnes en situation de handicap. 
+        Nous nous efforçons de respecter les normes d'accessibilité et de fournir une expérience utilisateur optimale pour tous.
+      </p>
+      
+      <h2 
+        id="measures-heading" 
+        class="text-2xl font-semibold text-gray-800 mb-4"
+      >
+        Mesures prises pour assurer l'accessibilité
+      </h2>
+      
+      <ul class="list-disc list-inside space-y-3 text-gray-700" aria-labelledby="measures-heading">
+        <li>Utilisation de balises ARIA pour améliorer la navigation et l'interaction.</li>
+        <li>Contraste de couleurs suffisant pour les textes et les éléments graphiques.</li>
+        <li>Navigation au clavier pour toutes les fonctionnalités interactives.</li>
+        <li>Descriptions alternatives pour les images et les éléments multimédias.</li>
+        <li>Structure sémantique claire avec des titres hiérarchisés.</li>
+        <li>Tests réguliers avec des outils d'accessibilité automatisés.</li>
+      </ul>
+      
+      <h2 
+        id="contact-heading" 
+        class="text-2xl font-semibold text-gray-800 mb-4"
+      >
+        Retour d'information et contact
+      </h2>
+        <p class="text-gray-700 leading-relaxed">
+        Si vous rencontrez des difficultés d'accessibilité sur notre site, veuillez nous contacter à l'adresse suivante : 
+        <a 
+          href="mailto:accessibilite@alenia.com" 
+          class="text-blue-600 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-1"
+        >
+          accessibilite&#64;alenia.com
+        </a>. 
+        Nous apprécions vos retours et nous nous efforcerons de résoudre les problèmes dans les meilleurs délais.
+      </p>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+        <h3 class="text-lg font-semibold text-blue-800 mb-2">Notre engagement</h3>
+        <p class="text-blue-700">
+          Cette déclaration d'accessibilité s'applique au site web Alenia. Nous nous engageons à maintenir 
+          et améliorer continuellement l'accessibilité de notre plateforme pour tous nos utilisateurs.
+        </p>
+      </div>
+
+      <div class="text-sm text-gray-500 mt-8 pt-6 border-t border-gray-200">
+        <p>Dernière mise à jour : {{ currentYear }}</p>
+      </div>
+    </section>
+  </main>
+</div>

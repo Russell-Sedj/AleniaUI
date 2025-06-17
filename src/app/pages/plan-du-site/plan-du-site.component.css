@@ -1,0 +1,83 @@
+/* Styles spécifiques pour le plan du site */
+
+/* Animation d'entrée douce */
+main {
+  animation: fadeInUp 0.5s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Effet hover sur les cartes */
+.bg-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Amélioration du focus pour l'accessibilité */
+button:focus,
+a:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Styles pour les liens */
+a {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Animation des icônes */
+.group:hover svg {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Responsive design amélioré */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  
+  .grid-cols-1 {
+    gap: 1rem;
+  }
+  
+  .bg-white {
+    padding: 1rem;
+  }
+}
+
+/* Styles pour les catégories de couleur */
+.text-blue-600:hover {
+  color: rgb(29 78 216);
+}
+
+.text-green-600 {
+  color: rgb(22 163 74);
+}
+
+.text-purple-600 {
+  color: rgb(147 51 234);
+}
+
+.text-orange-600 {
+  color: rgb(234 88 12);
+}
+
+.text-red-600 {
+  color: rgb(220 38 38);
+}
+
+.text-gray-600 {
+  color: rgb(75 85 99);
+}
