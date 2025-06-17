@@ -62,6 +62,7 @@ h1 {
 }
 
 .new-image2 {
+  width: 3000px; /* Largeur de l'image */
   position: relative; /* Changement de position relative */
   margin-top: 20px; /* Espacement depuis le paragraphe précédent */
   margin-left: auto; /* Pour aligner l'image à gauche */
@@ -80,7 +81,7 @@ h1 {
 
 /* Ombre plus marquée pour le rectangle bleu principal */
 .rectangle-ombre {
-  background-color: #6fa4f2;
+  background-color: #91b8f3;
   border-radius: 16px;
   padding: 60px 30px;
   box-shadow: 0 8px 32px 0 rgba(34, 60, 136, 0.25), 0 0 0 4px #90ade1;
@@ -89,12 +90,29 @@ h1 {
 }
 
 .rectangle2 {
-  background-color: #6fa4f2; /* Couleur de fond du rectangle */
-  border-radius: 10px; /* Coins arrondis du rectangle */
-  padding: 100px; /* Espacement intérieur du rectangle */
-  flex-grow: 1; /* Permet au rectangle de remplir l'espace restant */
-  margin-left: -20px; /* Pour que le rectangle morde la marge à droite */
-  box-shadow: 0 0 0 5px #90ade1, 0 0 0 6px transparent;
+  background-color: #b3d4fc;
+  /* couleur d'origine conservée */
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0, 60, 120, 0.10);
+  border: 1.5px solid #a0c4e8;
+  padding: 32px 40px;
+  max-width: 700px;
+  transition: box-shadow 0.3s;
+}
+
+.rectangle2:hover {
+  box-shadow: 0 8px 32px rgba(0, 60, 120, 0.18);
+}
+
+.rectangle2 h1 {
+  font-size: 2rem;
+  color: #2a3b5d;
+  margin-bottom: 16px;
+}
+
+.rectangle2 p {
+  color: #3d4a5c;
+  font-size: 1.1rem;
 }
 
 .text-zone p {
