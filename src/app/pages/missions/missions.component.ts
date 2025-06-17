@@ -16,19 +16,27 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './missions.component.html',
-  styleUrls: ['../../../../public/assets/Css/style3.css'],
+  styleUrls: ['./missions.component.css'],
 })
 export class MissionsComponent implements OnInit {
   missionList: (Mission & { etablissement?: Etablissement })[] = [];
+  isLoading = true;
 
   constructor(
     private missionService: MissionService,
     private etablissementService: EtablissementService
   ) {}
-
   ngOnInit(): void {
+    this.isLoading = true;
     this.missionService.getMissions().subscribe((response: any) => {
       const missions = response.$values;
+      let loadedCount = 0;
+      
+      if (missions.length === 0) {
+        this.isLoading = false;
+        return;
+      }
+      
       missions.forEach((mission: Mission) => {
         this.etablissementService
           .getEtablissement(mission.etablissementId)
@@ -37,6 +45,12 @@ export class MissionsComponent implements OnInit {
               ...mission,
               etablissement: etablissement
             });
+            loadedCount++;
+            
+            // Set loading to false when all missions are loaded
+            if (loadedCount === missions.length) {
+              this.isLoading = false;
+            }
           });
       });
     });
