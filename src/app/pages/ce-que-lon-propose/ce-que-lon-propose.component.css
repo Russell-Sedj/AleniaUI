@@ -1,207 +1,262 @@
+/* Harmonisation responsive et modernisation visuelle */
+
+/* Section principale */
 .content-section {
-   background-color: #88b3f3; /* Couleur de fond de la section */
-    padding: 20px 20px; /* Espacement intérieur pour le contenu */
-    padding-top: 70px;
-    padding-bottom: 70px;
-    text-align: center; /* Centrer le contenu horizontalement */
+  background: linear-gradient(120deg, #eaf1fb 0%, #b3d4fc 100%);
+  padding: 48px 0 32px 0;
+  text-align: center;
 }
 
 .content-container {
-   background: #ffffff;
-    border-radius: 16px;
-    padding: 40px 24px;
-    box-shadow: 0 4px 24px 0 rgba(34, 60, 136, 0.10);
-    border: 4px dashed #90ade1;
-    margin: 0 auto 32px auto;
-    max-width: 900px;
-}
-
-h1 {
-  color: #000000; /* Couleur du titre */
-  font-family: "Inria Serif", serif; /* Police Inria Serif pour le titre */
-  font-size: 48px; /* Taille de la police du titre */
-  text-shadow: 2px 2px 4px rgba(94, 138, 204, 0.7); /* Effet de surlignage */
-}
-
-.content-container p {
-  color: #000000; /* Couleur du texte */
-  font-family: "Inter", sans-serif; /* Police Inter pour le texte */
-  font-size: 18px; /* Taille de la police du texte */
-}
-
-.pictogramme1,
-.pictogramme2 {
-  position: absolute;
-  width: 100px; /* Largeur de l'image */
-  height: 100px; /* Hauteur de l'image ajustée automatiquement */
-}
-.pictogramme1 {
-  position: absolute;
-  top: -50px; /* Position verticale du pictogramme */
-  left: 1015px; /* Position horizontale du pictogramme */
-  z-index: -1; /* Positionne l'image en arrière-plan */
-}
-
-.pictogramme2 {
-  position: absolute;
-  bottom: -50px; /* Position verticale du pictogramme */
-  right: 1000px; /* Position horizontale du pictogramme */
-}
-/* Styles pour le conteneur du nouveau titre */
-.new-title-container {
-  text-align: center; /* Centre le contenu horizontalement */
-  margin-top: 20px; /* Espacement depuis le paragraphe précédent */
-}
-
-/* Styles pour l'image en dessous à gauche */
-.new-image {
-  position: relative; /* Changement de position relative */
-  margin-top: 20px; /* Espacement depuis le paragraphe précédent */
-  margin-right: auto; /* Pour aligner l'image à droite */
-  display: block; /* Pour que les marges automatiques fonctionnent */
-}
-
-.new-image2 {
-  width: 3000px; /* Largeur de l'image */
-  position: relative; /* Changement de position relative */
-  margin-top: 20px; /* Espacement depuis le paragraphe précédent */
-  margin-left: auto; /* Pour aligner l'image à gauche */
-  display: block; /* Pour que les marges automatiques fonctionnent */
-}
-
-.container {
-  margin: auto; /* Espacement automatique */
-  display: flex;
-  align-items: center; /* Centrer verticalement les éléments enfants */
-}
-
-.images {
-  margin-right: 50px; /* Espacement entre les images et le rectangle */
-}
-
-/* Ombre plus marquée pour le rectangle bleu principal */
-.rectangle-ombre {
-  background-color: #91b8f3;
-  border-radius: 16px;
-  padding: 60px 30px;
-  box-shadow: 0 8px 32px 0 rgba(34, 60, 136, 0.25), 0 0 0 4px #90ade1;
+  background: #fff;
+  border-radius: 18px;
+  padding: 32px 20px;
+  box-shadow: 0 2px 12px 0 rgba(34, 60, 136, 0.07);
+  border: none;
   margin: 0 auto 32px auto;
   max-width: 900px;
 }
 
+h1 {
+  color: #1a2233;
+   font-family: 'Inter', sans-serif; 
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+}
+
+.content-container p,
+.text-zone p {
+  color: #222;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  margin: 0 0 12px 0;
+}
+
+/* Styles pour le conteneur du nouveau titre */
+.new-title-container {
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+/* Styles pour l'image en dessous à gauche */
+.new-image,
+.new-image2 {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(34, 60, 136, 0.08);
+}
+
+.container {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.images {
+  margin: auto;
+  text-align: center;
+}
+
+/* Ombre plus marquée pour le rectangle bleu principal */
+.rectangle-ombre {
+  background: #c7dbf5; /* Bleu légèrement plus foncé qu'avant */
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 2px 12px 0 rgba(34, 60, 136, 0.10);
+  margin: 0 auto;
+  max-width: 600px;
+  border: none;
+}
+
 .rectangle2 {
-  background-color: #b3d4fc;
-  /* couleur d'origine conservée */
-  border-radius: 18px;
-  box-shadow: 0 4px 18px rgba(0, 60, 120, 0.10);
-  border: 1.5px solid #a0c4e8;
-  padding: 32px 40px;
-  max-width: 700px;
+  background: #b3c9e6; /* Bleu légèrement plus foncé qu'avant */
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(34, 60, 136, 0.10);
+  border: none;
+  padding: 32px 24px;
+  max-width: 600px;
   transition: box-shadow 0.3s;
 }
 
 .rectangle2:hover {
-  box-shadow: 0 8px 32px rgba(0, 60, 120, 0.18);
+  box-shadow: 0 4px 18px rgba(34, 60, 136, 0.14);
 }
 
 .rectangle2 h1 {
-  font-size: 2rem;
-  color: #2a3b5d;
-  margin-bottom: 16px;
+  font-size: 1.5rem;
+  color: #1a2233;
+  font-family: 'Inter', serif;
+  margin-bottom: 12px;
 }
 
 .rectangle2 p {
-  color: #3d4a5c;
-  font-size: 1.1rem;
+  color: #222;
+  font-size: 1rem;
 }
 
-.text-zone p {
-  margin: 0; /* Supprime les marges par défaut */
-  color: #000000; /* Couleur du texte */
-  font-family: "Inter", sans-serif; /* Police Inter pour le texte */
-  font-size: 18px; /* Taille de la police du texte */
+/* Section D.A inspirée de 'Qui sommes-nous' */
+.qsn-da-section {
+  background: linear-gradient(120deg, #eaf1fb 0%, #b3d4fc 100%);
+  border-radius: 24px;
+  margin: 40px auto 48px auto;
+  max-width: 1100px;
+  box-shadow: 0 4px 24px 0 rgba(34, 60, 136, 0.10);
+  padding: 32px 0 32px 0;
+}
+.qsn-da-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.qsn-da-image-container {
+  flex: 1 1 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.qsn-da-image {
+  max-width: 380px;
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(34, 60, 136, 0.10);
+  background: #fff;
+}
+.qsn-da-text-container {
+  flex: 2 1 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 24px;
+}
+.qsn-da-title {
+  font-family: 'Inter', serif;
+  font-size: 2.3rem;
+  color: #1a2233;
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+.qsn-da-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  color: #222;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.qsn-da-btn {
+  background-color: rgb(105, 155, 247);
+  color: #fff;
+  padding: 12px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(105, 155, 247, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+  border: none;
+  display: inline-block;
+}
+.qsn-da-btn:hover {
+  background-color: #3b7be0;
+  box-shadow: 0 4px 16px rgba(105, 155, 247, 0.18);
 }
 
-
-/* --- Responsive Design --- */
+/* Responsive */
 @media (max-width: 1024px) {
   .content-section {
-    padding: 10px 10px;
+    padding: 24px 0;
   }
   .content-container, .rectangle-ombre, .rectangle2 {
     max-width: 98%;
-    padding: 30px 10px;
+    padding: 20px 8px;
   }
   h1 {
-    font-size: 32px;
+    font-size: 2rem;
   }
-  .pictogramme1, .pictogramme2 {
-    width: 70px;
-    height: 70px;
-  }
-  .pictogramme1 {
-    left: 80%;
-    top: -35px;
-  }
-  .pictogramme2 {
-    right: 80%;
-    bottom: -35px;
-  }
-  .images {
-    margin-right: 20px;
-  }
-  .rectangle2 {
-    padding: 40px;
+  .container {
+    gap: 16px;
   }
 }
 
-@media (max-width: 600px) {
-  .content-section {
-    padding: 5px 0;
+@media (max-width: 900px) {
+  .qsn-da-flex {
+    flex-direction: column;
+    gap: 24px;
   }
-  .content-container, .rectangle-ombre, .rectangle2 {
-    max-width: 100%;
-    padding: 10px 0;
-    border-radius: 8px;
+  .qsn-da-section {
+    padding: 18px 0 18px 0;
   }
-  h1 {
-    font-size: 20px;
+  .qsn-da-image {
+    max-width: 340px;
   }
-  .content-container p, .text-zone p {
-    font-size: 15px;
+  .qsn-da-title {
+    font-size: 1.5rem;
   }
-  .pictogramme1, .pictogramme2 {
-    width: 40px;
-    height: 40px;
+  .qsn-da-desc {
+    font-size: 1rem;
   }
-  .pictogramme1 {
-    left: 70%;
-    top: -20px;
-  }
-  .pictogramme2 {
-    right: 70%;
-    bottom: -20px;
-  }
+}
+
+@media (max-width: 700px) {
   .container {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
   }
   .images {
-    margin: 0 0 10px 0;
+    margin: 0 0 8px 0;
     text-align: center;
   }
+  .new-image, .new-image2 {
+    max-width: 100%;
+    border-radius: 8px;
+  }
   .rectangle-ombre, .rectangle2 {
-    padding: 15px;
-    margin: 0 0 16px 0;
-    box-shadow: 0 0 0 2px #90ade1, 0 0 0 3px transparent;
+    padding: 10px;
+    margin: 0 0 12px 0;
+    box-shadow: 0 0 0 1px #eaf1fb, 0 0 0 2px transparent;
   }
   .new-title-container {
-    margin-top: 10px;
+    margin-top: 8px;
   }
-  .new-image {
-    margin-top: 10px;
-    width: 100%;
-    height: auto;
+  h1 {
+    font-size: 1.2rem;
   }
+  .content-container p, .text-zone p {
+    font-size: 0.95rem;
+  }
+}
+
+
+
+.pictogramme1, .pictogramme2 {
+  opacity: 0.7;
+  filter: blur(0.5px);
+}
+
+/* Pour la section .jolie si besoin */
+.jolie {
+  min-height: 40px;
+}
+
+/* Pour la compatibilité Tailwind */
+.font-inter {
+  font-family: 'Inter', sans-serif !important;
+}
+
+.font-newsreader {
+  font-family: 'Newsreader', serif !important;
 }
 
