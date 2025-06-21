@@ -1,0 +1,106 @@
+<nav class="bg-white shadow-lg border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">      <!-- Logo et nom -->
+      <div class="flex items-center">
+        <a routerLink="/page-accueil" class="flex items-center space-x-3">
+          <div class="w-10 h-10 flex items-center justify-center">
+            <img src="/assets/images/logo.png" alt="Logo Alenia" class="w-10 h-10 object-contain">
+          </div>
+          <span class="text-2xl font-bold text-gray-900">Alenia</span>
+        </a>
+      </div>
+
+      <!-- Navigation principale (desktop) -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-8">
+          <a routerLink="/page-accueil" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
+            Accueil
+          </a>
+          <a routerLink="/missions" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
+            Missions
+          </a>
+          <a routerLink="/ce-que-lon-propose" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
+            Services
+          </a>
+          <a routerLink="/qui-sommes-nous" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
+            À propos
+          </a>
+        </div>
+      </div>
+
+      <!-- Boutons d'action (desktop) -->
+      <div class="hidden md:flex items-center space-x-4">
+        <a routerLink="/connexion" 
+           class="text-gray-700 hover:text-blue-600 px-4 py-2 text-sm font-medium transition-colors duration-200">
+          Connexion
+        </a>
+        <a routerLink="/inscription" 
+           class="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200">
+          Inscription
+        </a>
+      </div>
+
+      <!-- Bouton menu mobile -->
+      <div class="md:hidden">
+        <button (click)="toggleMenu()" 
+                class="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path *ngIf="!isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16"></path>
+            <path *ngIf="isMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Menu mobile -->
+  <div *ngIf="isMenuOpen" class="md:hidden bg-white border-t border-gray-200">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <a routerLink="/page-accueil" 
+         (click)="closeMenu()"
+         routerLinkActive="text-blue-600 bg-blue-50"
+         class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors duration-200">
+        Accueil
+      </a>
+      <a routerLink="/missions" 
+         (click)="closeMenu()"
+         routerLinkActive="text-blue-600 bg-blue-50"
+         class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors duration-200">
+        Missions
+      </a>
+      <a routerLink="/ce-que-lon-propose" 
+         (click)="closeMenu()"
+         routerLinkActive="text-blue-600 bg-blue-50"
+         class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors duration-200">
+        Services
+      </a>
+      <a routerLink="/qui-sommes-nous" 
+         (click)="closeMenu()"
+         routerLinkActive="text-blue-600 bg-blue-50"
+         class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors duration-200">
+        À propos
+      </a>
+      <div class="border-t border-gray-200 pt-4 pb-3">
+        <a routerLink="/connexion" 
+           (click)="closeMenu()"
+           class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors duration-200">
+          Connexion
+        </a>
+        <a routerLink="/inscription" 
+           (click)="closeMenu()"
+           class="bg-blue-600 text-white hover:bg-blue-700 block px-3 py-2 mx-3 mt-2 rounded-lg text-base font-medium text-center transition-colors duration-200">
+          Inscription
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

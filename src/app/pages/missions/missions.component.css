@@ -1,0 +1,49 @@
+/* Additional utilities for missions page */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Smooth animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mission-card {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Custom scrollbar for search results */
+.mission-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mission-grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.mission-grid::-webkit-scrollbar-thumb {
+  background: #6FA4F2;
+  border-radius: 10px;
+}
+
+.mission-grid::-webkit-scrollbar-thumb:hover {
+  background: #5A94E8;
+}

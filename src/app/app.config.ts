@@ -10,7 +10,7 @@ import {
 } from '@angular/common/http';
 
 import { MissionService } from './services/mission/mission.service';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideHttpClient(
-      withInterceptors([AuthInterceptor]),
+      withInterceptors([authInterceptor]),
       withInterceptorsFromDi(),
       withFetch()
     ),

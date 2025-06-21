@@ -1,0 +1,120 @@
+/* Styles spécifiques pour la page de connexion */
+/* Les styles principaux sont gérés par Tailwind CSS dans le template */
+
+/* Animation pour les toasts */
+.toast-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.toast-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.toast-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.toast-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Amélioration du focus pour l'accessibilité */
+input:focus, 
+select:focus, 
+button:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Animation subtile pour les champs en erreur */
+input.ng-invalid.ng-touched {
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+}
+
+/* Style pour le loading spinner */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Styles pour les boutons de connexion sociale */
+.social-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.social-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation pour le toggle de mot de passe */
+.password-toggle {
+  transition: all 0.2s ease-in-out;
+}
+
+.password-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* Amélioration de l'affichage des icônes */
+.icon-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Style pour l'encadré de sécurité */
+.security-info {
+  border-left: 4px solid #10b981;
+  background: linear-gradient(to right, #f0fdf4, #f9fdf9);
+}
+
+/* Animation pour les boutons sociaux */
+.social-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Responsive design amélioré */
+@media (max-width: 640px) {
+  .social-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Animation d'apparition */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-animate {
+  animation: fadeInUp 0.6s ease-out;
+}

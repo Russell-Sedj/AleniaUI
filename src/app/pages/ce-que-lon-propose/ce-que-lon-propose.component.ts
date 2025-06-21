@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   templateUrl: './ce-que-lon-propose.component.html',
   // styleUrl: './ce-que-lon-propose.component.css',
   styleUrls: [
-    '../../../../public/assets/Css/style2.css',
+    './ce-que-lon-propose.component.css',
     '../../../../public/assets/Css/footer.css',
     '../../../../public/assets/Css/navigation_barre.css',
   ],

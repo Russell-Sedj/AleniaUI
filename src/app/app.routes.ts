@@ -21,6 +21,8 @@ import { Profil3Component } from './pages/profil3/profil3.component';
 import { QuestionsFrequentesComponent } from './pages/questions-frequentes/questions-frequentes.component';
 import { QuiSommesNousComponent } from './pages/qui-sommes-nous/qui-sommes-nous.component';
 import { LoginComponent } from './pages/auth/login/login.component';
+import { DeclarationAccessibiliteComponent } from './pages/declaration-accessibilite/declaration-accessibilite.component';
+import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/page-accueil', pathMatch: 'full' },
@@ -32,6 +34,10 @@ export const routes: Routes = [
   { path: 'fiche-poste', component: FichePosteComponent },
   {
     path: 'mission-detail-hilguegue',
+    component: MissionDetailHilguegueComponent,
+  },
+  {
+    path: 'mission-detail/:id',
     component: MissionDetailHilguegueComponent,
   },
   { path: 'inscription', component: InscriptionComponent },
@@ -46,7 +52,8 @@ export const routes: Routes = [
   { path: 'prestation', component: PrestationComponent },
   { path: 'profil1', component: Profil1Component },
   { path: 'profil2', component: Profil2Component },
-  { path: 'profil3', component: Profil3Component },
-  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },
+  { path: 'profil3', component: Profil3Component },  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },
   { path: 'qui-sommes-nous', component: QuiSommesNousComponent },
+  { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
+  { path: 'plan-du-site', component: PlanDuSiteComponent },
 ];

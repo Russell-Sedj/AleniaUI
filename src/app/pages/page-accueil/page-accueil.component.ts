@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-page-accueil',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule],
   templateUrl: './page-accueil.component.html',
-  // styleUrl: './page-accueil.component.css',
-  // styleUrls: ['./page-accueil.component.css'],
-  styleUrls: ['../../../../public/assets/Css/style.css'],
+  styleUrls: ['./page-accueil.component.css']
 })
-export class PageAccueilComponent {}
+export class PageAccueilComponent {
+  heroImage = '/assets/images/image17.png';
+  compImage = '/assets/images/comp1.png';
+
+  constructor(private router: Router) {}
+
+  navigateToRegister() {
+    this.router.navigate(['/inscription']);
+  }
+}
