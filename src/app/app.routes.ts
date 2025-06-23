@@ -23,11 +23,9 @@ import { QuiSommesNousComponent } from './pages/qui-sommes-nous/qui-sommes-nous.
 import { LoginComponent } from './pages/auth/login/login.component';
 import { DeclarationAccessibiliteComponent } from './pages/declaration-accessibilite/declaration-accessibilite.component';
 import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component';
-<<<<<<< HEAD
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-=======
+
 import { DashboardInterimaireComponent } from './pages/dashboard-interimaire/dashboard-interimaire.component';
->>>>>>> 4ca9cb9f91a1333ffb54701bc503b8e334c105ee
 
 export const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
@@ -61,10 +59,7 @@ export const routes: Routes = [
   { path: 'profil3', component: Profil3Component },  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },  { path: 'qui-sommes-nous', component: QuiSommesNousComponent },
   { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
   { path: 'plan-du-site', component: PlanDuSiteComponent },
-<<<<<<< HEAD
   { path: 'page-not-found', component: PageNotFoundComponent },
-  { path: '**', component: PageNotFoundComponent }, // Wildcard route - must be last
-=======
+  { path: '**', component: PageNotFoundComponent },
   { path: 'dashboard-interimaire', component: DashboardInterimaireComponent },
->>>>>>> 4ca9cb9f91a1333ffb54701bc503b8e334c105ee
 ];
