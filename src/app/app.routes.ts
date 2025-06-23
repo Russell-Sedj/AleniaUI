@@ -27,6 +27,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 
 import { DashboardInterimaireComponent } from './pages/dashboard-interimaire/dashboard-interimaire.component';
 import { AuthGuard } from './guards/auth.guard';
+import { DashboardEtablissementComponent } from './pages/dashboard-etablissement/dashboard-etablissement.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
@@ -59,6 +60,8 @@ export const routes: Routes = [
   { path: 'profil3', component: Profil3Component },  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },  { path: 'qui-sommes-nous', component: QuiSommesNousComponent },  { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
   { path: 'plan-du-site', component: PlanDuSiteComponent },
   { path: 'dashboard-interimaire', component: DashboardInterimaireComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard-interimaire', component: DashboardInterimaireComponent },
+  { path: 'dashboard-etablissement', component: DashboardEtablissementComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
