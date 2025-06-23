@@ -1,0 +1,1592 @@
+<div class="flex min-h-screen bg-gray-50">
+    <!-- Sidebar avec classe CSS personnalisée -->
+    <aside class="sidebar-container w-72 bg-white text-gray-700 flex flex-col shadow-lg border-r border-gray-200">
+        <div class="p-6 text-center border-b border-gray-100">
+            <img src="/assets/images/logo.png" alt="ALENIA" class="w-12 h-12 mx-auto mb-3">
+            <h3 class="text-lg font-semibold text-gray-800">Espace Établissement</h3>
+            <p class="text-sm text-gray-600">{{ etablissement.nom }}</p>
+        </div>
+
+        <nav class="flex-1 py-5">
+            <ul class="space-y-1">
+                <li>
+                    <a (click)="setActiveSection('tableau-bord')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'tableau-bord' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">📊</span>
+                        <span>Tableau de bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('missions')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'missions' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">💼</span>
+                        <span>Mes Missions</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('interimaires')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'interimaires' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">👥</span>
+                        <span>Intérimaires</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('candidatures')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'candidatures' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">📝</span>
+                        <span>Candidatures</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('planning')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'planning' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">📅</span>
+                        <span>Planning</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('gestion-financiere')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'gestion-financiere' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">💰</span>
+                        <span>Gestion financière</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('statistiques')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'statistiques' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">📈</span>
+                        <span>Statistiques</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('parametres')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'parametres' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">⚙️</span>
+                        <span>Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="p-5 border-t border-gray-100">
+            <button (click)="logout()"
+                class="flex items-center w-full p-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300">
+                <span class="w-5 h-5 mr-4 text-lg">🚪</span>
+                Déconnexion
+            </button>
+        </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="flex-1 flex flex-col min-h-screen overflow-hidden">
+        <header class="bg-white p-6 border-b border-gray-200 flex justify-between items-center shadow-sm">
+            <h1
+                class="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] leading-normal">
+                {{ getSectionTitle() }}</h1>
+            <div class="flex items-center space-x-4">
+                <img src="/assets/images/avatar-default.png" alt="Avatar"
+                    class="w-10 h-10 rounded-full border-2 border-transparent bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] p-0.5">
+                <span class="text-gray-700">{{ etablissement.responsable }}</span>
+            </div>
+        </header>
+
+        <div class="flex-1 p-8 overflow-y-auto">
+            <!-- Section Tableau de bord -->
+            <div *ngIf="activeSection === 'tableau-bord'" class="space-y-6">
+                <!-- Statistiques principales -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Missions publiées</p>
+                                <p class="text-3xl font-bold text-blue-600">{{ statistiques.missionsPubliees }}</p>
+                            </div>
+                            <span class="text-3xl">📢</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Missions pourvues</p>
+                                <p class="text-3xl font-bold text-green-600">{{ statistiques.missionsPourvues }}</p>
+                            </div>
+                            <span class="text-3xl">✅</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Candidatures reçues</p>
+                                <p class="text-3xl font-bold text-orange-600">{{ statistiques.candidaturesRecues }}</p>
+                            </div>
+                            <span class="text-3xl">📋</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Taux de pourvoi</p>
+                                <p class="text-3xl font-bold text-purple-600">{{ statistiques.tauxPourvoi }}%</p>
+                            </div>
+                            <span class="text-3xl">📊</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Missions récentes et candidatures en attente -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Missions récentes -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Missions récentes</h3>
+                            <button (click)="setActiveSection('missions')"
+                                class="text-blue-600 hover:text-blue-800 text-sm">Voir tout →</button>
+                        </div>
+                        <div class="space-y-3">
+                            <div *ngFor="let mission of missions.slice(0, 5)"
+                                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900">{{ mission.titre }}</h4>
+                                    <p class="text-sm text-gray-600">{{ mission.service }} • {{
+                                        formatDate(mission.dateDebut) }}</p>
+                                </div>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full"
+                                    [class]="getStatutBadgeClass(mission.statut)">
+                                    {{ mission.statut }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Candidatures en attente -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold text-gray-800">Candidatures en attente</h3>
+                            <button (click)="setActiveSection('candidatures')"
+                                class="text-blue-600 hover:text-blue-800 text-sm">Voir tout →</button>
+                        </div>
+                        <div class="space-y-3">
+                            <div *ngFor="let candidature of candidatures.slice(0, 5)"
+                                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                <div class="flex items-center space-x-3">
+                                    <div
+                                        class="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                        {{ getInitials(candidature.interimaire.prenom + ' ' +
+                                        candidature.interimaire.nom) }}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-900">{{ candidature.interimaire.prenom }} {{
+                                            candidature.interimaire.nom }}</h4>
+                                        <p class="text-sm text-gray-600">{{ candidature.mission.titre }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button (click)="accepterCandidature(candidature)"
+                                        class="px-3 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600">
+                                        Accepter
+                                    </button>
+                                    <button (click)="refuserCandidature(candidature)"
+                                        class="px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600">
+                                        Refuser
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Missions -->
+            <div *ngIf="activeSection === 'missions'" class="space-y-6">
+                <!-- Header avec bouton nouvelle mission -->
+                <div class="flex justify-between items-center">
+                    <div class="flex space-x-4">
+                        <input type="text" [(ngModel)]="rechercheText" placeholder="Rechercher une mission..."
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <select [(ngModel)]="filtreStatut"
+                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Tous les statuts</option>
+                            <option value="brouillon">Brouillon</option>
+                            <option value="publiee">Publiée</option>
+                            <option value="pourvue">Pourvue</option>
+                            <option value="terminee">Terminée</option>
+                        </select>
+                    </div>
+                    <button (click)="openMissionModal()"
+                        class="px-6 py-3 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transform hover:-translate-y-1 transition-all duration-300 font-medium">
+                        ➕ Nouvelle mission
+                    </button>
+                </div>
+
+                <!-- Liste des missions -->
+                <div class="grid grid-cols-1 gap-6">
+                    <div *ngFor="let mission of missions"
+                        class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-3 mb-3">
+                                        <h3 class="text-lg font-semibold text-gray-900">{{ mission.titre }}</h3>
+                                        <span *ngIf="mission.urgente"
+                                            class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
+                                            URGENT
+                                        </span>
+                                        <span class="px-3 py-1 text-sm font-medium rounded-full"
+                                            [class]="getStatutBadgeClass(mission.statut)">
+                                            {{ mission.statut }}
+                                        </span>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
+                                        <div>
+                                            <p><strong>Service :</strong> {{ mission.service }}</p>
+                                            <p><strong>Spécialité :</strong> {{ mission.specialite }}</p>
+                                        </div>
+                                        <div>
+                                            <p><strong>Date :</strong> {{ formatDate(mission.dateDebut) }} au {{
+                                                formatDate(mission.dateFin) }}</p>
+                                            <p><strong>Horaires :</strong> {{ mission.heureDebut }} - {{
+                                                mission.heureFin }}</p>
+                                        </div>
+                                        <div>
+                                            <p><strong>Tarif :</strong> <span class="font-semibold text-green-600">{{
+                                                    mission.tarif }}€/h</span></p>
+                                            <p><strong>Candidatures :</strong> {{ mission.candidatures }}</p>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-gray-700 mb-4">{{ mission.description }}</p>
+
+                                    <div *ngIf="mission.competencesRequises && mission.competencesRequises.length > 0"
+                                        class="flex flex-wrap gap-2 mb-4">
+                                        <span *ngFor="let competence of mission.competencesRequises"
+                                            class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                                            {{ competence }}
+                                        </span>
+                                    </div>
+
+                                    <div *ngIf="mission.interimaire"
+                                        class="bg-green-50 border border-green-200 rounded-lg p-3">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                                {{ getInitials(mission.interimaire.prenom + ' ' +
+                                                mission.interimaire.nom) }}
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-green-800">{{ mission.interimaire.prenom }}
+                                                    {{ mission.interimaire.nom }}</p>
+                                                <p class="text-sm text-green-600">{{ mission.interimaire.specialite }} •
+                                                    Note: {{ mission.interimaire.note }}/5</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex space-x-2 ml-4">
+                                    <button (click)="openMissionModal(mission)"
+                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded">
+                                        ✏️
+                                    </button>
+                                    <button *ngIf="mission.statut === 'brouillon'" (click)="publierMission(mission)"
+                                        class="p-2 text-green-600 hover:bg-green-50 rounded">
+                                        📢
+                                    </button>
+                                    <button (click)="supprimerMission(mission)"
+                                        class="p-2 text-red-600 hover:bg-red-50 rounded">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Intérimaires -->
+            <div *ngIf="activeSection === 'interimaires'" class="space-y-6">
+                <!-- Header avec recherche -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <div class="flex flex-wrap gap-4">
+                        <input type="text" placeholder="Rechercher un intérimaire..."
+                            class="flex-1 min-w-64 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="">Toutes spécialités</option>
+                            <option value="infirmier">Infirmier(ère)</option>
+                            <option value="aide-soignant">Aide-soignant</option>
+                            <option value="medecin">Médecin</option>
+                        </select>
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="">Tous statuts</option>
+                            <option value="disponible">Disponible</option>
+                            <option value="occupe">Occupé</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Liste des intérimaires -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div *ngFor="let interimaire of interimaires"
+                        class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div
+                                    class="w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    {{ getInitials(interimaire.prenom + ' ' + interimaire.nom) }}
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900">{{ interimaire.prenom }} {{ interimaire.nom
+                                        }}</h3>
+                                    <p class="text-sm text-gray-600">{{ interimaire.specialite }}</p>
+                                    <div class="flex items-center space-x-1 mt-1">
+                                        <span class="text-yellow-400">★</span>
+                                        <span class="text-sm font-medium">{{ interimaire.note }}/5</span>
+                                        <span class="w-2 h-2 rounded-full ml-2"
+                                            [class]="interimaire.disponible ? 'bg-green-500' : 'bg-red-500'"></span>
+                                        <span class="text-xs text-gray-500">
+                                            {{ interimaire.disponible ? 'Disponible' : 'Occupé' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 text-sm text-gray-600 mb-4">
+                                <p><strong>Expérience :</strong> {{ interimaire.experience }} ans</p>
+                                <p><strong>Localisation :</strong> {{ interimaire.localisation }}</p>
+                                <p><strong>Tarif :</strong> {{ interimaire.tarif }}€/h</p>
+                                <p><strong>Dernière connexion :</strong> {{ interimaire.derniereConnexion |
+                                    date:'dd/MM/yyyy à HH:mm' }}</p>
+                            </div>
+
+                            <div class="flex space-x-2">
+                                <button
+                                    class="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
+                                    📧 Contacter
+                                </button>
+                                <button
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                                    👁️ Profil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Candidatures -->
+            <div *ngIf="activeSection === 'candidatures'" class="space-y-6">
+                <!-- Filtres -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <div class="flex flex-wrap gap-4">
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="">Tous les statuts</option>
+                            <option value="en_attente">En attente</option>
+                            <option value="acceptee">Acceptée</option>
+                            <option value="refusee">Refusée</option>
+                        </select>
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg">
+                            <option value="">Toutes les missions</option>
+                            <option *ngFor="let mission of missions" [value]="mission.id">{{ mission.titre }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Liste des candidatures -->
+                <div class="space-y-4">
+                    <div *ngFor="let candidature of candidatures"
+                        class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-4 mb-4">
+                                        <div
+                                            class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                            {{ getInitials(candidature.interimaire.prenom + ' ' +
+                                            candidature.interimaire.nom) }}
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900">{{ candidature.interimaire.prenom }}
+                                                {{ candidature.interimaire.nom }}</h3>
+                                            <p class="text-sm text-gray-600">{{ candidature.interimaire.specialite }} •
+                                                {{ candidature.interimaire.experience }} ans d'expérience</p>
+                                            <div class="flex items-center space-x-1 mt-1">
+                                                <span class="text-yellow-400">★</span>
+                                                <span class="text-sm">{{ candidature.interimaire.note }}/5</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                        <h4 class="font-medium text-gray-900 mb-2">{{ candidature.mission.titre }}</h4>
+                                        <p class="text-sm text-gray-600">{{ candidature.mission.service }} • {{
+                                            formatDate(candidature.mission.dateDebut) }}</p>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
+                                        <div>
+                                            <p><strong>Date candidature :</strong> {{ candidature.dateCandidature |
+                                                date:'dd/MM/yyyy à HH:mm' }}</p>
+                                            <p><strong>Tarif proposé :</strong> {{ candidature.tarifPropose }}€/h</p>
+                                        </div>
+                                        <div>
+                                            <p><strong>Localisation :</strong> {{ candidature.interimaire.localisation
+                                                }}</p>
+                                            <p><strong>Contact :</strong> {{ candidature.interimaire.telephone }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="candidature.message"
+                                        class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                                        <p class="text-sm text-blue-800"><strong>Message :</strong> {{
+                                            candidature.message }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col items-end space-y-2 ml-4">
+                                    <span class="px-3 py-1 text-sm font-medium rounded-full"
+                                        [class]="getStatutBadgeClass(candidature.statut)">
+                                        {{ candidature.statut }}
+                                    </span>
+
+                                    <div *ngIf="candidature.statut === 'en_attente'" class="flex space-x-2">
+                                        <button (click)="accepterCandidature(candidature)"
+                                            class="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600">
+                                            ✅ Accepter
+                                        </button>
+                                        <button (click)="refuserCandidature(candidature)"
+                                            class="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600">
+                                            ❌ Refuser
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Planning -->
+            <div *ngIf="activeSection === 'planning'" class="space-y-6">
+                <!-- Header du planning -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <!-- Navigation temporelle -->
+                        <div class="flex items-center space-x-4">
+                            <button (click)="previousPeriod()" class="p-2 hover:bg-gray-100 rounded-lg">
+                                ← Précédent
+                            </button>
+                            <h3 class="text-xl font-semibold text-gray-800 min-w-64 text-center">
+                                {{ getPeriodTitle() }}
+                            </h3>
+                            <button (click)="nextPeriod()" class="p-2 hover:bg-gray-100 rounded-lg">
+                                Suivant →
+                            </button>
+                        </div>
+
+                        <!-- Contrôles -->
+                        <div class="flex items-center space-x-3">
+                            <button (click)="goToToday()"
+                                class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">
+                                Aujourd'hui
+                            </button>
+
+                            <!-- Sélecteur de vue -->
+                            <div class="flex border border-gray-300 rounded-lg overflow-hidden">
+                                <button (click)="setViewMode('month')"
+                                    [class]="'px-3 py-2 text-sm ' + (viewMode === 'month' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50')">
+                                    Mois
+                                </button>
+                                <button (click)="setViewMode('week')"
+                                    [class]="'px-3 py-2 text-sm border-x border-gray-300 ' + (viewMode === 'week' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50')">
+                                    Semaine
+                                </button>
+                                <button (click)="setViewMode('day')"
+                                    [class]="'px-3 py-2 text-sm ' + (viewMode === 'day' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50')">
+                                    Jour
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vue Mois -->
+                <div *ngIf="viewMode === 'month'" class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <!-- En-têtes des jours -->
+                    <div class="grid grid-cols-7 border-b border-gray-200">
+                        <div *ngFor="let day of getDayNames()"
+                            class="p-4 text-center text-sm font-medium text-gray-700 bg-gray-50">
+                            {{ day }}
+                        </div>
+                    </div>
+
+                    <!-- Grille du calendrier -->
+                    <div class="grid grid-cols-7">
+                        <div *ngFor="let jour of calendarDays" (click)="selectDate(jour)" [class]="'min-h-32 p-2 border-r border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors ' + 
+                             (jour.estAujourdhui ? 'bg-blue-50' : '') + 
+                             (!jour.estDansLeMois ? 'text-gray-400 bg-gray-50' : '')">
+
+                            <!-- Numéro du jour -->
+                            <div [class]="'text-sm font-medium mb-1 ' + 
+                                 (jour.estAujourdhui ? 'text-blue-600' : 'text-gray-900')">
+                                {{ jour.date.getDate() }}
+                            </div>
+
+                            <!-- Missions du jour -->
+                            <div class="space-y-1">
+                                <div *ngFor="let mission of jour.missions.slice(0, 3)"
+                                    (click)="openPlanningModal(mission); $event.stopPropagation()"
+                                    class="text-xs p-1 rounded cursor-pointer border-l-2"
+                                    [class]="getStatutPlanningClass(mission.statut)" [style]="getMissionStyle(mission)">
+                                    <div class="font-medium text-white truncate">{{ mission.mission.titre }}</div>
+                                    <div class="text-white opacity-90">{{ mission.heureDebut }} - {{ mission.heureFin }}
+                                    </div>
+                                </div>
+
+                                <!-- Indicateur "plus de missions" -->
+                                <div *ngIf="jour.missions.length > 3" class="text-xs text-gray-500 p-1">
+                                    +{{ jour.missions.length - 3 }} autres
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vue Semaine -->
+                <div *ngIf="viewMode === 'week'" class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="grid grid-cols-8 border-b border-gray-200">
+                        <div class="p-4 text-sm font-medium text-gray-700 bg-gray-50"></div>
+                        <div *ngFor="let jour of calendarDays"
+                            class="p-4 text-center text-sm font-medium text-gray-700 bg-gray-50">
+                            <div>{{ getDayNames()[jour.date.getDay()] }}</div>
+                            <div
+                                [class]="'text-lg ' + (jour.estAujourdhui ? 'text-blue-600 font-bold' : 'text-gray-900')">
+                                {{ jour.date.getDate() }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grille horaire -->
+                    <div class="max-h-96 overflow-y-auto">
+                        <div *ngFor="let timeSlot of getTimeSlots().slice(0, 24)"
+                            class="grid grid-cols-8 border-b border-gray-100">
+                            <!-- Colonne des heures -->
+                            <div class="p-2 text-xs text-gray-500 bg-gray-50 border-r border-gray-200">
+                                {{ timeSlot }}
+                            </div>
+
+                            <!-- Colonnes des jours -->
+                            <div *ngFor="let jour of calendarDays" class="p-1 border-r border-gray-200 min-h-12">
+                                <div *ngFor="let mission of jour.missions"
+                                    class="text-xs p-1 rounded mb-1 cursor-pointer"
+                                    [class]="getStatutPlanningClass(mission.statut)"
+                                    (click)="openPlanningModal(mission)">
+                                    <div class="font-medium truncate">{{ mission.mission.titre }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vue Jour -->
+                <div *ngIf="viewMode === 'day'" class="bg-white rounded-lg shadow-sm">
+                    <div class="p-6">
+                        <h4 class="text-lg font-semibold mb-4">
+                            Missions du {{ currentDate.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric',
+                            month: 'long' }) }}
+                        </h4>
+
+                        <div *ngIf="calendarDays[0] && calendarDays[0].missions.length === 0"
+                            class="text-center py-8 text-gray-500">
+                            Aucune mission programmée ce jour
+                        </div>
+
+                        <div class="space-y-3">
+                            <div *ngFor="let mission of calendarDays[0]?.missions"
+                                class="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                                (click)="openPlanningModal(mission)">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <h5 class="font-medium text-gray-900">{{ mission.mission.titre }}</h5>
+                                        <p class="text-sm text-gray-600">{{ mission.mission.service }}</p>
+                                        <p class="text-sm text-gray-500">{{ mission.heureDebut }} - {{ mission.heureFin
+                                            }}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="px-2 py-1 text-xs rounded-full"
+                                            [class]="getStatutPlanningClass(mission.statut)">
+                                            {{ mission.statut }}
+                                        </span>
+                                        <div *ngIf="mission.interimaire" class="text-sm text-gray-600 mt-1">
+                                            {{ mission.interimaire.prenom }} {{ mission.interimaire.nom }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Légende -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Légende :</h4>
+                    <div class="flex flex-wrap gap-4 text-xs">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-orange-500 rounded"></div>
+                            <span>Planifiée</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-blue-500 rounded"></div>
+                            <span>Confirmée</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-green-500 rounded"></div>
+                            <span>En cours</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-purple-500 rounded"></div>
+                            <span>Terminée</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-red-500 rounded"></div>
+                            <span>Annulée</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Gestion financière -->
+            <div *ngIf="activeSection === 'gestion-financiere'" class="space-y-6">
+                <!-- Statistiques financières -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Coûts totaux</p>
+                                <p class="text-2xl font-bold text-blue-600">{{
+                                    statistiquesDetaillees.missionsParMois[statistiquesDetaillees.missionsParMois.length
+                                    - 1].nombre || 0
+                                    }}</p>
+                            </div>
+                            <div class="text-3xl text-blue-500">💰</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Paiements effectués</p>
+                                <p class="text-2xl font-bold text-green-600">{{ formatCurrency(paiementStats.totalPaye)
+                                    }}</p>
+                            </div>
+                            <div class="text-3xl text-green-500">✅</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">En attente</p>
+                                <p class="text-2xl font-bold text-orange-600">{{
+                                    formatCurrency(paiementStats.totalEnAttente) }}</p>
+                            </div>
+                            <div class="text-3xl text-orange-500">⏳</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-red-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">En retard</p>
+                                <p class="text-2xl font-bold text-red-600">{{
+                                    formatCurrency(paiementStats.totalEnRetard) }}</p>
+                            </div>
+                            <div class="text-3xl text-red-500">⚠️</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions et filtres -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Gestion des rémunérations</h3>
+
+                        <div class="flex flex-wrap gap-3">
+                            <!-- Filtres -->
+                            <select [(ngModel)]="filtreStatutFacture"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="">Tous les statuts</option>
+                                <option value="brouillon">Brouillons</option>
+                                <option value="envoyee">À valider</option>
+                                <option value="payee">Payées</option>
+                                <option value="en_retard">En retard</option>
+                                <option value="annulee">Annulées</option>
+                            </select>
+
+                            <select [(ngModel)]="filtrePeriode"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="">Toutes les périodes</option>
+                                <option value="ce_mois">Ce mois</option>
+                                <option value="mois_dernier">Mois dernier</option>
+                                <option value="trimestre">Ce trimestre</option>
+                            </select>
+
+                            <!-- Actions -->
+                            <button (click)="genererFacture()"
+                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center space-x-2">
+                                <span>💳</span>
+                                <span>Générer paie</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Liste des rémunérations -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Rémunération
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Période
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Montant
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Statut
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Échéance
+                                    </th>
+                                    <th
+                                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr *ngFor="let facture of facturesFiltrees" class="hover:bg-gray-50 cursor-pointer"
+                                    (click)="openFactureModal(facture)">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="text-2xl mr-3">{{ getStatutFactureIcon(facture.statut) }}</div>
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">{{ facture.numero }}
+                                                </div>
+                                                <div class="text-sm text-gray-500">{{ formatDate(facture.dateEmission)
+                                                    }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">
+                                            {{ formatDate(facture.periode.debut) }} - {{ formatDate(facture.periode.fin)
+                                            }}
+                                        </div>
+                                        <div class="text-sm text-gray-500">{{ facture.missions.length }} mission(s)
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">{{
+                                            formatCurrency(facture.montantTTC) }}</div>
+                                        <div class="text-xs text-gray-500">Brut: {{ formatCurrency(facture.montantHT) }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full"
+                                            [class]="getStatutFactureClass(facture.statut)">
+                                            {{ getStatutFactureLabel(facture.statut) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">{{ formatDate(facture.dateEcheance) }}</div>
+                                        <div *ngIf="facture.datePaiement" class="text-xs text-green-600">
+                                            Payée le {{ formatDate(facture.datePaiement) }}
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end space-x-2" (click)="$event.stopPropagation()">
+                                            <!-- Actions selon le statut -->
+                                            <button *ngIf="facture.statut === 'brouillon'"
+                                                (click)="envoyerFacture(facture)"
+                                                class="text-blue-600 hover:text-blue-900" title="Valider">
+                                                ✓
+                                            </button>
+
+                                            <button *ngIf="facture.statut === 'envoyee'"
+                                                (click)="marquerCommePayee(facture)"
+                                                class="text-green-600 hover:text-green-900" title="Marquer comme payée">
+                                                💳
+                                            </button>
+
+                                            <button (click)="telechargerFacture(facture)"
+                                                class="text-gray-600 hover:text-gray-900"
+                                                title="Télécharger fiche de paie">
+                                                📥
+                                            </button>
+
+                                            <button *ngIf="facture.statut !== 'payee' && facture.statut !== 'annulee'"
+                                                (click)="annulerFacture(facture)"
+                                                class="text-red-600 hover:text-red-900" title="Annuler">
+                                                ❌
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Message si aucune rémunération -->
+                    <div *ngIf="facturesFiltrees.length === 0" class="text-center py-8 text-gray-500">
+                        <div class="text-4xl mb-4">💳</div>
+                        <p class="text-lg font-medium">Aucune rémunération trouvée</p>
+                        <p class="text-sm">Générez vos premiers bulletins de paie pour commencer</p>
+                    </div>
+                </div>
+
+                <!-- Aperçu financier -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Répartition par statut -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Répartition des paiements</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Payées</span>
+                                <span class="text-sm font-medium text-green-600">
+                                    {{ getFacturesPayees() }} rémunérations
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">En attente</span>
+                                <span class="text-sm font-medium text-blue-600">
+                                    {{ getFacturesEnvoyees() }} rémunérations
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">En retard</span>
+                                <span class="text-sm font-medium text-red-600">
+                                    {{ getFacturesEnRetard() }} rémunérations
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informations utiles -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Informations budgétaires</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Délai moyen de paiement</span>
+                                <span class="text-sm font-medium">{{ paiementStats.delaiMoyenPaiement }} jours</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Taux de paiement</span>
+                                <span class="text-sm font-medium text-green-600">
+                                    {{ ((paiementStats.totalPaye / paiementStats.totalFacture) * 100).toFixed(1) }}%
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Rémunérations ce mois</span>
+                                <span class="text-sm font-medium">
+                                    {{ getFacturesCeMois() }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Statistiques -->
+            <div *ngIf="activeSection === 'statistiques'" class="space-y-6">
+                <!-- Indicateurs clés avec tendances -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Missions ce mois -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-medium text-gray-600">Missions ce mois</h4>
+                            <span class="text-2xl">📋</span>
+                        </div>
+                        <p class="text-3xl font-bold text-blue-600 mb-1">{{
+                            statistiquesDetaillees.missionsParMois[statistiquesDetaillees.missionsParMois.length -
+                            1].nombre || 0
+                            }}</p>
+                        <div class="flex items-center text-sm"
+                            [class]="getTendanceClass(getTendanceMissions().tendance)">
+                            <span class="mr-1">{{ getTendanceIcon(getTendanceMissions().tendance) }}</span>
+                            <span>{{ getTendanceMissions().valeur.toFixed(1) }}% vs mois dernier</span>
+                        </div>
+                    </div>
+
+                    <!-- Intérimaires actifs -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-medium text-gray-600">Intérimaires actifs</h4>
+                            <span class="text-2xl">👥</span>
+                        </div>
+                        <p class="text-3xl font-bold text-green-600 mb-1">{{ statistiques.interimairesActifs }}</p>
+                        <div class="flex items-center text-sm"
+                            [class]="getTendanceClass(getTendanceInterimaires().tendance)">
+                            <span class="mr-1">{{ getTendanceIcon(getTendanceInterimaires().tendance) }}</span>
+                            <span>{{ getTendanceInterimaires().valeur.toFixed(1) }}% vs mois dernier</span>
+                        </div>
+                    </div>
+
+
+                    <!-- Coûts ce mois -->
+
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-medium text-gray-600">Coûts ce mois</h4>
+                            <span class="text-2xl">💰</span>
+                        </div>
+                        <p class="text-3xl font-bold text-orange-600 mb-1">{{
+                            formatCurrency(statistiquesDetaillees.coutsMensuels[statistiquesDetaillees.coutsMensuels.length
+                            - 1].montant || 0)
+                            }}</p>
+                        <div class="flex items-center text-sm" [class]="getTendanceClass(getTendanceCouts().tendance)">
+                            <span class="mr-1">{{ getTendanceIcon(getTendanceCouts().tendance) }}</span>
+                            <span>{{ getTendanceCouts().valeur.toFixed(1) }}% vs mois dernier</span>
+                        </div>
+                    </div>
+
+                    <!-- Satisfaction moyenne -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-medium text-gray-600">Satisfaction</h4>
+                            <span class="text-2xl">⭐</span>
+                        </div>
+                        <p class="text-3xl font-bold text-purple-600 mb-1">{{ getMoyenneSatisfaction().toFixed(1) }}/5
+                        </p>
+                        <div class="text-sm text-gray-500">
+                            <span>Moyenne des 6 derniers mois</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphiques principaux -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Évolution des missions -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Évolution des missions</h3>
+                        <div class="space-y-3">
+                            <div *ngFor="let data of statistiquesDetaillees.missionsParMois"
+                                class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600 w-16">{{ data.mois }}</span>
+                                <div class="flex-1 mx-4">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full"
+                                            [style.width.%]="getPercentageWidth(data.nombre, getMaxValue(statistiquesDetaillees.missionsParMois, 'nombre'))">
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-gray-900 w-8">{{ data.nombre }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Répartition par service -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Missions par service</h3>
+                        <div class="space-y-3">
+                            <div *ngFor="let data of statistiquesDetaillees.missionsParService"
+                                class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600 w-24">{{ data.service }}</span>
+                                <div class="flex-1 mx-4">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full"
+                                            [style.width.%]="data.pourcentage">
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-medium text-gray-900 w-12">{{ data.nombre }}</span>
+                                <span class="text-xs text-gray-500 w-12">{{ data.pourcentage }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistiques détaillées -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Performance par spécialité -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Performance par spécialité</h3>
+                        <div class="space-y-4">
+                            <div *ngFor="let data of statistiquesDetaillees.missionsParSpecialite"
+                                class="border-b border-gray-100 pb-3 last:border-b-0">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-sm font-medium text-gray-900">{{ data.specialite }}</span>
+                                    <span class="text-sm text-gray-600">{{ data.nombre }} missions</span>
+                                </div>
+                                <div class="flex justify-between items-center text-xs text-gray-500">
+                                    <span>Durée moyenne: {{ data.dureemoyenne }}h</span>
+                                    <div class="w-2 h-2 rounded-full"
+                                        [style.background-color]="getColorForSpecialite(data.specialite)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Évolution intérimaires -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Évolution intérimaires</h3>
+                        <div class="space-y-3">
+                            <div *ngFor="let data of statistiquesDetaillees.evolutionInterimaires"
+                                class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600 w-8">{{ data.mois }}</span>
+                                <div class="flex-1 mx-3">
+                                    <div class="flex items-center space-x-2 text-xs">
+                                        <div class="flex items-center">
+                                            <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                            <span>{{ data.actifs }}</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+                                            <span>+{{ data.nouveaux }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="flex items-center justify-center space-x-4 mt-4 pt-4 border-t border-gray-100 text-xs text-gray-500">
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                                <span>Actifs</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+                                <span>Nouveaux</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Économies réalisées -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Économies réalisées</h3>
+                        <div class="space-y-3 mb-4">
+                            <div *ngFor="let data of statistiquesDetaillees.economiesRealisees"
+                                class="flex justify-between items-center">
+                                <span class="text-xs text-gray-600 flex-1">{{ data.categorie }}</span>
+                                <span class="text-sm font-medium text-green-600">{{ formatCurrency(data.montant)
+                                    }}</span>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-gray-100">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium text-gray-800">Total économies</span>
+                                <span class="text-lg font-bold text-green-600">{{ formatCurrency(getTotalEconomies())
+                                    }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analyse comparative -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Comparaison tarifs -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Comparaison tarifs marché</h3>
+                        <div class="space-y-4">
+                            <div *ngFor="let data of statistiquesDetaillees.comparaisonTarifs" class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-medium text-gray-900">{{ data.specialite }}</span>
+                                    <div class="text-xs text-gray-500">
+                                        <span class="mr-2">Notre: {{ data.tarifMoyen }}€</span>
+                                        <span>Marché: {{ data.tarifMarche }}€</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full"
+                                            [style.width.%]="(data.tarifMoyen / data.tarifMarche) * 100">
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-medium"
+                                        [class]="data.tarifMoyen < data.tarifMarche ? 'text-green-600' : 'text-red-600'">
+                                        {{ data.tarifMoyen < data.tarifMarche ? '✓ Économique' : '⚠️ Élevé' }} </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Indicateurs de performance -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Indicateurs de performance</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Délai moyen de pourvoi -->
+                            <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">{{ getDelaiMoyenPourvoi().toFixed(1) }}
+                                </div>
+                                <div class="text-xs text-blue-800">Jours délai pourvoi</div>
+                                <div class="text-xs text-gray-500 mt-1">🎯 Objectif: &lt;2j</div>
+                            </div>
+
+                            <!-- Taux de réussite -->
+                            <div class="text-center p-4 bg-green-50 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600">{{ statistiques.tauxPourvoi }}%</div>
+                                <div class="text-xs text-green-800">Taux de pourvoi</div>
+                                <div class="text-xs text-gray-500 mt-1">🎯 Objectif: &gt;85%</div>
+                            </div>
+
+                            <!-- Note satisfaction -->
+                            <div class="text-center p-4 bg-purple-50 rounded-lg">
+                                <div class="text-2xl font-bold text-purple-600">{{ statistiques.noteMoyenne }}/5</div>
+                                <div class="text-xs text-purple-800">Note moyenne</div>
+                                <div class="text-xs text-gray-500 mt-1">🎯 Objectif: &gt;4.2</div>
+                            </div>
+
+                            <!-- Économies/mission -->
+                            <div class="text-center p-4 bg-orange-50 rounded-lg">
+                                <div class="text-2xl font-bold text-orange-600">{{ (getTotalEconomies() /
+                                    statistiques.missionsPubliees).toFixed(0) }}€</div>
+                                <div class="text-xs text-orange-800">Économie/mission</div>
+                                <div class="text-xs text-gray-500 mt-1">📈 Progression</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Évolution des coûts -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Évolution des coûts et heures</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-2 text-sm font-medium text-gray-500">Mois</th>
+                                    <th class="text-right py-2 text-sm font-medium text-gray-500">Montant</th>
+                                    <th class="text-right py-2 text-sm font-medium text-gray-500">Heures</th>
+                                    <th class="text-right py-2 text-sm font-medium text-gray-500">Coût/heure</th>
+                                    <th class="text-right py-2 text-sm font-medium text-gray-500">Évolution</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr *ngFor="let data of statistiquesDetaillees.coutsMensuels; let i = index">
+                                    <td class="py-3 text-sm text-gray-900">{{ data.mois }} 2025</td>
+                                    <td class="py-3 text-sm font-medium text-gray-900 text-right">{{
+                                        formatCurrency(data.montant) }}</td>
+                                    <td class="py-3 text-sm text-gray-900 text-right">{{ data.heures }}h</td>
+                                    <td class="py-3 text-sm text-gray-900 text-right">{{ (data.montant /
+                                        data.heures).toFixed(2) }}€</td>
+                                    <td class="py-3 text-sm text-right">
+                                        <span *ngIf="i > 0"
+                                            [class]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'text-red-600' : 'text-green-600'">
+                                            {{ (data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ?
+                                            '📈' : '📉' }}
+                                            {{ Math.abs(((data.montant -
+                                            statistiquesDetaillees.coutsMensuels[i-1].montant) /
+                                            statistiquesDetaillees.coutsMensuels[i-1].montant) * 100).toFixed(1) }}%
+                                        </span>
+                                        <span *ngIf="i === 0" class="text-gray-400">-</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Actions et exports -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Actions et rapports</h3>
+                        <div class="flex flex-wrap gap-3">
+                            <select [(ngModel)]="periodeStatistiques"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="mois">Ce mois</option>
+                                <option value="trimestre">Ce trimestre</option>
+                                <option value="annee">Cette année</option>
+                            </select>
+
+                            <button
+                                class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center space-x-2">
+                                <span>📊</span>
+                                <span>Exporter rapport</span>
+                            </button>
+
+                            <button
+                                class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm flex items-center space-x-2">
+                                <span>📈</span>
+                                <span>Tableau de bord</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <div class="text-2xl mb-2">📋</div>
+                            <div class="text-sm font-medium text-gray-800">Rapport missions</div>
+                            <div class="text-xs text-gray-500">Détail des missions par service</div>
+                        </div>
+
+                        <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <div class="text-2xl mb-2">💰</div>
+                            <div class="text-sm font-medium text-gray-800">Analyse financière</div>
+                            <div class="text-xs text-gray-500">Coûts et économies détaillées</div>
+                        </div>
+
+                        <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <div class="text-2xl mb-2">👥</div>
+                            <div class="text-sm font-medium text-gray-800">Performance RH</div>
+                            <div class="text-xs text-gray-500">Satisfaction et productivité</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Paramètres -->
+            <div *ngIf="activeSection === 'parametres'" class="space-y-6">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Informations de l'établissement</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nom de l'établissement</label>
+                            <input type="text" [value]="etablissement.nom"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                            <input type="text" [value]="etablissement.type"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                            <input type="text" [value]="etablissement.adresse"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                            <input type="tel" [value]="etablissement.telephone"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" [value]="etablissement.email"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                            Sauvegarder
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Détail Mission Planning -->
+            <div *ngIf="showPlanningModal"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg p-6 w-full max-w-lg mx-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Détail de la mission</h3>
+                        <button (click)="closePlanningModal()" class="text-gray-400 hover:text-gray-600 text-xl">
+                            ✕
+                        </button>
+                    </div>
+
+                    <div *ngIf="selectedPlanningMission" class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-gray-900">{{ selectedPlanningMission.mission.titre }}</h4>
+                            <p class="text-sm text-gray-600">{{ selectedPlanningMission.mission.service }}</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p><strong>Date :</strong> {{ formatDate(selectedPlanningMission.date) }}</p>
+                                <p><strong>Horaires :</strong> {{ selectedPlanningMission.heureDebut }} - {{
+                                    selectedPlanningMission.heureFin }}</p>
+                            </div>
+                            <div>
+                                <p><strong>Tarif :</strong> {{ selectedPlanningMission.mission.tarif }}€/h</p>
+                                <p><strong>Statut :</strong>
+                                    <span class="px-2 py-1 rounded text-xs"
+                                        [class]="getStatutPlanningClass(selectedPlanningMission.statut)">
+                                        {{ selectedPlanningMission.statut }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div *ngIf="selectedPlanningMission.interimaire" class="bg-gray-50 rounded-lg p-3">
+                            <h5 class="font-medium text-gray-800 mb-2">Intérimaire assigné :</h5>
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                    {{ getInitials(selectedPlanningMission.interimaire.prenom + ' ' +
+                                    selectedPlanningMission.interimaire.nom) }}
+                                </div>
+                                <div>
+                                    <p class="font-medium">{{ selectedPlanningMission.interimaire.prenom }} {{
+                                        selectedPlanningMission.interimaire.nom }}</p>
+                                    <p class="text-sm text-gray-600">{{ selectedPlanningMission.interimaire.telephone }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button (click)="closePlanningModal()"
+                                class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                                Fermer
+                            </button>
+                            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                                Modifier
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal Nouvelle/Modifier Mission -->
+<div *ngIf="showMissionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold text-gray-800">
+                {{ isEditingMission ? 'Modifier la mission' : 'Nouvelle mission' }}
+            </h3>
+            <button (click)="closeMissionModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                ✕
+            </button>
+        </div>
+
+        <form [formGroup]="missionForm" (ngSubmit)="saveMission()" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Titre de la mission</label>
+                <input type="text" formControlName="titre"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Service</label>
+                    <select formControlName="service"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <option value="">Sélectionner un service</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Spécialité</label>
+                    <select formControlName="specialite"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                        <option value="">Sélectionner une spécialité</option>
+                        <option value="Infirmier(ère)">Infirmier(ère)</option>
+                        <option value="Aide-soignant">Aide-soignant</option>
+                        <option value="Médecin">Médecin</option>
+                        <option value="Kinésithérapeute">Kinésithérapeute</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
+                    <input type="date" formControlName="dateDebut"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
+                    <input type="date" formControlName="dateFin"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Heure début</label>
+                    <input type="time" formControlName="heureDebut"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Heure fin</label>
+                    <input type="time" formControlName="heureFin"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tarif (€/h)</label>
+                    <input type="number" formControlName="tarif" min="0" step="0.5"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea formControlName="description" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Compétences requises (séparées par des
+                    virgules)</label>
+                <input type="text" formControlName="competencesRequises"
+                    placeholder="Ex: Cardiologie, Surveillance, Urgences"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="flex items-center">
+                <input type="checkbox" formControlName="urgente" id="urgente" class="mr-2">
+                <label for="urgente" class="text-sm text-gray-700">Mission urgente</label>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4">
+                <button type="button" (click)="closeMissionModal()"
+                    class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                    Annuler
+                </button>
+                <button type="submit" [disabled]="!missionForm.valid"
+                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50">
+                    {{ isEditingMission ? 'Modifier' : 'Créer' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Détail Facture -->
+<div *ngIf="showFactureModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold text-gray-800">
+                Bulletin de paie {{ selectedFacture?.numero }}
+            </h3>
+            <button (click)="closeFactureModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                ✕
+            </button>
+        </div>
+
+        <div *ngIf="selectedFacture" class="space-y-6">
+            <!-- En-tête facture -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">Informations facture</h4>
+                    <div class="space-y-1 text-sm">
+                        <p><strong>Numéro :</strong> {{ selectedFacture.numero }}</p>
+                        <p><strong>Date d'émission :</strong> {{ formatDate(selectedFacture.dateEmission) }}</p>
+                        <p><strong>Date d'échéance :</strong> {{ formatDate(selectedFacture.dateEcheance) }}</p>
+                        <p><strong>Période :</strong> {{ formatDate(selectedFacture.periode.debut) }} - {{
+                            formatDate(selectedFacture.periode.fin) }}</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-medium text-gray-800 mb-2">Statut et paiement</h4>
+                    <div class="space-y-2">
+                        <span class="px-3 py-1 text-sm font-medium rounded-full"
+                            [class]="getStatutFactureClass(selectedFacture.statut)">
+                            {{ getStatutFactureLabel(selectedFacture.statut) }}
+                        </span>
+                        <div *ngIf="selectedFacture.datePaiement" class="text-sm text-green-600">
+                            Payée le {{ formatDate(selectedFacture.datePaiement) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Détail des missions -->
+            <div>
+                <h4 class="font-medium text-gray-800 mb-3">Détail des missions</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Mission</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Intérimaire
+                                </th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Période</th>
+                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Heures</th>
+                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Tarif/h
+                                </th>
+                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Montant
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr *ngFor="let missionFacture of selectedFacture.missions">
+                                <td class="px-4 py-2">
+                                    <div class="text-sm font-medium text-gray-900">{{ missionFacture.mission.titre }}
+                                    </div>
+                                    <div class="text-xs text-gray-500">{{ missionFacture.mission.service }}</div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="text-sm text-gray-900">
+                                        {{ missionFacture.interimaire.prenom }} {{ missionFacture.interimaire.nom }}
+                                    </div>
+                                    <div class="text-xs text-gray-500">{{ missionFacture.interimaire.specialite }}</div>
+                                </td>
+                                <td class="px-4 py-2 text-sm text-gray-900">{{ missionFacture.periode }}</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 text-right">{{
+                                    missionFacture.heuresTravaillees }}h</td>
+                                <td class="px-4 py-2 text-sm text-gray-900 text-right">{{
+                                    formatCurrency(missionFacture.tarifHoraire) }}</td>
+                                <td class="px-4 py-2 text-sm font-medium text-gray-900 text-right">{{
+                                    formatCurrency(missionFacture.montant) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Totaux -->
+            <div class="border-t pt-4">
+                <div class="flex justify-end">
+                    <div class="w-64 space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>Total HT :</span>
+                            <span class="font-medium">{{ formatCurrency(selectedFacture.montantHT) }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>TVA (20%) :</span>
+                            <span class="font-medium">{{ formatCurrency(selectedFacture.tva) }}</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold border-t pt-2">
+                            <span>Total TTC :</span>
+                            <span>{{ formatCurrency(selectedFacture.montantTTC) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div *ngIf="selectedFacture.notes">
+                <h4 class="font-medium text-gray-800 mb-2">Notes</h4>
+                <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded">{{ selectedFacture.notes }}</p>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end space-x-3 pt-4 border-t">
+                <button (click)="closeFactureModal()"
+                    class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                    Fermer
+                </button>
+
+                <button (click)="telechargerFacture(selectedFacture)"
+                    class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+                    📥 Télécharger bulletin
+                </button>
+
+                <button *ngIf="selectedFacture.statut === 'brouillon'" (click)="envoyerFacture(selectedFacture)"
+                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                    ✓ Valider
+                </button>
+
+                <button *ngIf="selectedFacture.statut === 'envoyee'" (click)="marquerCommePayee(selectedFacture)"
+                    class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
+                    💳 Marquer payée
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -26,6 +26,7 @@ import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 import { DashboardInterimaireComponent } from './pages/dashboard-interimaire/dashboard-interimaire.component';
+import { DashboardEtablissementComponent } from './pages/dashboard-etablissement/dashboard-etablissement.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
@@ -59,6 +60,7 @@ export const routes: Routes = [
   { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
   { path: 'plan-du-site', component: PlanDuSiteComponent },
   { path: 'dashboard-interimaire', component: DashboardInterimaireComponent },
+  { path: 'dashboard-etablissement', component: DashboardEtablissementComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
