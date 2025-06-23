@@ -184,12 +184,12 @@ export class DashboardInterimaireComponent implements OnInit {
   faqItems: FaqItem[] = [];
 
   userProfile = {
-    prenom: 'Jean',
-    nom: 'Dupont',
-    email: 'jean.dupont@email.com',
-    telephone: '06 12 34 56 78',
-    specialite: 'infirmier',
-    experience: 5
+    prenom: 'Allan',
+    nom: 'Khebab',
+    email: 'allankhebabk2b@gmail.com',
+    telephone: '07 82 01 97 64',
+    specialite: 'ASH',
+    experience: 2
   };
 
   // Email support (pour éviter les problèmes avec @)
