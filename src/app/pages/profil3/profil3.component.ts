@@ -6,7 +6,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [],
   templateUrl: './profil3.component.html',
-  styleUrls: ['../../../../public/assets/Css/ProfilCss.css'],
+  styleUrls: [],
 })
 export class Profil3Component implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}

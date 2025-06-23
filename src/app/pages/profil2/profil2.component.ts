@@ -6,6 +6,6 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './profil2.component.html',
-  styleUrls: ['../../../../public/assets/Css/ProfilCss.css'],
+  styleUrls: [],
 })
 export class Profil2Component {}

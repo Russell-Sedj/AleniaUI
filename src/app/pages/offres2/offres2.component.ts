@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-profil1',
+  selector: 'app-offres2',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './profil1.component.html',
+  templateUrl: './offres2.component.html',
   styleUrls: [],
 })
-export class Profil1Component {}
+export class Offres2Component {}

@@ -6,7 +6,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [],
   templateUrl: './fiche-poste.component.html',
-  styleUrls: ['../../../../public/assets/Css/SendToBDD.css'],
+  styleUrls: [],
 })
 export class FichePosteComponent implements OnInit {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
