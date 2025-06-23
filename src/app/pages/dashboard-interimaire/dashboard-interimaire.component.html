@@ -1,0 +1,1600 @@
+<div class="flex min-h-screen bg-gray-50">
+    <!-- Sidebar avec classe CSS personnalisée -->
+    <aside class="sidebar-container w-72 bg-white text-gray-700 flex flex-col shadow-lg border-r border-gray-200">
+        <div class="p-6 text-center border-b border-gray-100">
+            <img src="/assets/images/logo.png" alt="ALENIA" class="w-12 h-12 mx-auto mb-3">
+            <h3 class="text-lg font-semibold text-gray-800">Espace Intérimaire</h3>
+        </div>
+
+        <nav class="flex-1 py-5">
+            <ul class="space-y-1">
+                <li>
+                    <a (click)="setActiveSection('profil')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'profil' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">👤</span>
+                        <span>Mon Profil</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('missions')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'missions' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">💼</span>
+                        <span>Mes Missions</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('planning')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'planning' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">📅</span>
+                        <span>Planning</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('documents')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'documents' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">📄</span>
+                        <span>Documents</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('messages')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'messages' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">💬</span>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a (click)="setActiveSection('parametres')"
+                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'parametres' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
+                        <span class="w-5 h-5 mr-4 text-lg">⚙️</span>
+                        <span>Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="p-5 border-t border-gray-100">
+            <button (click)="logout()"
+                class="flex items-center w-full p-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300">
+                <span class="w-5 h-5 mr-4 text-lg">🚪</span>
+                Déconnexion
+            </button>
+        </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="flex-1 flex flex-col min-h-screen overflow-hidden">
+        <header class="bg-white p-6 border-b border-gray-200 flex justify-between items-center shadow-sm">
+            <h1
+                class="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] leading-normal">
+                {{ getSectionTitle() }}</h1>
+            <div class="flex items-center space-x-4">
+                <img src="/assets/images/avatar-default.png" alt="Avatar"
+                    class="w-10 h-10 rounded-full border-2 border-transparent bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] p-0.5">
+                <span class="text-gray-700">Bonjour, {{ userProfile.prenom }} {{ userProfile.nom }}</span>
+            </div>
+        </header>
+
+        <div class="flex-1 p-8 overflow-y-auto">
+            <!-- Section Profil -->
+            <div *ngIf="activeSection === 'profil'" class="max-w-4xl">
+                <div class="bg-white rounded-xl p-8 shadow-lg">
+                    <h2
+                        class="text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] mb-8">
+                        Informations personnelles</h2>
+
+                    <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="space-y-2">
+                                <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
+                                <input type="text" id="prenom" formControlName="prenom"
+                                    [class]="'w-full px-4 py-3 border-2 rounded-lg transition-colors duration-300 ' + (!isEditing ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 focus:border-blue-500 focus:outline-none')">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+                                <input type="text" id="nom" formControlName="nom"
+                                    [class]="'w-full px-4 py-3 border-2 rounded-lg transition-colors duration-300 ' + (!isEditing ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 focus:border-blue-500 focus:outline-none')">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="space-y-2">
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="email" formControlName="email"
+                                    [class]="'w-full px-4 py-3 border-2 rounded-lg transition-colors duration-300 ' + (!isEditing ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 focus:border-blue-500 focus:outline-none')">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone</label>
+                                <input type="tel" id="telephone" formControlName="telephone"
+                                    [class]="'w-full px-4 py-3 border-2 rounded-lg transition-colors duration-300 ' + (!isEditing ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 focus:border-blue-500 focus:outline-none')">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="specialite"
+                                class="block text-sm font-medium text-gray-700 mb-2">Spécialité</label>
+                            <select id="specialite" formControlName="specialite"
+                                [class]="'w-full px-4 py-3 border-2 rounded-lg transition-colors duration-300 ' + (!isEditing ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 focus:border-blue-500 focus:outline-none')">
+                                <option value="">Sélectionner une spécialité</option>
+                                <option value="infirmier">Infirmier(ère)</option>
+                                <option value="aide-soignant">Aide-soignant(e)</option>
+                                <option value="medecin">Médecin</option>
+                                <option value="kinesitherapeute">Kinésithérapeute</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-8">
+                            <label for="experience" class="block text-sm font-medium text-gray-700 mb-2">Années
+                                d'expérience</label>
+                            <input type="number" id="experience" formControlName="experience"
+                                [class]="'w-full px-4 py-3 border-2 rounded-lg transition-colors duration-300 ' + (!isEditing ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-300 focus:border-blue-500 focus:outline-none')">
+                        </div>
+
+                        <div class="flex space-x-4">
+                            <button type="button" *ngIf="!isEditing" (click)="toggleEdit()"
+                                class="px-6 py-3 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transform hover:-translate-y-1 transition-all duration-300 font-medium">
+                                Modifier le profil
+                            </button>
+                            <div *ngIf="isEditing" class="flex space-x-4">
+                                <button type="submit"
+                                    class="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transform hover:-translate-y-1 transition-all duration-300 font-medium">
+                                    Sauvegarder
+                                </button>
+                                <button type="button" (click)="cancelEdit()"
+                                    class="px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transform hover:-translate-y-1 transition-all duration-300 font-medium">
+                                    Annuler
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Section Missions -->
+            <div *ngIf="activeSection === 'missions'" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <h3
+                            class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] mb-2">
+                            5</h3>
+                        <p class="text-gray-600">Missions en cours</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <h3
+                            class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] mb-2">
+                            23</h3>
+                        <p class="text-gray-600">Missions terminées</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <h3
+                            class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] mb-2">
+                            4.8/5</h3>
+                        <p class="text-gray-600">Note moyenne</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-8 shadow-lg">
+                    <h3
+                        class="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] mb-4">
+                        Mes missions récentes</h3>
+                    <p class="text-gray-600">Liste des missions à venir...</p>
+                </div>
+            </div>
+
+            <!-- Section Planning -->
+            <div *ngIf="activeSection === 'planning'" class="space-y-6">
+                <!-- Header avec vue et navigation -->
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex bg-white rounded-lg shadow-sm border">
+                            <button (click)="setCalendarView('day')"
+                                [class]="'px-4 py-2 text-sm font-medium transition-colors ' + (calendarView === 'day' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-50')">
+                                Jour
+                            </button>
+                            <button (click)="setCalendarView('week')"
+                                [class]="'px-4 py-2 text-sm font-medium transition-colors ' + (calendarView === 'week' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-50')">
+                                Semaine
+                            </button>
+                            <button (click)="setCalendarView('month')"
+                                [class]="'px-4 py-2 text-sm font-medium transition-colors ' + (calendarView === 'month' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-50')">
+                                Mois
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <div class="text-lg font-semibold text-gray-800">
+                            {{ getCurrentPeriodLabel() }}
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button (click)="previousPeriod()"
+                                class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+                                ←
+                            </button>
+                            <button (click)="today()"
+                                class="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                                Aujourd'hui
+                            </button>
+                            <button (click)="nextPeriod()"
+                                class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors">
+                                →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistiques du planning -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Cette semaine</p>
+                                <p class="text-2xl font-bold text-blue-600">{{ getThisWeekHours() }}h</p>
+                            </div>
+                            <span class="text-2xl">📅</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Ce mois</p>
+                                <p class="text-2xl font-bold text-green-600">{{ getThisMonthHours() }}h</p>
+                            </div>
+                            <span class="text-2xl">📊</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Prochaines missions</p>
+                                <p class="text-2xl font-bold text-orange-600">{{ getUpcomingMissions() }}</p>
+                            </div>
+                            <span class="text-2xl">⏰</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Disponibilité</p>
+                                <p class="text-2xl font-bold text-purple-600">{{ getAvailabilityPercentage() }}%</p>
+                            </div>
+                            <span class="text-2xl">✅</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vue Jour -->
+                <div *ngIf="calendarView === 'day'" class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ currentDate | date:'EEEE d MMMM yyyy':'fr-FR'
+                            }}</h3>
+                    </div>
+
+                    <div class="p-4">
+                        <!-- Grille horaire horizontale -->
+                        <div class="overflow-x-auto">
+                            <div class="min-w-[1200px]">
+                                <!-- En-tête des heures -->
+                                <div class="flex border-b border-gray-200 pb-2 mb-4">
+                                    <div *ngFor="let hour of getDayHours()"
+                                        class="flex-1 min-w-[70px] text-center text-xs text-gray-500 font-medium border-r border-gray-100 last:border-r-0">
+                                        {{ hour }}
+                                    </div>
+                                </div>
+
+                                <!-- Zone des missions - hauteur augmentée -->
+                                <div class="relative h-48 bg-gray-50 rounded border">
+                                    <!-- Lignes de séparation verticales pour les heures -->
+                                    <div class="absolute inset-0 flex">
+                                        <div *ngFor="let hour of getDayHours()"
+                                            class="flex-1 min-w-[70px] border-r border-gray-200 last:border-r-0 h-full">
+                                        </div>
+                                    </div>
+
+                                    <!-- Missions positionnées - hauteur et espacement augmentés -->
+                                    <div *ngFor="let mission of getDayMissions(currentDate); let i = index"
+                                        class="absolute bg-blue-100 border border-blue-300 rounded p-3 shadow-sm cursor-pointer hover:bg-blue-200 transition-colors"
+                                        [style.left.%]="getDayMissionPosition(mission).left"
+                                        [style.width.%]="getDayMissionPosition(mission).width"
+                                        [style.top.px]="10 + (i * 60)" [style.height.px]="50"
+                                        [title]="mission.etablissement + ' - ' + mission.heureDebut + ' à ' + mission.heureFin">
+
+                                        <!-- Contenu de la mission avec meilleur espacement -->
+                                        <div class="h-full flex flex-col justify-center">
+                                            <div class="text-sm font-semibold text-blue-800 truncate leading-tight">
+                                                {{ mission.etablissement }}
+                                            </div>
+                                            <div class="text-xs text-blue-600 mt-1">
+                                                {{ mission.heureDebut }}-{{ mission.heureFin }}
+                                            </div>
+                                            <div class="text-xs text-blue-500 truncate">
+                                                {{ mission.service }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Message si aucune mission -->
+                                    <div *ngIf="getDayMissions(currentDate).length === 0"
+                                        class="absolute inset-0 flex items-center justify-center text-gray-500">
+                                        <div class="text-center">
+                                            <span class="text-2xl block mb-1">📅</span>
+                                            <p class="text-sm">Aucune mission programmée</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Liste détaillée des missions du jour -->
+                        <div *ngIf="getDayMissions(currentDate).length > 0" class="mt-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-4">Détails des missions</h4>
+                            <div class="grid gap-4">
+                                <div *ngFor="let mission of getDayMissions(currentDate)"
+                                    class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h5 class="text-lg font-semibold text-gray-900">{{ mission.etablissement
+                                                    }}</h5>
+                                                <span class="px-3 py-1 text-sm font-medium rounded-full"
+                                                    [class]="getMissionStatusClass(mission.statut)">
+                                                    {{ getMissionStatusLabel(mission.statut) }}
+                                                </span>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                                                <div>
+                                                    <p><strong>Service :</strong> {{ mission.service }}</p>
+                                                    <p><strong>Spécialité :</strong> {{ mission.specialite }}</p>
+                                                    <p><strong>Horaires :</strong> {{ mission.heureDebut }} - {{
+                                                        mission.heureFin }} ({{ mission.duree }}h)</p>
+                                                </div>
+                                                <div>
+                                                    <p><strong>Adresse :</strong> {{ mission.adresse }}</p>
+                                                    <p><strong>Contact :</strong> {{ mission.contact }}</p>
+                                                    <p><strong>Rémunération :</strong> <span
+                                                            class="font-semibold text-green-600">{{ mission.remuneration
+                                                            }}€</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vue Semaine -->
+                <div *ngIf="calendarView === 'week'" class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-800">Semaine du {{ getWeekStart() | date:'d
+                            MMMM':'fr-FR' }} au {{ getWeekEnd() | date:'d MMMM yyyy':'fr-FR' }}</h3>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full min-w-[800px]">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="w-20 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                        Heure</th>
+                                    <th *ngFor="let day of getWeekDays()"
+                                        class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">
+                                        <div>{{ day | date:'EEEE':'fr' }}</div>
+                                        <div class="text-lg font-bold text-gray-800">{{ day | date:'d':'fr' }}</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let hour of getWorkingHours()" class="border-t border-gray-100">
+                                    <td class="px-4 py-3 text-sm text-gray-500 border-r border-gray-100">{{ hour }}:00
+                                    </td>
+                                    <td *ngFor="let day of getWeekDays()"
+                                        class="px-2 py-3 border-r border-gray-100 relative min-h-[60px] align-top">
+                                        <div *ngFor="let mission of getHourMissions(day, hour)"
+                                            class="bg-blue-100 border-l-4 border-blue-500 rounded p-1 mb-1 text-xs">
+                                            <div class="font-medium text-blue-800">{{ mission.etablissement }}</div>
+                                            <div class="text-blue-600">{{ mission.heureDebut }}-{{ mission.heureFin }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Vue Mois -->
+                <div *ngIf="calendarView === 'month'" class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ currentDate | date:'MMMM yyyy':'fr-FR' |
+                            titlecase }}</h3>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-0">
+                        <!-- En-têtes des jours -->
+                        <div *ngFor="let dayName of getDayNames()"
+                            class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+                            {{ dayName }}
+                        </div>
+
+                        <!-- Cases du calendrier -->
+                        <div *ngFor="let day of getMonthDays()"
+                            class="min-h-[120px] border-b border-r border-gray-200 p-2"
+                            [class.bg-gray-50]="!isCurrentMonth(day)" [class.bg-blue-50]="isToday(day)">
+
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-sm font-medium" [class.text-gray-400]="!isCurrentMonth(day)"
+                                    [class.text-blue-600]="isToday(day)">
+                                    {{ day | date:'d' }}
+                                </span>
+                                <span *ngIf="getDayMissions(day).length > 0"
+                                    class="text-xs bg-blue-500 text-white rounded-full px-2 py-1">
+                                    {{ getDayMissions(day).length }}
+                                </span>
+                            </div>
+
+                            <div class="space-y-1">
+                                <div *ngFor="let mission of getDayMissions(day).slice(0, 2)"
+                                    class="text-xs bg-blue-100 text-blue-800 rounded px-2 py-1 truncate">
+                                    {{ mission.heureDebut }} {{ mission.etablissement }}
+                                </div>
+                                <div *ngIf="getDayMissions(day).length > 2" class="text-xs text-gray-500">
+                                    +{{ getDayMissions(day).length - 2 }} autre(s)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prochaines missions -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-800">Prochaines missions</h3>
+                    </div>
+
+                    <div class="divide-y divide-gray-200">
+                        <div *ngFor="let mission of getUpcomingMissionsList().slice(0, 5)"
+                            class="px-6 py-4 hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <span class="text-blue-600 font-bold">{{ mission.dateMission | date:'d'
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">{{ mission.etablissement }}</h4>
+                                        <p class="text-sm text-gray-600">{{ mission.specialite }} • {{ mission.service
+                                            }}</p>
+                                        <p class="text-xs text-gray-500">
+                                            {{ mission.dateMission | date:'EEEE d MMMM':'fr-FR' }} •
+                                            {{ mission.heureDebut }} - {{ mission.heureFin }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full"
+                                        [class]="getMissionStatusClass(mission.statut)">
+                                        {{ getMissionStatusLabel(mission.statut) }}
+                                    </span>
+                                    <button class="text-blue-600 hover:text-blue-800 text-sm">
+                                        Détails →
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="getUpcomingMissionsList().length === 0" class="px-6 py-12 text-center">
+                        <span class="text-4xl mb-4 block">📅</span>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Aucune mission programmée</h3>
+                        <p class="text-gray-500">Vos prochaines missions apparaîtront ici dès qu'elles seront
+                            planifiées.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Documents -->
+            <div *ngIf="activeSection === 'documents'" class="space-y-6">
+                <!-- Header modifié -->
+                <div class="flex justify-end items-center">
+                    <div class="text-sm text-gray-600">
+                        <span class="font-medium">{{ getCompletedDocuments() }}/5</span> documents obligatoires
+                        complétés
+                    </div>
+                </div>
+
+                <!-- Barre de progression -->
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-700">Progression des documents</span>
+                        <span class="text-sm text-gray-600">{{ getProgressPercentage() }}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] h-2 rounded-full transition-all duration-300"
+                            [style.width.%]="getProgressPercentage()"></div>
+                    </div>
+                </div>
+
+                <!-- Documents obligatoires -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- CV -->
+                    <div class="bg-white rounded-lg shadow-sm border-2"
+                        [class]="getDocument('cv') ? 'border-green-200' : 'border-red-200'">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-3 rounded-lg"
+                                        [class]="getDocument('cv') ? 'bg-green-100' : 'bg-red-100'">
+                                        <span class="text-2xl">📄</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">CV</h3>
+                                        <p class="text-sm text-gray-600">Curriculum vitae à jour</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span *ngIf="getDocument('cv')" class="text-green-500 text-xl">✅</span>
+                                    <span *ngIf="!getDocument('cv')" class="text-red-500 text-xl">❌</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="getDocument('cv')" class="mt-4 p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">{{ getDocument('cv')?.nom }}</p>
+                                        <p class="text-xs text-gray-500">
+                                            Ajouté le {{ getDocument('cv')?.dateUpload | date:'dd/MM/yyyy' }}
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button (click)="viewDocument(getDocument('cv'))"
+                                            class="text-blue-600 hover:text-blue-800 text-sm">👁️</button>
+                                        <button (click)="downloadDocument(getDocument('cv'))"
+                                            class="text-green-600 hover:text-green-800 text-sm">📥</button>
+                                        <button (click)="replaceDocument('cv')"
+                                            class="text-orange-600 hover:text-orange-800 text-sm">🔄</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button *ngIf="!getDocument('cv')" (click)="openUploadModal('cv')"
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transition-all duration-300">
+                                📤 Déposer mon CV
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Diplôme -->
+                    <div class="bg-white rounded-lg shadow-sm border-2"
+                        [class]="getDocument('diplome') ? 'border-green-200' : 'border-red-200'">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-3 rounded-lg"
+                                        [class]="getDocument('diplome') ? 'bg-green-100' : 'bg-red-100'">
+                                        <span class="text-2xl">🎓</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">Diplôme</h3>
+                                        <p class="text-sm text-gray-600">Diplôme professionnel</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span *ngIf="getDocument('diplome')" class="text-green-500 text-xl">✅</span>
+                                    <span *ngIf="!getDocument('diplome')" class="text-red-500 text-xl">❌</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="getDocument('diplome')" class="mt-4 p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">{{ getDocument('diplome')?.nom }}
+                                        </p>
+                                        <p class="text-xs text-gray-500">
+                                            Ajouté le {{ getDocument('diplome')?.dateUpload | date:'dd/MM/yyyy' }}
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button (click)="viewDocument(getDocument('diplome'))"
+                                            class="text-blue-600 hover:text-blue-800 text-sm">👁️</button>
+                                        <button (click)="downloadDocument(getDocument('diplome'))"
+                                            class="text-green-600 hover:text-green-800 text-sm">📥</button>
+                                        <button (click)="replaceDocument('diplome')"
+                                            class="text-orange-600 hover:text-orange-800 text-sm">🔄</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button *ngIf="!getDocument('diplome')" (click)="openUploadModal('diplome')"
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transition-all duration-300">
+                                📤 Déposer mon diplôme
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pièce d'identité -->
+                    <div class="bg-white rounded-lg shadow-sm border-2"
+                        [class]="getDocument('identite') ? 'border-green-200' : 'border-red-200'">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-3 rounded-lg"
+                                        [class]="getDocument('identite') ? 'bg-green-100' : 'bg-red-100'">
+                                        <span class="text-2xl">🆔</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">Pièce d'identité</h3>
+                                        <p class="text-sm text-gray-600">CNI, passeport ou permis</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span *ngIf="getDocument('identite')" class="text-green-500 text-xl">✅</span>
+                                    <span *ngIf="!getDocument('identite')" class="text-red-500 text-xl">❌</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="getDocument('identite')" class="mt-4 p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">{{ getDocument('identite')?.nom }}
+                                        </p>
+                                        <p class="text-xs text-gray-500">
+                                            Ajouté le {{ getDocument('identite')?.dateUpload | date:'dd/MM/yyyy' }}
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button (click)="viewDocument(getDocument('identite'))"
+                                            class="text-blue-600 hover:text-blue-800 text-sm">👁️</button>
+                                        <button (click)="downloadDocument(getDocument('identite'))"
+                                            class="text-green-600 hover:text-green-800 text-sm">📥</button>
+                                        <button (click)="replaceDocument('identite')"
+                                            class="text-orange-600 hover:text-orange-800 text-sm">🔄</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button *ngIf="!getDocument('identite')" (click)="openUploadModal('identite')"
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transition-all duration-300">
+                                📤 Déposer ma pièce d'identité
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RIB/IBAN -->
+                    <div class="bg-white rounded-lg shadow-sm border-2"
+                        [class]="getDocument('rib') ? 'border-green-200' : 'border-red-200'">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-3 rounded-lg"
+                                        [class]="getDocument('rib') ? 'bg-green-100' : 'bg-red-100'">
+                                        <span class="text-2xl">🏦</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">RIB/IBAN</h3>
+                                        <p class="text-sm text-gray-600">Relevé d'identité bancaire</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span *ngIf="getDocument('rib')" class="text-green-500 text-xl">✅</span>
+                                    <span *ngIf="!getDocument('rib')" class="text-red-500 text-xl">❌</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="getDocument('rib')" class="mt-4 p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">{{ getDocument('rib')?.nom }}</p>
+                                        <p class="text-xs text-gray-500">
+                                            Ajouté le {{ getDocument('rib')?.dateUpload | date:'dd/MM/yyyy' }}
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button (click)="viewDocument(getDocument('rib'))"
+                                            class="text-blue-600 hover:text-blue-800 text-sm">👁️</button>
+                                        <button (click)="downloadDocument(getDocument('rib'))"
+                                            class="text-green-600 hover:text-green-800 text-sm">📥</button>
+                                        <button (click)="replaceDocument('rib')"
+                                            class="text-orange-600 hover:text-orange-800 text-sm">🔄</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button *ngIf="!getDocument('rib')" (click)="openUploadModal('rib')"
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transition-all duration-300">
+                                📤 Déposer mon RIB
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Attestation sécurité sociale -->
+                    <div class="bg-white rounded-lg shadow-sm border-2"
+                        [class]="getDocument('secu') ? 'border-green-200' : 'border-red-200'">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="p-3 rounded-lg"
+                                        [class]="getDocument('secu') ? 'bg-green-100' : 'bg-red-100'">
+                                        <span class="text-2xl">🏥</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800">Attestation sécu</h3>
+                                        <p class="text-sm text-gray-600">Attestation de sécurité sociale</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span *ngIf="getDocument('secu')" class="text-green-500 text-xl">✅</span>
+                                    <span *ngIf="!getDocument('secu')" class="text-red-500 text-xl">❌</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="getDocument('secu')" class="mt-4 p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">{{ getDocument('secu')?.nom }}</p>
+                                        <p class="text-xs text-gray-500">
+                                            Ajouté le {{ getDocument('secu')?.dateUpload | date:'dd/MM/yyyy' }}
+                                        </p>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button (click)="viewDocument(getDocument('secu'))"
+                                            class="text-blue-600 hover:text-blue-800 text-sm">👁️</button>
+                                        <button (click)="downloadDocument(getDocument('secu'))"
+                                            class="text-green-600 hover:text-green-800 text-sm">📥</button>
+                                        <button (click)="replaceDocument('secu')"
+                                            class="text-orange-600 hover:text-orange-800 text-sm">🔄</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button *ngIf="!getDocument('secu')" (click)="openUploadModal('secu')"
+                                class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transition-all duration-300">
+                                📤 Déposer mon attestation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aide et informations -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start space-x-3">
+                        <span class="text-blue-500 text-xl">💡</span>
+                        <div>
+                            <h4 class="font-semibold text-blue-800 mb-2">Aide pour vos documents</h4>
+                            <ul class="text-sm text-blue-700 space-y-1">
+                                <li>• <strong>CV :</strong> Document récent au format PDF (max 5MB)</li>
+                                <li>• <strong>Diplôme :</strong> Copie de votre diplôme principal</li>
+                                <li>• <strong>Pièce d'identité :</strong> CNI, passeport ou permis de conduire</li>
+                                <li>• <strong>RIB :</strong> Relevé d'identité bancaire pour les virements</li>
+                                <li>• <strong>Attestation sécu :</strong> Téléchargeable sur ameli.fr</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal d'upload -->
+            <div *ngIf="showUploadModal"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            Ajouter : {{ getDocumentTypeLabel(currentUploadType) }}
+                        </h3>
+                        <button (click)="closeUploadModal()" class="text-gray-400 hover:text-gray-600">
+                            <span class="text-xl">✕</span>
+                        </button>
+                    </div>
+
+                    <form [formGroup]="uploadForm" (ngSubmit)="uploadDocument()">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Fichier</label>
+                                <input type="file" (change)="onFileSelected($event)"
+                                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <p class="text-xs text-gray-500 mt-1">Formats: PDF, DOC, DOCX, JPG, PNG (Max: 10MB)</p>
+                            </div>
+
+                            <div *ngIf="selectedFile" class="p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-green-500">📎</span>
+                                    <span class="text-sm font-medium">{{ selectedFile.name }}</span>
+                                    <span class="text-xs text-gray-500">({{ getFileSize(selectedFile.size) }})</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-3 mt-6">
+                            <button type="submit" [disabled]="!selectedFile"
+                                class="flex-1 px-4 py-2 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Télécharger
+                            </button>
+                            <button type="button" (click)="closeUploadModal()"
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                                Annuler
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Section Messages -->
+            <div *ngIf="activeSection === 'messages'" class="space-y-6">
+                <!-- Header avec filtres et nouveau message -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="flex items-center space-x-4">
+                        <!-- Filtres -->
+                        <div class="flex bg-white rounded-lg shadow-sm border">
+                            <button (click)="setMessageFilter('tous')"
+                                [class]="'px-4 py-2 text-sm font-medium transition-colors ' + (messageFilter === 'tous' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-50')">
+                                Tous ({{ getTotalMessages() }})
+                            </button>
+                            <button (click)="setMessageFilter('non_lus')"
+                                [class]="'px-4 py-2 text-sm font-medium transition-colors ' + (messageFilter === 'non_lus' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-50')">
+                                Non lus ({{ getUnreadMessages() }})
+                            </button>
+                            <button (click)="setMessageFilter('importants')"
+                                [class]="'px-4 py-2 text-sm font-medium transition-colors ' + (messageFilter === 'importants' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-50')">
+                                Importants ({{ getImportantMessages() }})
+                            </button>
+                        </div>
+                    </div>
+
+                    <button (click)="openNewMessageModal()"
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2">
+                        <span>✉️</span>
+                        <span>Nouveau message</span>
+                    </button>
+                </div>
+
+                <!-- Statistiques rapides -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Messages reçus</p>
+                                <p class="text-2xl font-bold text-blue-600">{{ getTotalMessages() }}</p>
+                            </div>
+                            <span class="text-2xl">📬</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Non lus</p>
+                                <p class="text-2xl font-bold text-orange-600">{{ getUnreadMessages() }}</p>
+                            </div>
+                            <span class="text-2xl">🔔</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Importants</p>
+                                <p class="text-2xl font-bold text-red-600">{{ getImportantMessages() }}</p>
+                            </div>
+                            <span class="text-2xl">⭐</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Cette semaine</p>
+                                <p class="text-2xl font-bold text-green-600">{{ getWeekMessages() }}</p>
+                            </div>
+                            <span class="text-2xl">📅</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barre de recherche -->
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <div class="relative">
+                        <input type="text" [(ngModel)]="messageSearchTerm" (input)="filterMessages()"
+                            placeholder="Rechercher dans les messages..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <span class="absolute left-3 top-2.5 text-gray-400">🔍</span>
+                    </div>
+                </div>
+
+                <!-- Liste des messages -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            {{ getFilterTitle() }}
+                            <span class="text-sm font-normal text-gray-500">({{ getFilteredMessages().length }})</span>
+                        </h3>
+                    </div>
+
+                    <div class="divide-y divide-gray-200 max-h-[600px] overflow-y-auto">
+                        <div *ngFor="let message of getFilteredMessages()"
+                            class="px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                            (click)="openMessage(message)" [class.bg-blue-50]="!message.lu">
+
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-3 flex-1">
+                                    <!-- Avatar de l'expéditeur -->
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                            {{ getInitials(message.expediteur) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center space-x-2 mb-1">
+                                            <h4 class="text-sm font-semibold text-gray-900 truncate">{{
+                                                message.expediteur }}</h4>
+                                            <span *ngIf="message.important" class="text-red-500">⭐</span>
+                                            <span *ngIf="!message.lu" class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                        </div>
+
+                                        <h5 class="text-sm font-medium text-gray-800 mb-1 truncate"
+                                            [class.font-bold]="!message.lu">
+                                            {{ message.sujet }}
+                                        </h5>
+
+                                        <p class="text-sm text-gray-600 truncate">{{ message.contenu }}</p>
+
+                                        <div class="flex items-center space-x-4 mt-2 text-xs text-gray-500">
+                                            <span>{{ message.dateEnvoi | date:'dd/MM/yyyy à HH:mm':'fr-FR' }}</span>
+                                            <span class="px-2 py-1 rounded-full text-xs"
+                                                [class]="getMessageCategoryClass(message.categorie)">
+                                                {{ getMessageCategoryLabel(message.categorie) }}
+                                            </span>
+                                            <span *ngIf="message.urgent"
+                                                class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
+                                                URGENT
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center space-x-2 ml-4">
+                                    <button (click)="toggleImportant(message); $event.stopPropagation()"
+                                        class="p-1 rounded hover:bg-gray-200 transition-colors"
+                                        [class.text-red-500]="message.important">
+                                        ⭐
+                                    </button>
+                                    <button (click)="toggleRead(message); $event.stopPropagation()"
+                                        class="p-1 rounded hover:bg-gray-200 transition-colors">
+                                        {{ message.lu ? '📖' : '📬' }}
+                                    </button>
+                                    <button (click)="deleteMessage(message); $event.stopPropagation()"
+                                        class="p-1 rounded hover:bg-gray-200 transition-colors text-red-500">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message si aucun résultat -->
+                    <div *ngIf="getFilteredMessages().length === 0" class="px-6 py-12 text-center">
+                        <span class="text-4xl mb-4 block">📭</span>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Aucun message trouvé</h3>
+                        <p class="text-gray-500">{{ getEmptyStateMessage() }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de lecture de message -->
+            <div *ngIf="selectedMessage"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                (click)="closeMessage()">
+                <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden"
+                    (click)="$event.stopPropagation()">
+
+                    <!-- Header du message -->
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                    {{ getInitials(selectedMessage.expediteur) }}
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+                                        <span>{{ selectedMessage.sujet }}</span>
+                                        <span *ngIf="selectedMessage.important" class="text-red-500">⭐</span>
+                                        <span *ngIf="selectedMessage.urgent"
+                                            class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
+                                            URGENT
+                                        </span>
+                                    </h3>
+                                    <p class="text-sm text-gray-600">De : {{ selectedMessage.expediteur }}</p>
+                                    <p class="text-xs text-gray-500">{{ selectedMessage.dateEnvoi | date:'EEEE d MMMM
+                                        yyyy à HH:mm':'fr-FR' }}</p>
+                                </div>
+                            </div>
+                            <button (click)="closeMessage()" class="text-gray-400 hover:text-gray-600 text-xl">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Contenu du message -->
+                    <div class="px-6 py-4 max-h-[50vh] overflow-y-auto">
+                        <div class="prose max-w-none text-gray-800 whitespace-pre-wrap">{{ selectedMessage.contenu }}
+                        </div>
+
+                        <div *ngIf="selectedMessage.pieceJointe" class="mt-4 p-3 bg-gray-50 rounded border">
+                            <p class="text-sm text-gray-600 mb-2">Pièce jointe :</p>
+                            <button class="text-blue-600 hover:text-blue-800 text-sm flex items-center space-x-2">
+                                <span>📎</span>
+                                <span>{{ selectedMessage.pieceJointe }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-between">
+                        <div class="flex space-x-2">
+                            <button (click)="replyToMessage(selectedMessage)"
+                                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                                Répondre
+                            </button>
+                            <button (click)="toggleImportant(selectedMessage)"
+                                class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                                [class.bg-red-50]="selectedMessage.important">
+                                {{ selectedMessage.important ? 'Retirer des importants' : 'Marquer important' }}
+                            </button>
+                        </div>
+                        <button (click)="deleteMessage(selectedMessage)"
+                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal nouveau message -->
+            <div *ngIf="showNewMessageModal"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                (click)="closeNewMessageModal()">
+                <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4" (click)="$event.stopPropagation()">
+
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-900">Nouveau message</h3>
+                    </div>
+
+                    <form [formGroup]="newMessageForm" (ngSubmit)="sendMessage()" class="p-6 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Destinataire</label>
+                            <select formControlName="destinataire"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Sélectionner un destinataire</option>
+                                <option value="admin">Administration ALENIA</option>
+                                <option value="rh">Service RH</option>
+                                <option value="planning">Service Planning</option>
+                                <option value="support">Support technique</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sujet</label>
+                            <input type="text" formControlName="sujet"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Sujet du message">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                            <textarea formControlName="contenu" rows="6"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Votre message..."></textarea>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" formControlName="urgent" class="mr-2">
+                                <span class="text-sm text-gray-700">Message urgent</span>
+                            </label>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 pt-4">
+                            <button type="button" (click)="closeNewMessageModal()"
+                                class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                                Annuler
+                            </button>
+                            <button type="submit" [disabled]="!newMessageForm.valid"
+                                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                Envoyer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Section Paramètres -->
+            <div *ngIf="activeSection === 'parametres'" class="space-y-6">
+                <!-- Navigation des sous-sections -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <div class="flex flex-wrap gap-2">
+                        <button (click)="setParameterSection('compte')"
+                            [class]="'px-4 py-2 text-sm font-medium rounded-lg transition-colors ' + (parameterSection === 'compte' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100')">
+                            👤 Mon compte
+                        </button>
+                        <button (click)="setParameterSection('notifications')"
+                            [class]="'px-4 py-2 text-sm font-medium rounded-lg transition-colors ' + (parameterSection === 'notifications' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100')">
+                            🔔 Notifications
+                        </button>
+                        <button (click)="setParameterSection('preferences')"
+                            [class]="'px-4 py-2 text-sm font-medium rounded-lg transition-colors ' + (parameterSection === 'preferences' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100')">
+                            ⚙️ Préférences
+                        </button>
+                        <button (click)="setParameterSection('securite')"
+                            [class]="'px-4 py-2 text-sm font-medium rounded-lg transition-colors ' + (parameterSection === 'securite' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100')">
+                            🔒 Sécurité
+                        </button>
+                        <button (click)="setParameterSection('support')"
+                            [class]="'px-4 py-2 text-sm font-medium rounded-lg transition-colors ' + (parameterSection === 'support' ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100')">
+                            📞 Support
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section Mon compte -->
+                <div *ngIf="parameterSection === 'compte'" class="space-y-6">
+                    <!-- Informations personnelles -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Informations personnelles</h3>
+                            <p class="text-sm text-gray-600">Gérez vos informations de profil</p>
+                        </div>
+
+                        <form [formGroup]="settingsForm" class="p-6 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                                    <input type="text" formControlName="prenom"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                                    <input type="text" formControlName="nom"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" formControlName="email"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                                    <input type="tel" formControlName="telephone"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Date de
+                                        naissance</label>
+                                    <input type="date" formControlName="dateNaissance"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                                <textarea formControlName="adresse" rows="3"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                            </div>
+
+                            <div class="flex justify-end space-x-3 pt-4">
+                                <button type="button" (click)="resetAccountSettings()"
+                                    class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                                    Annuler
+                                </button>
+                                <button type="button" (click)="saveAccountSettings()"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                                    Sauvegarder
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Photo de profil -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Photo de profil</h3>
+                            <p class="text-sm text-gray-600">Ajoutez ou modifiez votre photo de profil</p>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex items-center space-x-6">
+                                <div
+                                    class="w-24 h-24 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                                    {{ getInitials(userProfile.prenom + ' ' + userProfile.nom) }}
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-600 mb-2">JPG, PNG ou GIF. Maximum 5MB.</p>
+                                    <div class="flex space-x-3">
+                                        <button
+                                            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                                            Changer la photo
+                                        </button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                                            Supprimer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Notifications -->
+                <div *ngIf="parameterSection === 'notifications'" class="space-y-6">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Préférences de notifications</h3>
+                            <p class="text-sm text-gray-600">Choisissez comment vous souhaitez être notifié</p>
+                        </div>
+
+                        <div class="p-6 space-y-6">
+                            <!-- Notifications par email -->
+                            <div>
+                                <h4 class="text-md font-medium text-gray-800 mb-3">Notifications par email</h4>
+                                <div class="space-y-3">
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Nouvelles missions disponibles</span>
+                                        <input type="checkbox" [checked]="notificationSettings.email.missions"
+                                            (change)="updateNotificationSetting('email', 'missions', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Confirmations de missions</span>
+                                        <input type="checkbox" [checked]="notificationSettings.email.confirmations"
+                                            (change)="updateNotificationSetting('email', 'confirmations', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Rappels de missions</span>
+                                        <input type="checkbox" [checked]="notificationSettings.email.rappels"
+                                            (change)="updateNotificationSetting('email', 'rappels', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Messages importants</span>
+                                        <input type="checkbox" [checked]="notificationSettings.email.messages"
+                                            (change)="updateNotificationSetting('email', 'messages', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Notifications SMS -->
+                            <div>
+                                <h4 class="text-md font-medium text-gray-800 mb-3">Notifications SMS</h4>
+                                <div class="space-y-3">
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Missions urgentes</span>
+                                        <input type="checkbox" [checked]="notificationSettings.sms.urgent"
+                                            (change)="updateNotificationSetting('sms', 'urgent', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Rappels 24h avant mission</span>
+                                        <input type="checkbox" [checked]="notificationSettings.sms.rappels24h"
+                                            (change)="updateNotificationSetting('sms', 'rappels24h', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Changements de planning</span>
+                                        <input type="checkbox" [checked]="notificationSettings.sms.changements"
+                                            (change)="updateNotificationSetting('sms', 'changements', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Notifications push -->
+                            <div>
+                                <h4 class="text-md font-medium text-gray-800 mb-3">Notifications push (application)</h4>
+                                <div class="space-y-3">
+                                    <label class="flex items-center justify-between">
+                                        <span class="text-sm text-gray-700">Toutes les notifications</span>
+                                        <input type="checkbox" [checked]="notificationSettings.push.enabled"
+                                            (change)="updateNotificationSetting('push', 'enabled', $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Préférences -->
+                <div *ngIf="parameterSection === 'preferences'" class="space-y-6">
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Préférences de travail</h3>
+                            <p class="text-sm text-gray-600">Configurez vos préférences pour les missions</p>
+                        </div>
+
+                        <div class="p-6 space-y-6">
+                            <!-- Zones géographiques -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Zones géographiques
+                                    préférées</label>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <label *ngFor="let zone of availableZones" class="flex items-center">
+                                        <input type="checkbox" [checked]="workPreferences.zones.includes(zone.id)"
+                                            (change)="toggleZonePreference(zone.id, $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2">
+                                        <span class="text-sm text-gray-700">{{ zone.nom }}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Types d'établissements -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Types d'établissements
+                                    préférés</label>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <label *ngFor="let type of etablissementTypes" class="flex items-center">
+                                        <input type="checkbox"
+                                            [checked]="workPreferences.etablissements.includes(type.id)"
+                                            (change)="toggleEtablissementPreference(type.id, $event)"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2">
+                                        <span class="text-sm text-gray-700">{{ type.nom }}</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Horaires -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Créneaux horaires
+                                    préférés</label>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs text-gray-600 mb-1">Heure de début minimale</label>
+                                        <select [(ngModel)]="workPreferences.heureDebutMin"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                                            <option value="05:00">05:00</option>
+                                            <option value="06:00">06:00</option>
+                                            <option value="07:00">07:00</option>
+                                            <option value="08:00">08:00</option>
+                                            <option value="09:00">09:00</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs text-gray-600 mb-1">Heure de fin maximale</label>
+                                        <select [(ngModel)]="workPreferences.heureFinMax"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                                            <option value="18:00">18:00</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="22:00">22:00</option>
+                                            <option value="00:00">00:00</option>
+                                            <option value="02:00">02:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Distance maximale -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">
+                                    Distance maximale : {{ workPreferences.distanceMax }} km
+                                </label>
+                                <input type="range" [(ngModel)]="workPreferences.distanceMax" min="5" max="100" step="5"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>5 km</span>
+                                    <span>100 km</span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end space-x-3 pt-4">
+                                <button (click)="resetWorkPreferences()"
+                                    class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                                    Réinitialiser
+                                </button>
+                                <button (click)="saveWorkPreferences()"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                                    Sauvegarder
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Sécurité -->
+                <div *ngIf="parameterSection === 'securite'" class="space-y-6">
+                    <!-- Changer mot de passe -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Changer le mot de passe</h3>
+                            <p class="text-sm text-gray-600">Mettez à jour votre mot de passe pour sécuriser votre
+                                compte</p>
+                        </div>
+
+                        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Mot de passe actuel</label>
+                                <input type="password" formControlName="currentPassword"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
+                                <input type="password" formControlName="newPassword"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <p class="text-xs text-gray-500 mt-1">Au moins 8 caractères avec majuscules, minuscules
+                                    et chiffres</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Confirmer le nouveau mot de
+                                    passe</label>
+                                <input type="password" formControlName="confirmPassword"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+
+                            <div class="flex justify-end space-x-3 pt-4">
+                                <button type="button" (click)="resetPasswordForm()"
+                                    class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                                    Annuler
+                                </button>
+                                <button type="submit" [disabled]="!passwordForm.valid"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                    Changer le mot de passe
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Authentification à deux facteurs -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Authentification à deux facteurs (2FA)</h3>
+                            <p class="text-sm text-gray-600">Renforcez la sécurité de votre compte</p>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="text-md font-medium text-gray-800">Authentification par SMS</h4>
+                                    <p class="text-sm text-gray-600">Recevez un code par SMS lors de la connexion</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" [checked]="securitySettings.twoFactor.enabled"
+                                        (change)="toggleTwoFactor($event)" class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div *ngIf="securitySettings.twoFactor.enabled"
+                                class="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                                <p class="text-sm text-green-700">✅ L'authentification à deux facteurs est activée</p>
+                                <p class="text-xs text-green-600">Numéro configuré : {{ securitySettings.twoFactor.phone
+                                    }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sessions actives -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Sessions actives</h3>
+                            <p class="text-sm text-gray-600">Gérez vos connexions actives</p>
+                        </div>
+
+                        <div class="divide-y divide-gray-200">
+                            <div *ngFor="let session of activeSessions" class="px-6 py-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-2xl">{{ getDeviceIcon(session.device) }}</span>
+                                        <div>
+                                            <h4 class="text-sm font-medium text-gray-900">{{ session.device }}</h4>
+                                            <p class="text-xs text-gray-500">{{ session.location }} • {{
+                                                session.lastActive | date:'dd/MM/yyyy à HH:mm':'fr-FR' }}</p>
+                                            <span *ngIf="session.current"
+                                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                                Session actuelle
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button *ngIf="!session.current" (click)="revokeSession(session)"
+                                        class="text-red-600 hover:text-red-800 text-sm">
+                                        Révoquer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Support -->
+                <div *ngIf="parameterSection === 'support'" class="space-y-6">
+                    <!-- Contact support -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Contacter le support</h3>
+                            <p class="text-sm text-gray-600">Besoin d'aide ? Notre équipe est là pour vous accompagner
+                            </p>
+                        </div>
+
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div
+                                class="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
+                                <span class="text-3xl block mb-2">📧</span>
+                                <h4 class="font-medium text-gray-900 mb-1">Email</h4>
+                                <p class="text-sm text-gray-600 mb-3">support&#64;alenia.fr</p>
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">Envoyer un email</button>
+                            </div>
+
+                            <div
+                                class="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
+                                <span class="text-3xl block mb-2">📞</span>
+                                <h4 class="font-medium text-gray-900 mb-1">Téléphone</h4>
+                                <p class="text-sm text-gray-600 mb-3">01 23 45 67 89</p>
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">Appeler</button>
+                            </div>
+
+                            <div
+                                class="text-center p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
+                                <span class="text-3xl block mb-2">💬</span>
+                                <h4 class="font-medium text-gray-900 mb-1">Chat en direct</h4>
+                                <p class="text-sm text-gray-600 mb-3">Lun-Ven 9h-18h</p>
+                                <button class="text-blue-600 hover:text-blue-800 text-sm">Ouvrir le chat</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Questions fréquentes</h3>
+                        </div>
+
+                        <div class="divide-y divide-gray-200">
+                            <div *ngFor="let faq of faqItems" class="px-6 py-4">
+                                <button (click)="toggleFaq(faq)"
+                                    class="w-full text-left flex items-center justify-between hover:bg-gray-50 p-2 -m-2 rounded">
+                                    <h4 class="text-sm font-medium text-gray-900">{{ faq.question }}</h4>
+                                    <span class="text-gray-400">{{ faq.open ? '−' : '+' }}</span>
+                                </button>
+                                <div *ngIf="faq.open" class="mt-3 text-sm text-gray-600">
+                                    {{ faq.reponse }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informations légales -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-800">Informations légales</h3>
+                        </div>
+
+                        <div class="p-6 space-y-3">
+                            <a href="#" class="block text-blue-600 hover:text-blue-800 text-sm">Conditions générales
+                                d'utilisation</a>
+                            <a href="#" class="block text-blue-600 hover:text-blue-800 text-sm">Politique de
+                                confidentialité</a>
+                            <a href="#" class="block text-blue-600 hover:text-blue-800 text-sm">Mentions légales</a>
+                            <a href="#" class="block text-blue-600 hover:text-blue-800 text-sm">Politique de cookies</a>
+                        </div>
+                    </div>
+
+                    <!-- Version de l'application -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 text-center text-sm text-gray-500">
+                            <p>Application ALENIA v2.1.0</p>
+                            <p>Dernière mise à jour : 15 juin 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
