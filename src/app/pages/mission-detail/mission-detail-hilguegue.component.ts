@@ -19,8 +19,7 @@ export class MissionDetailHilguegueComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {}
-  
-  ngOnInit() {
+    ngOnInit() {
     // Get the mission ID from route parameters if available
     this.route.params.subscribe(params => {
       if (params['id']) {
@@ -28,28 +27,54 @@ export class MissionDetailHilguegueComponent implements OnInit {
       }
     });
   }
-    postulerMission() {
+
+  deconnecter() {
+    this.authService.logout();
+    this.router.navigate(['/connexion']);
+  }postulerMission() {
     // Get current user ID
     const user = this.authService.getCurrentUser();
+    
+    console.log('=== DEBUG POSTULATION ===');
+    console.log('User récupéré:', user);
+    console.log('localStorage currentUser:', localStorage.getItem('currentUser'));
+    console.log('localStorage authToken:', localStorage.getItem('authToken'));
+    
     if (!user || !user.id) {
-      alert('Vous devez être connecté pour postuler à une mission');
+      console.log('User non connecté ou pas d\'ID');
+      alert('Vous devez être connecté en tant qu\'intérimaire pour postuler à une mission');
       this.router.navigate(['/connexion']);
       return;
     }
     
-    console.log('User récupéré:', user);
+    // Vérifier si l'utilisateur est un intérimaire
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      const userObj = JSON.parse(savedUser);
+      if (userObj.type === 'etablissement') {
+        console.log('Utilisateur est un établissement, ne peut pas postuler');
+        alert('Seuls les intérimaires peuvent postuler à des missions. Veuillez vous connecter avec un compte intérimaire.');
+        this.router.navigate(['/connexion']);
+        return;
+      }
+    }
+    
     console.log('Mission ID:', this.missionId);
+    console.log('User ID:', user.id, 'Type:', typeof user.id);
     
     // Vérifier que les IDs sont des GUIDs valides
     const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
     
     if (!guidRegex.test(this.missionId)) {
+      console.log('Mission ID invalid:', this.missionId);
       alert('ID de mission invalide');
       return;
     }
     
     if (!guidRegex.test(user.id)) {
-      alert('ID d\'utilisateur invalide');
+      console.log('User ID invalid:', user.id);
+      alert('ID d\'utilisateur invalide. Veuillez vous reconnecter avec un compte intérimaire valide.');
+      this.router.navigate(['/connexion']);
       return;
     }
     

@@ -58,15 +58,33 @@ export class InscriptionComponent {
         adresse: '', // Vide au lieu d'undefined
         competences: [], // Tableau vide au lieu d'undefined  
         disponibilites: '' // Vide au lieu d'undefined
-      };
-
-      this.authService.register(registerModel).subscribe({
+      };      this.authService.register(registerModel).subscribe({
         next: (response) => {
-          this.showToast('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'success');
-          setTimeout(() => {
-            this.router.navigate(['/connexion']);
-          }, 2000);
-        },        error: (error) => {
+          console.log('Inscription réussie, réponse:', response);
+          
+          // Connecter automatiquement l'utilisateur après l'inscription
+          const loginData = {
+            email: this.formData.email.trim(),
+            motDePasse: this.formData.password
+          };
+          
+          this.authService.login(loginData).subscribe({
+            next: (loginResponse) => {
+              console.log('Connexion automatique réussie:', loginResponse);
+              this.showToast('Inscription réussie ! Vous êtes maintenant connecté.', 'success');
+              setTimeout(() => {
+                this.router.navigate(['/dashboard-interimaire']);
+              }, 2000);
+            },
+            error: (loginError) => {
+              console.error('Erreur lors de la connexion automatique:', loginError);
+              this.showToast('Inscription réussie ! Veuillez vous connecter.', 'success');
+              setTimeout(() => {
+                this.router.navigate(['/connexion']);
+              }, 2000);
+            }
+          });
+        },error: (error) => {
           console.error('Erreur lors de l\'inscription:', error);
           let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
           
