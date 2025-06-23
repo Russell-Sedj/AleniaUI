@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth/auth.service';
-import { RegisterModel } from '../../models/auth/register.model';
+import { AuthService, RegisterDto } from '../../services/auth/auth.service';
 
 interface RegisterFormData {
   firstName: string;
@@ -49,11 +48,10 @@ export class InscriptionComponent {
 
     this.isLoading = true;
 
-    try {
-      const registerModel: RegisterModel = {
+    try {      const registerModel: RegisterDto = {
         email: this.formData.email.trim(),
-        motDePass: this.formData.password,
-        role: 'User', // Par défaut, pourra être modifié selon les besoins
+        motDePasse: this.formData.password,
+        confirmMotDePasse: this.formData.confirmPassword,
         nom: this.formData.lastName.trim(),
         prenom: this.formData.firstName.trim(),
         telephone: this.formData.countryCode + this.formData.phoneNumber.trim()

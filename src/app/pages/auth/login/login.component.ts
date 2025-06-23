@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthService, LoginDto } from '../../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,21 +13,19 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
   errorMessage: string = '';
-
-  model: { email: string; motDePass: string } = {
+  model: LoginDto = {
     email: '',
-    motDePass: '',
+    motDePasse: '',
   };
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit(form: any) {
     if (form.valid) {
-      console.log('Tentative de connexion avec:', this.model);
-      this.authService.login(this.model).subscribe({
+      console.log('Tentative de connexion avec:', this.model);      this.authService.login(this.model).subscribe({
         next: (response) => {
           console.log('Connexion réussie:', response);
-          this.router.navigate(['/']);
+          this.router.navigate(['/dashboard-interimaire']);
         },
         error: (error) => {
           console.error('Erreur détaillée:', error);

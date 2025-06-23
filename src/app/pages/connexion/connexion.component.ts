@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth/auth.service';
-import { LoginModel } from '../../models/auth/login.model';
+import { AuthService, LoginDto } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-connexion',
@@ -15,10 +14,9 @@ import { LoginModel } from '../../models/auth/login.model';
 export class ConnexionComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
-
-  loginModel: LoginModel = {
+  loginModel: LoginDto = {
     email: '',
-    motDePass: ''
+    motDePasse: ''
   };
   isLoading = false;
   showPassword = false;
@@ -47,18 +45,16 @@ export class ConnexionComponent {
 
     this.isLoading = true;
 
-    try {
-      const trimmedLoginModel: LoginModel = {
+    try {      const trimmedLoginModel: LoginDto = {
         email: this.loginModel.email.trim(),
-        motDePass: this.loginModel.motDePass
+        motDePasse: this.loginModel.motDePasse
       };
 
-      this.authService.login(trimmedLoginModel).subscribe({
-        next: (response) => {
+      this.authService.login(trimmedLoginModel).subscribe({        next: (response) => {
           this.showToast('Connexion réussie ! Redirection en cours...', 'success');
           setTimeout(() => {
-            // Rediriger vers le tableau de bord ou la page d'accueil
-            this.router.navigate(['/page-accueil']);
+            // Rediriger vers le dashboard intérimaire
+            this.router.navigate(['/dashboard-interimaire']);
           }, 1500);
         },
         error: (error) => {

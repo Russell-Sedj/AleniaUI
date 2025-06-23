@@ -1,33 +1,89 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Candidature } from '../../models/candidature.model';
+import { AuthService } from '../auth/auth.service';
+
+export interface CandidatureDto {
+  id: string;
+  missionId: string;
+  missionPoste: string;
+  missionEtablissement: string;
+  interimaireId: string;
+  interimaireNom: string;
+  interimairePrenom: string;
+  statut: string;
+  dateCandidature: Date;
+  horairesChoisis: string[];
+}
+
+export interface CreateCandidatureDto {
+  missionId: string;
+  interimaireId: string;
+  horairesChoisis: string[];
+}
+
+export interface UpdateCandidatureStatutDto {
+  statut: string; // "En cours", "Acceptée", "Refusée"
+}
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CandidatureService {
-  private apiUrl = 'https://localhost:7134/api/Candidature';
+  private readonly API_URL = 'https://localhost:7134/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
-  getCandidatures(): Observable<Candidature[]> {
-    return this.http.get<Candidature[]>(this.apiUrl);
+  getCandidaturesByInterimaire(interimaireId: string): Observable<CandidatureDto[]> {
+    return this.http.get<CandidatureDto[]>(`${this.API_URL}/candidatures/interimaire/${interimaireId}`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  getCandidature(id: string): Observable<Candidature> {
-    return this.http.get<Candidature>(`${this.apiUrl}/${id}`);
+  getCandidaturesByMission(missionId: string): Observable<CandidatureDto[]> {
+    return this.http.get<CandidatureDto[]>(`${this.API_URL}/candidatures/mission/${missionId}`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  addCandidature(candidature: Candidature): Observable<Candidature> {
-    return this.http.post<Candidature>(this.apiUrl, candidature);
+  getCandidatureById(id: string): Observable<CandidatureDto> {
+    return this.http.get<CandidatureDto>(`${this.API_URL}/candidatures/${id}`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  updateCandidature(candidature: Candidature): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${candidature.id}`, candidature);
+  createCandidature(candidature: CreateCandidatureDto): Observable<CandidatureDto> {
+    return this.http.post<CandidatureDto>(`${this.API_URL}/candidatures`, candidature, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  deleteCandidature(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  updateCandidatureStatut(id: string, statut: UpdateCandidatureStatutDto): Observable<CandidatureDto> {
+    return this.http.put<CandidatureDto>(`${this.API_URL}/candidatures/${id}/statut`, statut, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  deleteCandidature(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.API_URL}/candidatures/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  checkCandidatureExists(missionId: string, interimaireId: string): Observable<{ exists: boolean }> {
+    return this.http.get<{ exists: boolean }>(`${this.API_URL}/candidatures/exists?missionId=${missionId}&interimaireId=${interimaireId}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
   }
 }
