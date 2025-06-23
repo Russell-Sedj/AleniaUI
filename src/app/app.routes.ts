@@ -23,6 +23,7 @@ import { QuiSommesNousComponent } from './pages/qui-sommes-nous/qui-sommes-nous.
 import { LoginComponent } from './pages/auth/login/login.component';
 import { DeclarationAccessibiliteComponent } from './pages/declaration-accessibilite/declaration-accessibilite.component';
 import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component';
+import { DashboardInterimaireComponent } from './pages/dashboard-interimaire/dashboard-interimaire.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/page-accueil', pathMatch: 'full' },
@@ -56,4 +57,5 @@ export const routes: Routes = [
   { path: 'qui-sommes-nous', component: QuiSommesNousComponent },
   { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
   { path: 'plan-du-site', component: PlanDuSiteComponent },
+  { path: 'dashboard-interimaire', component: DashboardInterimaireComponent },
 ];
