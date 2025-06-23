@@ -5,13 +5,13 @@ import { ContratComponent } from './pages/contrat/contrat.component';
 import { DisponibiliteComponent } from './pages/disponibilite/disponibilite.component';
 import { FichePosteComponent } from './pages/fiche-poste/fiche-poste.component';
 import { InscriptionComponent } from './pages/inscription/inscription.component';
-import { MissionDetailHilguegueComponent } from './pages/mission-detail-hilguegue/mission-detail-hilguegue.component';
+import { MissionDetailHilguegueComponent } from './pages/mission-detail/mission-detail-hilguegue.component';
 import { MissionsComponent } from './pages/missions/missions.component';
 import { MissionsPassesComponent } from './pages/missions-passes/missions-passes.component';
 import { MissionsVenirComponent } from './pages/missions-venir/missions-venir.component';
-import { Offres1Component } from './pages/offres1/offres1.component';
-import { Offres2Component } from './pages/offres2/offres2.component';
-import { PageAccueilComponent } from './pages/page-accueil/page-accueil.component';
+import { Offres1Component } from './pages/offres-etablissements/offres1.component';
+import { Offres2Component } from './pages/offres-interimaires/offres2.component';
+import { AccueilComponent } from './pages/accueil/accueil.component';
 import { ParametreEntrepriseComponent } from './pages/parametre-entreprise/parametre-entreprise.component';
 import { PlanningEntrepriseComponent } from './pages/planning-entreprise/planning-entreprise.component';
 import { PrestationComponent } from './pages/prestation/prestation.component';
@@ -26,7 +26,7 @@ import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/page-accueil', pathMatch: 'full' },
+  { path: '', redirectTo: '/accueil', pathMatch: 'full' },
   { path: 'ce-que-lon-propose', component: CeQueLonProposeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'connexion', component: ConnexionComponent },
@@ -45,9 +45,10 @@ export const routes: Routes = [
   { path: 'missions', component: MissionsComponent },
   { path: 'missions-passes', component: MissionsPassesComponent },
   { path: 'missions-venir', component: MissionsVenirComponent },
-  { path: 'offres1', component: Offres1Component },
-  { path: 'offres2', component: Offres2Component },
-  { path: 'page-accueil', component: PageAccueilComponent },
+  { path: 'offres-etablissements', component: Offres1Component },
+  { path: 'offres-interimaires', component: Offres2Component },
+  { path: 'accueil', component: AccueilComponent },
+  { path: 'page-accueil', redirectTo: '/accueil', pathMatch: 'full' },
   { path: 'parametre-entreprise', component: ParametreEntrepriseComponent },
   { path: 'planning-entreprise', component: PlanningEntrepriseComponent },
   { path: 'prestation', component: PrestationComponent },

@@ -3,13 +3,13 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-page-accueil',
+  selector: 'app-accueil',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './page-accueil.component.html',
-  styleUrls: ['./page-accueil.component.css']
+  templateUrl: './accueil.component.html',
+  styleUrls: ['./accueil.component.css']
 })
-export class PageAccueilComponent {
+export class AccueilComponent {
   heroImage = '/assets/images/image17.png';
   compImage = '/assets/images/comp1.png';
 
