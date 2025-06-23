@@ -1361,84 +1361,40 @@
             <button (click)="closeMissionModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
                 ✕
             </button>
-        </div>
-
-        <form [formGroup]="missionForm" (ngSubmit)="saveMission()" class="space-y-4">
+        </div>        <form [formGroup]="missionForm" (ngSubmit)="saveMission()" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Titre de la mission</label>
-                <input type="text" formControlName="titre"
+                <label class="block text-sm font-medium text-gray-700 mb-1">Poste recherché</label>
+                <input type="text" formControlName="poste"
+                    placeholder="Ex: Infirmier(ère) de nuit, Aide-soignant..."
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Service</label>
-                    <select formControlName="service"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        <option value="">Sélectionner un service</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Spécialité</label>
-                    <select formControlName="specialite"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        <option value="">Sélectionner une spécialité</option>
-                        <option value="Infirmier(ère)">Infirmier(ère)</option>
-                        <option value="Aide-soignant">Aide-soignant</option>
-                        <option value="Médecin">Médecin</option>
-                        <option value="Kinésithérapeute">Kinésithérapeute</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
-                    <input type="date" formControlName="dateDebut"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
-                    <input type="date" formControlName="dateFin"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Heure début</label>
-                    <input type="time" formControlName="heureDebut"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Heure fin</label>
-                    <input type="time" formControlName="heureFin"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tarif (€/h)</label>
-                    <input type="number" formControlName="tarif" min="0" step="0.5"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Adresse de la mission</label>
+                <input type="text" formControlName="adresse"
+                    placeholder="Ex: 7 rue de Verdin, Paris 12ème"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea formControlName="description" rows="3"
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tarif horaire (€)</label>
+                <input type="number" formControlName="tauxHoraire" min="0" step="0.5"
+                    placeholder="Ex: 25.50"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description de la mission</label>
+                <textarea formControlName="description" rows="4"
+                    placeholder="Décrivez les tâches, compétences requises, conditions de travail..."
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Compétences requises (séparées par des
-                    virgules)</label>
-                <input type="text" formControlName="competencesRequises"
-                    placeholder="Ex: Cardiologie, Surveillance, Urgences"
+                <label class="block text-sm font-medium text-gray-700 mb-1">Horaires disponibles (optionnel)</label>
+                <input type="text" formControlName="horaires"
+                    placeholder="Ex: 08h-16h, 16h-00h, 00h-08h (séparés par des virgules)"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <div class="flex items-center">
-                <input type="checkbox" formControlName="urgente" id="urgente" class="mr-2">
-                <label for="urgente" class="text-sm text-gray-700">Mission urgente</label>
             </div>
 
             <div class="flex justify-end space-x-3 pt-4">

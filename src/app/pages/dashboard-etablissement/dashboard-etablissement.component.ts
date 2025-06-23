@@ -243,20 +243,13 @@ export class DashboardEtablissementComponent implements OnInit {
     this.initForms();
     this.loadData();
   }
-
   initForms() {
     this.missionForm = this.fb.group({
-      titre: ['', [Validators.required]],
-      service: ['', [Validators.required]],
-      specialite: ['', [Validators.required]],
-      dateDebut: ['', [Validators.required]],
-      dateFin: ['', [Validators.required]],
-      heureDebut: ['', [Validators.required]],
-      heureFin: ['', [Validators.required]],
-      tarif: ['', [Validators.required, Validators.min(0)]],
+      poste: ['', [Validators.required]],
+      adresse: ['', [Validators.required]],
+      tauxHoraire: ['', [Validators.required, Validators.min(0)]],
       description: ['', [Validators.required]],
-      urgente: [false],
-      competencesRequises: ['']
+      horaires: [''] // Optionnel
     });
 
     this.rechercheForm = this.fb.group({
@@ -637,33 +630,59 @@ export class DashboardEtablissementComponent implements OnInit {
     this.selectedMission = null;
     this.isEditingMission = false;
     this.missionForm.reset();
-  }
-
-  saveMission() {
+  }  saveMission() {
     if (this.missionForm.valid) {
       const formData = this.missionForm.value;
       
       if (this.isEditingMission && this.selectedMission) {
         // Modifier mission existante
-        const index = this.missions.findIndex(m => m.id === this.selectedMission!.id);
-        if (index !== -1) {
-          this.missions[index] = { ...this.missions[index], ...formData };
-        }
+        const updateData = {
+          poste: formData.poste,
+          adresse: formData.adresse,
+          description: formData.description,
+          tauxHoraire: formData.tauxHoraire
+        };
+        
+        this.missionService.updateMission(this.selectedMission.id, updateData).subscribe({
+          next: (mission) => {
+            console.log('Mission modifiée:', mission);
+            alert('Mission modifiée avec succès !');
+            this.closeMissionModal();
+            this.loadMissions(); // Recharger les missions
+          },
+          error: (error) => {
+            console.error('Erreur lors de la modification:', error);
+            alert('Erreur lors de la modification de la mission');
+          }
+        });
       } else {
         // Créer nouvelle mission
-        const newMission: Mission = {
-          id: Date.now().toString(),
-          ...formData,
-          statut: 'brouillon',
-          candidatures: 0,
-          competencesRequises: formData.competencesRequises ? 
-            formData.competencesRequises.split(',').map((c: string) => c.trim()) : [] // AJOUTEZ cette vérification
+        const newMissionData = {
+          etablissementId: '08dd4c13-425e-45de-8db8-fa479f17b521', // ID d'établissement par défaut pour demo
+          poste: formData.poste,
+          adresse: formData.adresse,
+          description: formData.description,
+          tauxHoraire: formData.tauxHoraire,
+          horaires: formData.horaires ? formData.horaires.split(',').map((h: string) => h.trim()) : []
         };
-        this.missions.unshift(newMission);
+        
+        console.log('Création de mission:', newMissionData);
+        
+        this.missionService.createMission(newMissionData).subscribe({
+          next: (mission) => {
+            console.log('Mission créée:', mission);
+            alert('Mission créée avec succès !');
+            this.closeMissionModal();
+            this.loadMissions(); // Recharger les missions
+          },
+          error: (error) => {
+            console.error('Erreur lors de la création:', error);
+            alert('Erreur lors de la création de la mission: ' + (error.error?.message || error.message));
+          }
+        });
       }
-      
-      this.closeMissionModal();
-      alert(this.isEditingMission ? 'Mission modifiée avec succès !' : 'Mission créée avec succès !');
+    } else {
+      alert('Veuillez remplir tous les champs obligatoires');
     }
   }
 

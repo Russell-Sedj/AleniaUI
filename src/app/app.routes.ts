@@ -28,12 +28,13 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { DashboardInterimaireComponent } from './pages/dashboard-interimaire/dashboard-interimaire.component';
 import { AuthGuard } from './guards/auth.guard';
 import { DashboardEtablissementComponent } from './pages/dashboard-etablissement/dashboard-etablissement.component';
+import { ConnexionEtablissementComponent } from './pages/connexion-etablissement/connexion-etablissement.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/accueil', pathMatch: 'full' },
-  { path: 'ce-que-lon-propose', component: CeQueLonProposeComponent },
+  { path: '', redirectTo: '/accueil', pathMatch: 'full' },  { path: 'ce-que-lon-propose', component: CeQueLonProposeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'connexion', component: ConnexionComponent },
+  { path: 'connexion-etablissement', component: ConnexionEtablissementComponent },
   { path: 'contrat', component: ContratComponent },
   { path: 'disponibilite', component: DisponibiliteComponent },
   { path: 'fiche-poste', component: FichePosteComponent },
