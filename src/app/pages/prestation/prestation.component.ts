@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-prestation',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './prestation.component.html',
-  styleUrls: ['../../../../public/assets/Css/ProfilCss.css'],
 })
 export class PrestationComponent {}

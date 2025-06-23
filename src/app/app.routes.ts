@@ -23,6 +23,7 @@ import { QuiSommesNousComponent } from './pages/qui-sommes-nous/qui-sommes-nous.
 import { LoginComponent } from './pages/auth/login/login.component';
 import { DeclarationAccessibiliteComponent } from './pages/declaration-accessibilite/declaration-accessibilite.component';
 import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/page-accueil', pathMatch: 'full' },
@@ -52,8 +53,9 @@ export const routes: Routes = [
   { path: 'prestation', component: PrestationComponent },
   { path: 'profil1', component: Profil1Component },
   { path: 'profil2', component: Profil2Component },
-  { path: 'profil3', component: Profil3Component },  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },
-  { path: 'qui-sommes-nous', component: QuiSommesNousComponent },
+  { path: 'profil3', component: Profil3Component },  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },  { path: 'qui-sommes-nous', component: QuiSommesNousComponent },
   { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
   { path: 'plan-du-site', component: PlanDuSiteComponent },
+  { path: 'page-not-found', component: PageNotFoundComponent },
+  { path: '**', component: PageNotFoundComponent }, // Wildcard route - must be last
 ];

@@ -1,26 +1,131 @@
-<div class="calendar" style="margin-bottom: 200px">
-  <div class="navigation">
-    <button class="arrow">←</button>
-    <div class="month">Mars 2024</div>
-    <button class="arrow">→</button>
+<!-- Disponibilités Page -->
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2 font-newsreader">Mes Disponibilités</h1>
+        <p class="text-gray-600">Gérez vos créneaux et disponibilités</p>
+      </div>
+    </div>
   </div>
-  <button class="today">Jours de la semaine</button>
-  <div class="days">
-    <span>lun.</span><span>mar.</span><span>mer.</span><span>jeu.</span
-    ><span>ven.</span><span>sam.</span><span>dim.</span>
-  </div>
-  <div class="dates">
-    <button disabled>25</button>
-    <button disabled>26</button>
-    <button disabled>27</button>
-    <button disabled>28</button>
-    <button id="selected4">29</button>
-    <button disabled>30</button>
-    <button disabled>31</button>
-  </div>
-  <div class="message">
-    <p>Aucun créneaux</p>
-    <p>Vous n'avez pas de créneau privé cette semaine.</p>
-    <button>+ renseigner mes dispos</button>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Calendar Section -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+      <!-- Calendar Header -->
+      <div class="flex items-center justify-between mb-6">
+        <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        
+        <h2 class="text-xl font-semibold text-gray-900">Mars 2024</h2>
+        
+        <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Week View Toggle -->
+      <div class="mb-6">
+        <button class="bg-[#6FA4F2] text-white px-4 py-2 rounded-lg font-medium text-sm">
+          Jours de la semaine
+        </button>
+      </div>
+
+      <!-- Days Header -->
+      <div class="grid grid-cols-7 gap-1 mb-2">
+        <div class="text-center text-sm font-medium text-gray-500 py-2">Lun.</div>
+        <div class="text-center text-sm font-medium text-gray-500 py-2">Mar.</div>
+        <div class="text-center text-sm font-medium text-gray-500 py-2">Mer.</div>
+        <div class="text-center text-sm font-medium text-gray-500 py-2">Jeu.</div>
+        <div class="text-center text-sm font-medium text-gray-500 py-2">Ven.</div>
+        <div class="text-center text-sm font-medium text-gray-500 py-2">Sam.</div>
+        <div class="text-center text-sm font-medium text-gray-500 py-2">Dim.</div>
+      </div>
+
+      <!-- Calendar Days -->
+      <div class="grid grid-cols-7 gap-1">
+        <button class="h-12 text-sm text-gray-400 hover:bg-gray-50 rounded-lg disabled:cursor-not-allowed" disabled>25</button>
+        <button class="h-12 text-sm text-gray-400 hover:bg-gray-50 rounded-lg disabled:cursor-not-allowed" disabled>26</button>
+        <button class="h-12 text-sm text-gray-400 hover:bg-gray-50 rounded-lg disabled:cursor-not-allowed" disabled>27</button>
+        <button class="h-12 text-sm text-gray-400 hover:bg-gray-50 rounded-lg disabled:cursor-not-allowed" disabled>28</button>
+        <button class="h-12 text-sm bg-[#6FA4F2] text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">29</button>
+        <button class="h-12 text-sm text-gray-400 hover:bg-gray-50 rounded-lg disabled:cursor-not-allowed" disabled>30</button>
+        <button class="h-12 text-sm text-gray-400 hover:bg-gray-50 rounded-lg disabled:cursor-not-allowed" disabled>31</button>
+      </div>
+    </div>
+
+    <!-- No Slots Message -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Aucun créneau</h3>
+        <p class="text-gray-600 mb-6">Vous n'avez pas de créneau privé cette semaine.</p>
+        
+        <button class="bg-[#6FA4F2] text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors inline-flex items-center space-x-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <span>Renseigner mes dispos</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Créneaux confirmés</p>
+            <p class="text-2xl font-bold text-gray-900">0</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-[#6FA4F2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Créneaux disponibles</p>
+            <p class="text-2xl font-bold text-gray-900">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+      <div class="flex items-start">
+        <div class="flex-shrink-0">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-blue-800">Comment ça marche ?</h3>
+          <div class="mt-2 text-sm text-blue-700">
+            <p>Cliquez sur les jours du calendrier pour définir vos disponibilités. Les établissements pourront ensuite vous proposer des missions correspondant à vos créneaux.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,29 +1,215 @@
-<div class="content">
-  <div class="mission-detail">
-    <img
-      src="/assets/images/ephad1.jpg"
-      alt="Établissement Hilguegue"
-      class="mission-image"
-    />
-    <h2 class="center">Établissement Hilguegue</h2>
-    <h3 class="center poste">Médecin de santé préventive (F/H)</h3>
+<!-- Mission Detail Page -->
+<div class="min-h-screen bg-gray-50">
+  <!-- Header Section -->
+  <div class="relative bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex items-center space-x-4 text-sm text-gray-500 mb-6">
+        <a routerLink="/missions" class="hover:text-blue-600 transition-colors">Missions</a>
+        <span>›</span>
+        <span class="text-gray-900">Établissement Hilguegue</span>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Mission Image -->
+        <div class="lg:col-span-1">
+          <img
+            src="/assets/images/ephad1.jpg"
+            alt="Établissement Hilguegue"
+            class="w-full h-64 object-cover rounded-lg shadow-md"
+          />
+        </div>
+        
+        <!-- Mission Info -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Title and Job -->
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900 font-newsreader mb-2">Établissement Hilguegue</h1>
+            <h2 class="text-xl text-[#6FA4F2] font-semibold mb-4">Médecin de santé préventive (F/H)</h2>
+            
+            <!-- Quick Info Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                <div class="text-sm text-gray-600 mb-1">Taux horaire</div>
+                <div class="text-lg font-semibold text-gray-900">35€ / heure</div>
+              </div>
+              <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                <div class="text-sm text-gray-600 mb-1">Date de début</div>
+                <div class="text-lg font-semibold text-gray-900">1er Nov 2024</div>
+              </div>
+              <div class="bg-orange-50 p-4 rounded-lg border border-orange-100">
+                <div class="text-sm text-gray-600 mb-1">Date de fin</div>
+                <div class="text-lg font-semibold text-gray-900">30 Avr 2025</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Button -->
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button class="bg-[#6FA4F2] text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2">
+              <span>Postuler maintenant</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </button>
+            <button class="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+              Sauvegarder
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Petite barre grise sous le poste -->
-    <hr class="divider" />
+  <!-- Mission Details -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- Description -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h3 class="text-xl font-semibold text-gray-900 mb-4 font-newsreader">Description de la mission</h3>
+          <div class="prose text-gray-700 leading-relaxed">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde voluptatibus temporibus ipsam similique facere sequi praesentium assumenda. Nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet non curabitur gravida.
+            </p>
+            <p class="mt-4">
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+            </p>
+          </div>
+        </div>
 
-    <p class="center"><strong>Taux horaire:</strong> 35€ / heure</p>
-    <p class="center"><strong>Date de début:</strong> 1er Novembre 2024</p>
-    <p class="center"><strong>Date de fin:</strong> 30 Avril 2025</p>
+        <!-- Responsabilités -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h3 class="text-xl font-semibold text-gray-900 mb-4 font-newsreader">Responsabilités principales</h3>
+          <ul class="space-y-3">
+            <li class="flex items-start space-x-3">
+              <div class="w-2 h-2 bg-[#6FA4F2] rounded-full mt-2 flex-shrink-0"></div>
+              <span class="text-gray-700">Assurer le suivi médical des résidents</span>
+            </li>
+            <li class="flex items-start space-x-3">
+              <div class="w-2 h-2 bg-[#6FA4F2] rounded-full mt-2 flex-shrink-0"></div>
+              <span class="text-gray-700">Participer aux réunions d'équipe pluridisciplinaire</span>
+            </li>
+            <li class="flex items-start space-x-3">
+              <div class="w-2 h-2 bg-[#6FA4F2] rounded-full mt-2 flex-shrink-0"></div>
+              <span class="text-gray-700">Établir et mettre à jour les dossiers médicaux</span>
+            </li>
+            <li class="flex items-start space-x-3">
+              <div class="w-2 h-2 bg-[#6FA4F2] rounded-full mt-2 flex-shrink-0"></div>
+              <span class="text-gray-700">Coordonner avec les familles et les soignants</span>
+            </li>
+          </ul>
+        </div>
 
-    <p class="description center">
-      <strong>Description:</strong> Lorem ipsum dolor sit amet, consectetur
-      adipisicing elit. Unde voluptatibus temporibus ipsam similique facere
-      sequi praesentium assumenda.
-    </p>
+        <!-- Qualifications -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h3 class="text-xl font-semibold text-gray-900 mb-4 font-newsreader">Qualifications requises</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-3">
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-700">Doctorat en médecine</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-700">Inscription à l'Ordre des médecins</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-700">Expérience en gériatrie</span>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-700">Permis B valide</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7-293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-700">Flexibilité horaire</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-gray-700">Esprit d'équipe</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <!-- Bouton postuler centré -->
-    <div class="center button-container">
-      <button class="apply-button">Postuler maintenant</button>
+      <!-- Sidebar -->
+      <div class="lg:col-span-1 space-y-6">
+        <!-- Établissement Info -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 font-newsreader">À propos de l'établissement</h3>
+          <div class="space-y-4">
+            <div>
+              <div class="text-sm text-gray-600 mb-1">Type</div>
+              <div class="text-gray-900 font-medium">EHPAD</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-600 mb-1">Capacité</div>
+              <div class="text-gray-900 font-medium">120 lits</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-600 mb-1">Localisation</div>
+              <div class="text-gray-900 font-medium">Paris 15ème</div>
+            </div>
+            <div>
+              <div class="text-sm text-gray-600 mb-1">Contact</div>
+              <div class="text-gray-900 font-medium">01 45 67 89 10</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mission Stats -->
+        <div class="bg-white p-6 rounded-lg shadow-sm">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4 font-newsreader">Informations mission</h3>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Durée</span>
+              <span class="font-medium text-gray-900">6 mois</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Contrat</span>
+              <span class="font-medium text-gray-900">Intérim</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Temps</span>
+              <span class="font-medium text-gray-900">Temps plein</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">Urgence</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                Haute
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="bg-gradient-to-r from-[#6FA4F2] to-blue-600 p-6 rounded-lg text-white">
+          <h3 class="text-lg font-semibold mb-2">Intéressé(e) ?</h3>
+          <p class="text-blue-100 mb-4 text-sm">
+            Postulez dès maintenant ou contactez-nous pour plus d'informations.
+          </p>
+          <button class="w-full bg-white text-[#6FA4F2] py-2 px-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+            Contacter l'équipe
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

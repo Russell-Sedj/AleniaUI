@@ -10,15 +10,7 @@ import { FooterComponent } from './components/footer/footer.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
-  styleUrls: [
-    '../../public/assets/Css/styles.css',
-    '../../public/assets/Css/style3.css',
-    '../../public/assets/Css/style4.css',
-    '../../public/assets/Css/ProfilCss.css',
-    '../../public/assets/Css/navigation_barre.css',
-    '../../public/assets/Css/footer.css',
-    './app.component.css',
-  ],
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   currentUrl: string = ''; // Initialisation de currentUrl avec une chaîne vide

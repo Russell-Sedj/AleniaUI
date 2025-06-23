@@ -1,14 +1,117 @@
-<div class="main-content">
-  <div class="tabs">
-    <a routerLink="#" class="tab active">Déclinés</a>
-    <a routerLink="/offres1" class="tab">Disponibles</a>
+<!-- Offres Déclinées Page -->
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2 font-newsreader">Mes Offres</h1>
+        <p class="text-gray-600">Gérez vos offres disponibles et déclinées</p>
+      </div>
+    </div>
   </div>
 
-  <div class="message">Aucune offre Déclinés</div>
+  <!-- Navigation Tabs -->
+  <div class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex space-x-8">
+        <a routerLink="/offres1" 
+           class="border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 py-4 px-1 text-sm font-medium transition-colors">
+          Disponibles
+        </a>
+        <a routerLink="/offres2" 
+           class="border-b-2 border-[#6FA4F2] text-[#6FA4F2] py-4 px-1 text-sm font-medium">
+          Déclinés
+        </a>
+      </nav>
+    </div>
+  </div>
 
-  <a routerLink="/page-accueil" class="button">Voir mes établissements</a>
-  <div class="rectangle">
-    <p>Liste des offres déclinées :</p>
-    <!-- Texte dans le rectangle -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Empty State -->
+    <div class="text-center py-12">
+      <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">Aucune offre déclinée</h3>
+      <p class="text-gray-600 mb-8">Vous n'avez actuellement aucune offre déclinée. Les offres que vous déclinerez apparaîtront ici.</p>
+      
+      <a routerLink="/page-accueil" 
+         class="bg-[#6FA4F2] text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors inline-flex items-center space-x-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+        </svg>
+        <span>Voir mes établissements</span>
+      </a>
+    </div>
+
+    <!-- Liste des offres déclinées -->
+    <div class="mt-12">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 font-newsreader">Liste des offres déclinées</h3>
+          <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">0 offre</span>
+        </div>
+        
+        <div class="text-center py-8">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <p class="text-gray-500 mb-4">Aucune offre déclinée pour le moment</p>
+          <p class="text-sm text-gray-400">Les offres que vous déclinerez seront archivées ici pour référence future</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Total déclinées</p>
+            <p class="text-2xl font-bold text-gray-900">0</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+            <svg class="w-6 h-6 text-[#6FA4F2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Ce mois-ci</p>
+            <p class="text-2xl font-bold text-gray-900">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+      <div class="flex items-start">
+        <div class="flex-shrink-0">
+          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-blue-800">Conseils</h3>
+          <div class="mt-2 text-sm text-blue-700">
+            <p>Les offres déclinées restent dans votre historique. Vous pouvez analyser vos préférences pour mieux cibler les futures opportunités.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
