@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CandidatureService } from '../../services/candidature/candidature.service';
+import { MissionService, MissionDto } from '../../services/mission/mission.service';
 
 interface Interimaire {
   id: string;
@@ -229,12 +231,12 @@ export class DashboardEtablissementComponent implements OnInit {
     economiesRealisees: []
   };
   periodeStatistiques = 'annee'; // mois, trimestre, annee
-
   Math = Math; // Pour utiliser Math dans le template
-
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private candidatureService: CandidatureService,
+    private missionService: MissionService
   ) {}
 
   ngOnInit() {
@@ -265,68 +267,49 @@ export class DashboardEtablissementComponent implements OnInit {
       note: ['']
     });
   }
-
   loadData() {
-    this.loadMissions();
+    this.loadMissions(); // loadCandidatures() sera appelé depuis loadMissions()
     this.loadInterimaires();
-    this.loadCandidatures();
     this.loadStatistiques();
     this.loadPlanningData();
     this.loadFacturationData();
     this.loadStatistiquesDetaillees(); // AJOUTEZ CETTE LIGNE
   }
-
   loadMissions() {
-    // Simulation de données
-    this.missions = [
-      {
-        id: '1',
-        titre: 'Infirmier(ère) de nuit - Cardiologie',
-        service: 'Cardiologie',
-        specialite: 'Infirmier(ère)',
-        dateDebut: new Date('2025-06-25'),
-        dateFin: new Date('2025-06-27'),
-        heureDebut: '20:00',
-        heureFin: '08:00',
-        tarif: 28,
-        statut: 'publiee',
-        candidatures: 5,
-        urgente: true,
-        description: 'Recherche infirmier(ère) expérimenté(e) pour service de cardiologie',
-        competencesRequises: ['Cardiologie', 'Surveillance', 'Urgences'],
-        interimaire: undefined
+    this.missionService.getAllMissions().subscribe({
+      next: (missions: MissionDto[]) => {
+        console.log('Missions chargées depuis l\'API:', missions);
+        
+        // Convertir les MissionDto vers le format attendu par le template
+        this.missions = missions.map(mission => ({
+          id: mission.id,
+          titre: mission.poste,
+          service: '', // Pas disponible dans le DTO
+          specialite: mission.poste,
+          dateDebut: new Date(mission.datePublication),
+          dateFin: new Date(mission.datePublication),
+          heureDebut: '',
+          heureFin: '',
+          tarif: mission.tauxHoraire,
+          statut: 'publiee' as const,
+          candidatures: mission.nombreCandidatures,
+          urgente: false,
+          description: mission.description || '',
+          competencesRequises: [],
+          interimaire: undefined
+        }));
+        
+        console.log('Missions formatées:', this.missions);
+        
+        // Charger les candidatures après avoir chargé les missions
+        this.loadCandidatures();
       },
-      {
-        id: '2',
-        titre: 'Aide-soignant - Urgences',
-        service: 'Urgences',
-        specialite: 'Aide-soignant',
-        dateDebut: new Date('2025-06-24'),
-        dateFin: new Date('2025-06-24'),
-        heureDebut: '14:00',
-        heureFin: '22:00',
-        tarif: 22,
-        statut: 'pourvue',
-        candidatures: 8,
-        urgente: false,
-        description: 'Renfort pour service des urgences',
-        competencesRequises: ['Urgences', 'Premiers secours'],
-        interimaire: {
-          id: '1',
-          prenom: 'Sophie',
-          nom: 'Martin',
-          specialite: 'Aide-soignant',
-          experience: 3,
-          note: 4.8,
-          disponible: false,
-          telephone: '06 12 34 56 78',
-          email: 'sophie.martin@email.com',
-          localisation: 'Paris 12ème',
-          tarif: 22,
-          derniereConnexion: new Date()
-        }
+      error: (error) => {
+        console.error('Erreur lors du chargement des missions:', error);
+        // En cas d'erreur, utiliser des données par défaut pour éviter un crash
+        this.missions = [];
       }
-    ];
+    });
   }
 
   loadInterimaires() {
@@ -360,21 +343,77 @@ export class DashboardEtablissementComponent implements OnInit {
         derniereConnexion: new Date(Date.now() - 2 * 60 * 60 * 1000)
       }
     ];
-  }
-
-  loadCandidatures() {
-    this.candidatures = [
-      {
-        id: '1',
-        missionId: '1',
-        interimaire: this.interimaires[1],
-        mission: this.missions[0],
-        dateCandidature: new Date(),
-        statut: 'en_attente',
-        message: 'Je suis très intéressé par cette mission en cardiologie.',
-        tarifPropose: 28
+  }  loadCandidatures() {
+    // Réinitialiser la liste des candidatures
+    this.candidatures = [];
+    
+    // Pour un POC, récupérons les candidatures de toutes les missions
+    // Dans un vrai système, on filtrerait par établissement
+    this.missions.forEach(mission => {
+      if (mission.id) {
+        this.candidatureService.getCandidaturesByMission(mission.id).subscribe({
+          next: (candidatures) => {
+            console.log('Candidatures reçues pour mission', mission.id, ':', candidatures);
+            
+            // Convertir les CandidatureDto vers le format attendu par le template
+            const candidaturesFormatted: Candidature[] = candidatures.map(candidature => ({
+              id: candidature.id,
+              missionId: candidature.missionId,
+              interimaire: {
+                id: candidature.interimaireId,
+                prenom: candidature.interimairePrenom,
+                nom: candidature.interimaireNom,
+                email: '', // Pas disponible dans le DTO
+                telephone: '', // Pas disponible dans le DTO
+                specialite: '', // Pas disponible dans le DTO
+                experience: 0, // Pas disponible dans le DTO
+                note: 4.5, // Valeur par défaut
+                localisation: '', // Pas disponible dans le DTO
+                disponible: true, // Valeur par défaut
+                tarif: 25, // Valeur par défaut
+                derniereConnexion: new Date() // Valeur par défaut
+              },
+              mission: {
+                id: candidature.missionId,
+                titre: candidature.missionPoste,
+                service: '', // Pas disponible dans le DTO
+                specialite: candidature.missionPoste,
+                dateDebut: new Date(),
+                dateFin: new Date(),
+                heureDebut: '',
+                heureFin: '',
+                tarif: 0,
+                description: '',
+                statut: 'publiee' as const,
+                candidatures: 0,
+                urgente: false,
+                competencesRequises: []
+              },
+              dateCandidature: new Date(candidature.dateCandidature),
+              statut: this.mapStatutToTemplate(candidature.statut),
+              message: '', // Pas disponible dans le DTO
+              tarifPropose: 25 // Valeur par défaut
+            }));
+            
+            // Ajouter les candidatures de cette mission à la liste globale
+            this.candidatures = [...this.candidatures, ...candidaturesFormatted];
+            console.log('Candidatures totales chargées:', this.candidatures);
+          },
+          error: (error) => {
+            console.error('Erreur lors du chargement des candidatures pour la mission', mission.id, ':', error);
+          }
+        });
       }
-    ];
+    });
+  }
+  
+  private mapStatutToTemplate(statut: string): 'en_attente' | 'acceptee' | 'refusee' | 'retiree' {
+    switch (statut) {
+      case 'En cours': return 'en_attente';
+      case 'Acceptée': return 'acceptee';
+      case 'Refusée': return 'refusee';
+      default: return 'en_attente';
+    }
   }
 
   loadStatistiques() {
@@ -651,27 +690,48 @@ export class DashboardEtablissementComponent implements OnInit {
   closeCandidatureModal() {
     this.showCandidatureModal = false;
     this.selectedCandidature = null;
-  }
-
-  accepterCandidature(candidature: Candidature) {
+  }  accepterCandidature(candidature: Candidature) {
     if (confirm('Êtes-vous sûr de vouloir accepter cette candidature ?')) {
-      candidature.statut = 'acceptee';
-      // Mettre à jour la mission
-      const mission = this.missions.find(m => m.id === candidature.missionId);
-      if (mission) {
-        mission.statut = 'pourvue';
-        mission.interimaire = candidature.interimaire;
-      }
-      this.closeCandidatureModal();
-      alert('Candidature acceptée avec succès !');
+      // Appeler l'API pour mettre à jour le statut
+      this.candidatureService.updateCandidatureStatut(candidature.id, { statut: 'Acceptée' }).subscribe({
+        next: (response) => {
+          // Update local data
+          candidature.statut = 'acceptee';
+          
+          // Update the mission
+          const mission = this.missions.find(m => m.id === candidature.missionId);
+          if (mission) {
+            mission.statut = 'pourvue';
+            mission.interimaire = candidature.interimaire;
+          }
+          
+          this.closeCandidatureModal();
+          alert('Candidature acceptée avec succès !');
+        },
+        error: (error) => {
+          console.error('Erreur lors de l\'acceptation de la candidature:', error);
+          alert('Erreur lors de l\'acceptation de la candidature. Veuillez réessayer.');
+        }
+      });
     }
   }
 
   refuserCandidature(candidature: Candidature) {
     if (confirm('Êtes-vous sûr de vouloir refuser cette candidature ?')) {
-      candidature.statut = 'refusee';
-      this.closeCandidatureModal();
-      alert('Candidature refusée.');
+      // Appeler l'API pour mettre à jour le statut
+      this.candidatureService.updateCandidatureStatut(candidature.id, { statut: 'Refusée' }).subscribe({
+        next: (response) => {
+          // Update local data
+          candidature.statut = 'refusee';
+          
+          this.closeCandidatureModal();
+          alert('Candidature refusée.');
+        },
+        error: (error) => {
+          console.error('Erreur lors du refus de la candidature:', error);
+          alert('Erreur lors du refus de la candidature. Veuillez réessayer.');
+        }
+      });
     }
   }
 
