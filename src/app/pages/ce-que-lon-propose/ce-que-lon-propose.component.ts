@@ -5,11 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './ce-que-lon-propose.component.html',
-  // styleUrl: './ce-que-lon-propose.component.css',
-  styleUrls: [
-    './ce-que-lon-propose.component.css',
-    '../../../../public/assets/Css/footer.css',
-    '../../../../public/assets/Css/navigation_barre.css',
-  ],
+  // Modern Tailwind CSS design - no external CSS needed
 })
 export class CeQueLonProposeComponent {}
