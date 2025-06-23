@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { RegisterModel } from '../../models/auth/register.model';
 
 interface RegisterFormData {
+  role: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -14,6 +15,10 @@ interface RegisterFormData {
   password: string;
   confirmPassword: string;
   termsAccepted: boolean;
+  // Champs spécifiques
+  adresse?: string;
+  typeEtablissement?: string;
+  pseudo?: string;
 }
 
 @Component({
@@ -21,13 +26,14 @@ interface RegisterFormData {
   standalone: true,
   imports: [RouterLink, FormsModule, CommonModule],
   templateUrl: './inscription.component.html',
-  styleUrl: './inscription.component.css'
+  styleUrl: './inscription.component.css',
 })
 export class InscriptionComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
   formData: RegisterFormData = {
+    role: '', // Ajoute cette ligne
     firstName: '',
     lastName: '',
     phoneNumber: '',
@@ -35,15 +41,24 @@ export class InscriptionComponent {
     email: '',
     password: '',
     confirmPassword: '',
-    termsAccepted: false
+    termsAccepted: false,
+    adresse: '',
+    typeEtablissement: '',
+    pseudo: '',
   };
 
   isLoading = false;
 
   async onSubmit(form: NgForm): Promise<void> {
-    if (form.invalid || this.formData.password !== this.formData.confirmPassword) {
+    if (
+      form.invalid ||
+      this.formData.password !== this.formData.confirmPassword
+    ) {
       this.markFormGroupTouched(form);
-      this.showToast('Veuillez corriger les erreurs dans le formulaire', 'error');
+      this.showToast(
+        'Veuillez corriger les erreurs dans le formulaire',
+        'error'
+      );
       return;
     }
 
@@ -53,21 +68,34 @@ export class InscriptionComponent {
       const registerModel: RegisterModel = {
         email: this.formData.email.trim(),
         motDePass: this.formData.password,
-        role: 'User', // Par défaut, pourra être modifié selon les besoins
+        role: this.formData.role,
         nom: this.formData.lastName.trim(),
         prenom: this.formData.firstName.trim(),
-        telephone: this.formData.countryCode + this.formData.phoneNumber.trim()
+        telephone: this.formData.countryCode + this.formData.phoneNumber.trim(),
+        // Champs dynamiques selon le rôle
+        adresse: this.formData.adresse?.trim() || undefined,
+        typeEtablissement:
+          this.formData.role === 'etablissement'
+            ? this.formData.typeEtablissement?.trim()
+            : undefined,
+        pseudo:
+          this.formData.role === 'admin'
+            ? this.formData.pseudo?.trim()
+            : undefined,
       };
 
       this.authService.register(registerModel).subscribe({
         next: (response) => {
-          this.showToast('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'success');
+          this.showToast(
+            'Inscription réussie ! Vous pouvez maintenant vous connecter.',
+            'success'
+          );
           setTimeout(() => {
             this.router.navigate(['/connexion']);
           }, 2000);
         },
         error: (error) => {
-          console.error('Erreur lors de l\'inscription:', error);
+          console.error("Erreur lors de l'inscription:", error);
           this.showToast(
             error.message || 'Une erreur est survenue. Veuillez réessayer.',
             'error'
@@ -75,10 +103,10 @@ export class InscriptionComponent {
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
     } catch (error: any) {
-      console.error('Erreur lors de l\'inscription:', error);
+      console.error("Erreur lors de l'inscription:", error);
       this.showToast(
         error.message || 'Une erreur est survenue. Veuillez réessayer.',
         'error'
@@ -88,29 +116,38 @@ export class InscriptionComponent {
   }
 
   private markFormGroupTouched(form: NgForm): void {
-    Object.keys(form.controls).forEach(key => {
+    Object.keys(form.controls).forEach((key) => {
       const control = form.controls[key];
       control.markAsTouched();
     });
   }
 
-  private showToast(message: string, type: 'success' | 'error' | 'info' = 'info'): void {
+  private showToast(
+    message: string,
+    type: 'success' | 'error' | 'info' = 'info'
+  ): void {
     const container = document.getElementById('toast-container');
     if (!container) return;
 
     const toast = document.createElement('div');
-    const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
-    
+    const bgColor =
+      type === 'success'
+        ? 'bg-green-500'
+        : type === 'error'
+        ? 'bg-red-500'
+        : 'bg-blue-500';
+
     toast.className = `${bgColor} text-white px-6 py-4 rounded-lg shadow-lg mb-4 transform transition-all duration-300 translate-x-full opacity-0`;
     toast.innerHTML = `
       <div class="flex items-center justify-between">
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            ${type === 'success' 
-              ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
-              : type === 'error'
-              ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
-              : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>'
+            ${
+              type === 'success'
+                ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
+                : type === 'error'
+                ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
+                : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>'
             }
           </svg>
           <span>${message}</span>
