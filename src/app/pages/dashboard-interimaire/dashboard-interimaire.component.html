@@ -171,12 +171,46 @@
                             4.8/5</h3>
                         <p class="text-gray-600">Note moyenne</p>
                     </div>
-                </div>
-                <div class="bg-white rounded-xl p-8 shadow-lg">
+                </div>                <div class="bg-white rounded-xl p-8 shadow-lg">
                     <h3
-                        class="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] mb-4">
-                        Mes missions récentes</h3>
-                    <p class="text-gray-600">Liste des missions à venir...</p>
+                        class="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] mb-6">
+                        Navigation Missions</h3>
+                    
+                    <!-- 3 cartes de navigation vers les missions -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Missions disponibles -->
+                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer border border-blue-200">
+                            <a routerLink="/missions" class="block text-center">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl text-white">🔍</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-blue-800 mb-2">Missions disponibles</h4>
+                                <p class="text-blue-600 text-sm">Découvrez toutes les missions près de chez vous</p>
+                            </a>
+                        </div>
+                        
+                        <!-- Missions à venir -->
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer border border-green-200">
+                            <a routerLink="/missions-venir" class="block text-center">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl text-white">📅</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-green-800 mb-2">Missions à venir</h4>
+                                <p class="text-green-600 text-sm">Consultez vos prochaines missions confirmées</p>
+                            </a>
+                        </div>
+                        
+                        <!-- Missions passées -->
+                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 hover:shadow-lg transition-all duration-300 cursor-pointer border border-purple-200">
+                            <a routerLink="/missions-passes" class="block text-center">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl text-white">📋</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-purple-800 mb-2">Missions passées</h4>
+                                <p class="text-purple-600 text-sm">Consultez l'historique de vos missions</p>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
