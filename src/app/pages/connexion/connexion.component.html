@@ -29,16 +29,22 @@
       </div>
 
       <!-- Zone d'affichage des notifications -->
-      <div id="toast-container" class="mb-6"></div>
-
-      <!-- Lien vers inscription -->
+      <div id="toast-container" class="mb-6"></div>      <!-- Lien vers inscription -->
       <div class="text-center mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-        <p class="text-sm text-gray-700">
+        <p class="text-sm text-gray-700 mb-2">
           Pas encore de compte ?
           <a routerLink="/inscription" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors">
             Créer un compte
           </a>
         </p>
+        <div class="border-t border-blue-200 pt-2">
+          <p class="text-sm text-gray-600">
+            Vous êtes un établissement ?
+            <a routerLink="/connexion-etablissement" class="text-green-600 hover:text-green-800 font-semibold transition-colors">
+              Connexion établissement
+            </a>
+          </p>
+        </div>
       </div>
 
       <!-- Formulaire -->
