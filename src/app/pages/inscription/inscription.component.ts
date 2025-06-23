@@ -54,7 +54,10 @@ export class InscriptionComponent {
         confirmMotDePasse: this.formData.confirmPassword,
         nom: this.formData.lastName.trim(),
         prenom: this.formData.firstName.trim(),
-        telephone: this.formData.countryCode + this.formData.phoneNumber.trim()
+        telephone: this.formData.countryCode + this.formData.phoneNumber.trim(),
+        adresse: '', // Vide au lieu d'undefined
+        competences: [], // Tableau vide au lieu d'undefined  
+        disponibilites: '' // Vide au lieu d'undefined
       };
 
       this.authService.register(registerModel).subscribe({
@@ -63,13 +66,23 @@ export class InscriptionComponent {
           setTimeout(() => {
             this.router.navigate(['/connexion']);
           }, 2000);
-        },
-        error: (error) => {
+        },        error: (error) => {
           console.error('Erreur lors de l\'inscription:', error);
-          this.showToast(
-            error.message || 'Une erreur est survenue. Veuillez réessayer.',
-            'error'
-          );
+          let errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+          
+          if (error.error) {
+            if (typeof error.error === 'string') {
+              errorMessage = error.error;
+            } else if (error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.error.error) {
+              errorMessage = error.error.error;
+            }
+          } else if (error.message) {
+            errorMessage = error.message;
+          }
+          
+          this.showToast(errorMessage, 'error');
         },
         complete: () => {
           this.isLoading = false;

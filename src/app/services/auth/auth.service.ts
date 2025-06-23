@@ -20,6 +20,18 @@ export interface RegisterDto {
   disponibilites?: string;
 }
 
+export interface CreateInterimaireDto {
+  Email: string;
+  MotDePasse: string;
+  ConfirmMotDePasse: string;
+  Nom: string;
+  Prenom: string;
+  Adresse?: string;
+  Telephone?: string;
+  Competences?: string[];
+  Disponibilites?: string;
+}
+
 export interface User {
   id: string;
   email: string;
@@ -64,10 +76,35 @@ export class AuthService {
           this.currentUserSubject.next(response.user);
         })
       );
-  }
-
-  register(userData: RegisterDto): Observable<User> {
-    return this.http.post<User>(`${this.API_URL}/auth/register`, userData);
+  }  register(userData: RegisterDto): Observable<User> {
+    // Convertir les données du format camelCase vers PascalCase pour l'API .NET
+    const createInterimaireDto: any = {
+      Email: userData.email,
+      MotDePasse: userData.motDePasse,
+      ConfirmMotDePasse: userData.confirmMotDePasse,
+      Nom: userData.nom,
+      Prenom: userData.prenom
+    };
+    
+    // N'ajouter les champs optionnels que s'ils ont une valeur non vide
+    if (userData.adresse && userData.adresse.trim().length > 0) {
+      createInterimaireDto.Adresse = userData.adresse.trim();
+    }
+    
+    if (userData.telephone && userData.telephone.trim().length > 0) {
+      createInterimaireDto.Telephone = userData.telephone.trim();
+    }
+    
+    if (userData.competences && Array.isArray(userData.competences) && userData.competences.length > 0) {
+      createInterimaireDto.Competences = userData.competences;
+    }
+    
+    if (userData.disponibilites && userData.disponibilites.trim().length > 0) {
+      createInterimaireDto.Disponibilites = userData.disponibilites.trim();
+    }
+    
+    console.log('Données envoyées à l\'API pour l\'inscription:', createInterimaireDto);
+    return this.http.post<User>(`${this.API_URL}/auth/register`, createInterimaireDto);
   }
 
   logout(): void {
