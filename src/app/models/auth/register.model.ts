@@ -11,3 +11,15 @@ export interface RegisterModel {
   competences?: string[];
   disponibilites?: string;
 }
+
+export enum StatutCandidature {
+  EnCours = 'En cours',
+  Acceptee = 'Acceptée',
+  Refusee = 'Refusée',
+}
+
+export enum StatutMission {
+  Ouverte = 'Ouverte',
+  Pourvue = 'Pourvue',
+  Fermee = 'Fermée',
+}
