@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../services/notification.service';
 
 interface Document {
   id: string;
@@ -41,7 +47,12 @@ interface Message {
   lu: boolean;
   important: boolean;
   urgent: boolean;
-  categorie: 'mission' | 'administrative' | 'planning' | 'generale' | 'technique';
+  categorie:
+    | 'mission'
+    | 'administrative'
+    | 'planning'
+    | 'generale'
+    | 'technique';
   pieceJointe?: string;
 }
 
@@ -113,7 +124,7 @@ export class DashboardInterimaireComponent implements OnInit {
   activeSection: string = 'profil';
   isEditing: boolean = false;
   profileForm!: FormGroup;
-  
+
   // Documents
   documents: Document[] = [];
   filteredDocuments: Document[] = [];
@@ -124,12 +135,12 @@ export class DashboardInterimaireComponent implements OnInit {
   uploadForm!: FormGroup;
   selectedFile: File | null = null;
   currentUploadType: string = '';
-  
+
   // Planning
   calendarView: 'day' | 'week' | 'month' = 'week';
   currentDate: Date;
   missions: Mission[] = [];
-  
+
   // Messages
   messages: Message[] = [];
   filteredMessages: Message[] = [];
@@ -141,7 +152,12 @@ export class DashboardInterimaireComponent implements OnInit {
 
   // AJOUTEZ CES PROPRIÉTÉS POUR LES PARAMÈTRES :
   // Paramètres
-  parameterSection: 'compte' | 'notifications' | 'preferences' | 'securite' | 'support' = 'compte';
+  parameterSection:
+    | 'compte'
+    | 'notifications'
+    | 'preferences'
+    | 'securite'
+    | 'support' = 'compte';
   settingsForm!: FormGroup;
   passwordForm!: FormGroup;
 
@@ -151,16 +167,16 @@ export class DashboardInterimaireComponent implements OnInit {
       missions: true,
       confirmations: true,
       rappels: true,
-      messages: false
+      messages: false,
     },
     sms: {
       urgent: true,
       rappels24h: true,
-      changements: false
+      changements: false,
     },
     push: {
-      enabled: true
-    }
+      enabled: true,
+    },
   };
 
   workPreferences: WorkPreferences = {
@@ -168,14 +184,14 @@ export class DashboardInterimaireComponent implements OnInit {
     etablissements: ['hopital', 'clinique'],
     heureDebutMin: '06:00',
     heureFinMax: '22:00',
-    distanceMax: 30
+    distanceMax: 30,
   };
 
   securitySettings: SecuritySettings = {
     twoFactor: {
       enabled: false,
-      phone: '+33 6 12 34 56 78'
-    }
+      phone: '+33 6 12 34 56 78',
+    },
   };
 
   activeSessions: ActiveSession[] = [];
@@ -189,7 +205,7 @@ export class DashboardInterimaireComponent implements OnInit {
     email: 'allankhebabk2b@gmail.com',
     telephone: '07 82 01 97 64',
     specialite: 'ASH',
-    experience: 2
+    experience: 2,
   };
 
   // Email support (pour éviter les problèmes avec @)
@@ -197,7 +213,8 @@ export class DashboardInterimaireComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService // AJOUT
   ) {
     this.currentDate = new Date();
   }
@@ -210,12 +227,12 @@ export class DashboardInterimaireComponent implements OnInit {
     this.initProfileForm();
     this.initUploadForm();
     this.initNewMessageForm();
-    this.initSettingsForm();        // NOUVELLE LIGNE
-    this.initPasswordForm();        // NOUVELLE LIGNE
+    this.initSettingsForm(); // NOUVELLE LIGNE
+    this.initPasswordForm(); // NOUVELLE LIGNE
     this.loadDocuments();
     this.loadMissions();
     this.loadMessages();
-    this.loadParametersData();      // NOUVELLE LIGNE
+    this.loadParametersData(); // NOUVELLE LIGNE
   }
 
   // Ajout de la méthode manquante pour éviter l'erreur
@@ -226,10 +243,10 @@ export class DashboardInterimaireComponent implements OnInit {
       { id: 'hautsdeseine', nom: 'Hauts-de-Seine (92)' },
       { id: 'seinestdenis', nom: 'Seine-Saint-Denis (93)' },
       { id: 'valdemarne', nom: 'Val-de-Marne (94)' },
-      { id: 'valdoise', nom: 'Val-d\'Oise (95)' },
+      { id: 'valdoise', nom: "Val-d'Oise (95)" },
       { id: 'seineetmarne', nom: 'Seine-et-Marne (77)' },
       { id: 'yvelines', nom: 'Yvelines (78)' },
-      { id: 'essonne', nom: 'Essonne (91)' }
+      { id: 'essonne', nom: 'Essonne (91)' },
     ];
 
     // Types d'établissements
@@ -239,7 +256,7 @@ export class DashboardInterimaireComponent implements OnInit {
       { id: 'ehpad', nom: 'EHPAD' },
       { id: 'had', nom: 'Hospitalisation à domicile' },
       { id: 'centre_sante', nom: 'Centres de santé' },
-      { id: 'laboratoire', nom: 'Laboratoires' }
+      { id: 'laboratoire', nom: 'Laboratoires' },
     ];
 
     // Sessions actives
@@ -249,56 +266,70 @@ export class DashboardInterimaireComponent implements OnInit {
         device: 'Chrome sur Windows',
         location: 'Paris, France',
         lastActive: new Date(),
-        current: true
+        current: true,
       },
       {
         id: '2',
         device: 'Safari sur iPhone',
         location: 'Paris, France',
         lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        current: false
-      }
+        current: false,
+      },
     ];
 
     // FAQ
     this.faqItems = [
       {
         question: 'Comment modifier mes informations personnelles ?',
-        reponse: 'Rendez-vous dans la section "Mon compte" des paramètres, modifiez les champs souhaités et cliquez sur "Sauvegarder".',
-        open: false
+        reponse:
+          'Rendez-vous dans la section "Mon compte" des paramètres, modifiez les champs souhaités et cliquez sur "Sauvegarder".',
+        open: false,
       },
       {
         question: 'Comment recevoir les notifications par SMS ?',
-        reponse: 'Dans la section "Notifications", activez les notifications SMS pour les types d\'alertes que vous souhaitez recevoir.',
-        open: false
+        reponse:
+          'Dans la section "Notifications", activez les notifications SMS pour les types d\'alertes que vous souhaitez recevoir.',
+        open: false,
       },
       {
-        question: 'Que faire si j\'oublie mon mot de passe ?',
-        reponse: 'Utilisez le lien "Mot de passe oublié" sur la page de connexion pour réinitialiser votre mot de passe.',
-        open: false
+        question: "Que faire si j'oublie mon mot de passe ?",
+        reponse:
+          'Utilisez le lien "Mot de passe oublié" sur la page de connexion pour réinitialiser votre mot de passe.',
+        open: false,
       },
       {
         question: 'Comment configurer mes préférences de missions ?',
-        reponse: 'Dans "Préférences", sélectionnez vos zones géographiques, types d\'établissements et créneaux horaires préférés.',
-        open: false
+        reponse:
+          'Dans "Préférences", sélectionnez vos zones géographiques, types d\'établissements et créneaux horaires préférés.',
+        open: false,
       },
       {
-        question: 'L\'authentification à deux facteurs est-elle obligatoire ?',
-        reponse: 'Non, mais nous la recommandons fortement pour sécuriser votre compte.',
-        open: false
-      }
+        question: "L'authentification à deux facteurs est-elle obligatoire ?",
+        reponse:
+          'Non, mais nous la recommandons fortement pour sécuriser votre compte.',
+        open: false,
+      },
     ];
   }
 
   // ===== MÉTHODES PROFIL =====
   initProfileForm() {
     this.profileForm = this.fb.group({
-      prenom: [this.userProfile.prenom, [Validators.required, Validators.minLength(2)]],
-      nom: [this.userProfile.nom, [Validators.required, Validators.minLength(2)]],
+      prenom: [
+        this.userProfile.prenom,
+        [Validators.required, Validators.minLength(2)],
+      ],
+      nom: [
+        this.userProfile.nom,
+        [Validators.required, Validators.minLength(2)],
+      ],
       email: [this.userProfile.email, [Validators.required, Validators.email]],
       telephone: [this.userProfile.telephone, [Validators.required]],
       specialite: [this.userProfile.specialite, [Validators.required]],
-      experience: [this.userProfile.experience, [Validators.required, Validators.min(0)]]
+      experience: [
+        this.userProfile.experience,
+        [Validators.required, Validators.min(0)],
+      ],
     });
     this.profileForm.disable();
   }
@@ -307,7 +338,7 @@ export class DashboardInterimaireComponent implements OnInit {
     this.uploadForm = this.fb.group({
       nom: ['', [Validators.required]],
       categorie: ['', [Validators.required]],
-      dateExpiration: ['']
+      dateExpiration: [''],
     });
   }
 
@@ -316,7 +347,7 @@ export class DashboardInterimaireComponent implements OnInit {
       destinataire: ['', [Validators.required]],
       sujet: ['', [Validators.required, Validators.minLength(3)]],
       contenu: ['', [Validators.required, Validators.minLength(10)]],
-      urgent: [false]
+      urgent: [false],
     });
   }
 
@@ -327,12 +358,12 @@ export class DashboardInterimaireComponent implements OnInit {
 
   getSectionTitle(): string {
     const titles: { [key: string]: string } = {
-      'profil': 'Mon Profil',
-      'missions': 'Mes Missions',
-      'planning': 'Mon Planning',
-      'documents': 'Mes Documents',
-      'messages': 'Messages',
-      'parametres': 'Paramètres'
+      profil: 'Mon Profil',
+      missions: 'Mes Missions',
+      planning: 'Mon Planning',
+      documents: 'Mes Documents',
+      messages: 'Messages',
+      parametres: 'Paramètres',
     };
     return titles[this.activeSection] || 'Dashboard';
   }
@@ -357,9 +388,9 @@ export class DashboardInterimaireComponent implements OnInit {
       this.userProfile = { ...this.profileForm.value };
       this.isEditing = false;
       this.profileForm.disable();
-      
+
       console.log('Profile updated:', this.userProfile);
-      alert('Profil mis à jour avec succès !');
+      this.notificationService.notify('Profil mis à jour avec succès !');
     } else {
       this.profileForm.markAllAsTouched();
     }
@@ -381,7 +412,7 @@ export class DashboardInterimaireComponent implements OnInit {
         categorie: 'cv',
         dateUpload: new Date('2024-01-15'),
         statut: 'valide',
-        taille: '1.2 MB'
+        taille: '1.2 MB',
       },
       {
         id: '2',
@@ -390,19 +421,19 @@ export class DashboardInterimaireComponent implements OnInit {
         categorie: 'diplome',
         dateUpload: new Date('2024-01-10'),
         statut: 'valide',
-        taille: '800 KB'
-      }
+        taille: '800 KB',
+      },
     ];
     this.filteredDocuments = [...this.documents];
   }
 
   getDocument(type: string): Document | undefined {
-    return this.documents.find(doc => doc.categorie === type);
+    return this.documents.find((doc) => doc.categorie === type);
   }
 
   getCompletedDocuments(): number {
     const requiredTypes = ['cv', 'diplome', 'identite', 'rib', 'secu'];
-    return requiredTypes.filter(type => this.getDocument(type)).length;
+    return requiredTypes.filter((type) => this.getDocument(type)).length;
   }
 
   getProgressPercentage(): number {
@@ -414,7 +445,7 @@ export class DashboardInterimaireComponent implements OnInit {
     this.showUploadModal = true;
     this.uploadForm.patchValue({
       categorie: type,
-      nom: ''
+      nom: '',
     });
   }
 
@@ -433,30 +464,40 @@ export class DashboardInterimaireComponent implements OnInit {
         return;
       }
 
-      const allowedTypes = ['application/pdf', 'application/msword', 
-                           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                           'image/jpeg', 'image/png', 'image/jpg'];
-      
+      const allowedTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+      ];
+
       if (!allowedTypes.includes(file.type)) {
-        alert('Type de fichier non autorisé. Utilisez : PDF, DOC, DOCX, JPG, PNG');
+        alert(
+          'Type de fichier non autorisé. Utilisez : PDF, DOC, DOCX, JPG, PNG'
+        );
         return;
       }
 
       this.selectedFile = file;
-      const suggestedName = this.generateDocumentName(this.currentUploadType, file.name);
+      const suggestedName = this.generateDocumentName(
+        this.currentUploadType,
+        file.name
+      );
       this.uploadForm.patchValue({ nom: suggestedName });
     }
   }
 
   generateDocumentName(type: string, fileName: string): string {
     const typeLabels = {
-      'cv': 'CV',
-      'diplome': 'Diplôme',
-      'identite': 'Pièce d\'identité',
-      'rib': 'RIB',
-      'secu': 'Attestation Sécurité Sociale'
+      cv: 'CV',
+      diplome: 'Diplôme',
+      identite: "Pièce d'identité",
+      rib: 'RIB',
+      secu: 'Attestation Sécurité Sociale',
     };
-    
+
     const label = typeLabels[type as keyof typeof typeLabels] || type;
     const extension = fileName.split('.').pop();
     return `${label}_${this.userProfile.prenom}_${this.userProfile.nom}.${extension}`;
@@ -473,12 +514,16 @@ export class DashboardInterimaireComponent implements OnInit {
       type: this.selectedFile.type,
       categorie: this.currentUploadType as any,
       dateUpload: new Date(),
-      dateExpiration: this.uploadForm.value.dateExpiration ? new Date(this.uploadForm.value.dateExpiration) : undefined,
+      dateExpiration: this.uploadForm.value.dateExpiration
+        ? new Date(this.uploadForm.value.dateExpiration)
+        : undefined,
       statut: 'attente',
-      taille: this.getFileSize(this.selectedFile.size)
+      taille: this.getFileSize(this.selectedFile.size),
     };
 
-    const existingIndex = this.documents.findIndex(doc => doc.categorie === this.currentUploadType);
+    const existingIndex = this.documents.findIndex(
+      (doc) => doc.categorie === this.currentUploadType
+    );
     if (existingIndex !== -1) {
       this.documents[existingIndex] = newDocument;
     } else {
@@ -487,7 +532,9 @@ export class DashboardInterimaireComponent implements OnInit {
 
     this.filteredDocuments = [...this.documents];
     this.closeUploadModal();
-    alert(`Document "${newDocument.nom}" ajouté avec succès !`);
+    this.notificationService.notify(
+      `Document "${newDocument.nom}" ajouté avec succès !`
+    );
   }
 
   replaceDocument(type: string) {
@@ -507,20 +554,21 @@ export class DashboardInterimaireComponent implements OnInit {
   }
 
   deleteDocument(document: Document) {
+    // Remplacer confirm par une version simple, ou garder confirm natif si besoin
     if (confirm(`Êtes-vous sûr de vouloir supprimer "${document.nom}" ?`)) {
-      this.documents = this.documents.filter(doc => doc.id !== document.id);
+      this.documents = this.documents.filter((doc) => doc.id !== document.id);
       this.filteredDocuments = [...this.documents];
-      alert('Document supprimé avec succès !');
+      this.notificationService.notify('Document supprimé avec succès !');
     }
   }
 
   getDocumentTypeLabel(type: string): string {
     const labels = {
-      'cv': 'CV',
-      'diplome': 'Diplôme',
-      'identite': 'Pièce d\'identité',
-      'rib': 'RIB/IBAN',
-      'secu': 'Attestation Sécurité Sociale'
+      cv: 'CV',
+      diplome: 'Diplôme',
+      identite: "Pièce d'identité",
+      rib: 'RIB/IBAN',
+      secu: 'Attestation Sécurité Sociale',
     };
     return labels[type as keyof typeof labels] || type;
   }
@@ -534,32 +582,35 @@ export class DashboardInterimaireComponent implements OnInit {
   }
 
   filterDocuments() {
-    this.filteredDocuments = this.documents.filter(doc => {
-      const matchesCategory = !this.selectedCategory || doc.categorie === this.selectedCategory;
-      const matchesStatus = !this.selectedStatus || doc.statut === this.selectedStatus;
-      const matchesSearch = !this.searchTerm || 
+    this.filteredDocuments = this.documents.filter((doc) => {
+      const matchesCategory =
+        !this.selectedCategory || doc.categorie === this.selectedCategory;
+      const matchesStatus =
+        !this.selectedStatus || doc.statut === this.selectedStatus;
+      const matchesSearch =
+        !this.searchTerm ||
         doc.nom.toLowerCase().includes(this.searchTerm.toLowerCase());
-      
+
       return matchesCategory && matchesStatus && matchesSearch;
     });
   }
 
   getValidatedDocuments(): number {
-    return this.documents.filter(doc => doc.statut === 'valide').length;
+    return this.documents.filter((doc) => doc.statut === 'valide').length;
   }
 
   getPendingDocuments(): number {
-    return this.documents.filter(doc => doc.statut === 'attente').length;
+    return this.documents.filter((doc) => doc.statut === 'attente').length;
   }
 
   getExpiredDocuments(): number {
-    return this.documents.filter(doc => doc.statut === 'expire').length;
+    return this.documents.filter((doc) => doc.statut === 'expire').length;
   }
 
   // ===== MÉTHODES PLANNING =====
   loadMissions() {
     const today = new Date();
-    
+
     this.missions = [
       {
         id: '1',
@@ -573,7 +624,7 @@ export class DashboardInterimaireComponent implements OnInit {
         statut: 'confirmee',
         adresse: '184 Rue du Faubourg Saint-Antoine, 75012 Paris',
         contact: 'Dr. Martin - 01 49 28 20 00',
-        remuneration: 200
+        remuneration: 200,
       },
       {
         id: '2',
@@ -587,7 +638,7 @@ export class DashboardInterimaireComponent implements OnInit {
         statut: 'confirmee',
         adresse: '25 Boulevard Victor Hugo, 92200 Neuilly',
         contact: 'Mme Dubois - 01 46 25 30 00',
-        remuneration: 220
+        remuneration: 220,
       },
       {
         id: '3',
@@ -601,7 +652,7 @@ export class DashboardInterimaireComponent implements OnInit {
         statut: 'en_attente',
         adresse: '12 Rue des Lilas, 93260 Les Lilas',
         contact: 'M. Rousseau - 01 48 97 15 00',
-        remuneration: 180
+        remuneration: 180,
       },
       {
         id: '4',
@@ -615,7 +666,7 @@ export class DashboardInterimaireComponent implements OnInit {
         statut: 'confirmee',
         adresse: '45 Avenue Voltaire, 75011 Paris',
         contact: 'Dr. Leroy - 01 43 79 25 00',
-        remuneration: 210
+        remuneration: 210,
       },
       {
         id: '5',
@@ -629,8 +680,8 @@ export class DashboardInterimaireComponent implements OnInit {
         statut: 'en_attente',
         adresse: '4 Rue de la Chine, 75020 Paris',
         contact: 'Dr. Bernard - 01 56 01 70 00',
-        remuneration: 230
-      }
+        remuneration: 230,
+      },
     ];
   }
 
@@ -647,20 +698,27 @@ export class DashboardInterimaireComponent implements OnInit {
   getCurrentPeriodLabel(): string {
     switch (this.calendarView) {
       case 'day':
-        return this.currentDate.toLocaleDateString('fr-FR', { 
-          weekday: 'long', 
-          day: 'numeric', 
-          month: 'long', 
-          year: 'numeric' 
+        return this.currentDate.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
         });
       case 'week':
         const weekStart = this.getWeekStart();
         const weekEnd = this.getWeekEnd();
-        return `Semaine du ${weekStart.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })} au ${weekEnd.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+        return `Semaine du ${weekStart.toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'long',
+        })} au ${weekEnd.toLocaleDateString('fr-FR', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        })}`;
       case 'month':
-        return this.currentDate.toLocaleDateString('fr-FR', { 
-          month: 'long', 
-          year: 'numeric' 
+        return this.currentDate.toLocaleDateString('fr-FR', {
+          month: 'long',
+          year: 'numeric',
         });
       default:
         return '';
@@ -706,9 +764,9 @@ export class DashboardInterimaireComponent implements OnInit {
   getThisWeekHours(): number {
     const weekStart = this.getWeekStart();
     const weekEnd = this.getWeekEnd();
-    
+
     return this.missions
-      .filter(mission => {
+      .filter((mission) => {
         const missionDate = new Date(mission.dateMission);
         return missionDate >= weekStart && missionDate <= weekEnd;
       })
@@ -716,11 +774,19 @@ export class DashboardInterimaireComponent implements OnInit {
   }
 
   getThisMonthHours(): number {
-    const monthStart = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
-    const monthEnd = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0);
-    
+    const monthStart = new Date(
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth(),
+      1
+    );
+    const monthEnd = new Date(
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth() + 1,
+      0
+    );
+
     return this.missions
-      .filter(mission => {
+      .filter((mission) => {
         const missionDate = new Date(mission.dateMission);
         return missionDate >= monthStart && missionDate <= monthEnd;
       })
@@ -730,8 +796,8 @@ export class DashboardInterimaireComponent implements OnInit {
   getUpcomingMissions(): number {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
-    return this.missions.filter(mission => {
+
+    return this.missions.filter((mission) => {
       const missionDate = new Date(mission.dateMission);
       missionDate.setHours(0, 0, 0, 0);
       return missionDate >= today;
@@ -767,13 +833,13 @@ export class DashboardInterimaireComponent implements OnInit {
   getWeekDays(): Date[] {
     const weekStart = this.getWeekStart();
     const days: Date[] = [];
-    
+
     for (let i = 0; i < 7; i++) {
       const day = new Date(weekStart);
       day.setDate(weekStart.getDate() + i);
       days.push(day);
     }
-    
+
     return days;
   }
 
@@ -784,27 +850,29 @@ export class DashboardInterimaireComponent implements OnInit {
   getMonthDays(): Date[] {
     const year = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
-    
+
     const firstDay = new Date(year, month, 1);
     const startDate = new Date(firstDay);
     const dayOfWeek = firstDay.getDay();
     const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
     startDate.setDate(firstDay.getDate() - daysToSubtract);
-    
+
     const days: Date[] = [];
     const currentDate = new Date(startDate);
-    
+
     for (let i = 0; i < 42; i++) {
       days.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    
+
     return days;
   }
 
   isCurrentMonth(date: Date): boolean {
-    return date.getMonth() === this.currentDate.getMonth() && 
-           date.getFullYear() === this.currentDate.getFullYear();
+    return (
+      date.getMonth() === this.currentDate.getMonth() &&
+      date.getFullYear() === this.currentDate.getFullYear()
+    );
   }
 
   isToday(date: Date): boolean {
@@ -816,73 +884,84 @@ export class DashboardInterimaireComponent implements OnInit {
   isDayMissionVisible(mission: Mission): boolean {
     const startHour = parseInt(mission.heureDebut.split(':')[0]);
     const endHour = parseInt(mission.heureFin.split(':')[0]);
-    
+
     // Afficher la mission si elle a au moins une partie dans la plage 6h-22h
     return !(endHour <= 6 || startHour >= 22);
   }
 
   getDayMissions(date: Date): Mission[] {
-    return this.missions.filter(mission => {
+    return this.missions.filter((mission) => {
       const missionDate = new Date(mission.dateMission);
-      return missionDate.toDateString() === date.toDateString() && 
-             this.isDayMissionVisible(mission);
+      return (
+        missionDate.toDateString() === date.toDateString() &&
+        this.isDayMissionVisible(mission)
+      );
     });
   }
 
   getHourMissions(date: Date, hour: number): Mission[] {
-    return this.getDayMissions(date).filter(mission => {
+    return this.getDayMissions(date).filter((mission) => {
       const startHour = parseInt(mission.heureDebut.split(':')[0]);
       const endHour = parseInt(mission.heureFin.split(':')[0]);
       return hour >= startHour && hour < endHour;
     });
   }
 
-  getMissionPosition(mission: Mission): { left: number, width: number, top: number } {
+  getMissionPosition(mission: Mission): {
+    left: number;
+    width: number;
+    top: number;
+  } {
     const startHour = parseInt(mission.heureDebut.split(':')[0]);
     const startMinute = parseInt(mission.heureDebut.split(':')[1]);
     const endHour = parseInt(mission.heureFin.split(':')[0]);
     const endMinute = parseInt(mission.heureFin.split(':')[1]);
-    
+
     const startPercent = ((startHour + startMinute / 60) / 24) * 100;
-    const duration = (endHour + endMinute / 60) - (startHour + startMinute / 60);
+    const duration = endHour + endMinute / 60 - (startHour + startMinute / 60);
     const widthPercent = (duration / 24) * 100;
-    
+
     return {
       left: startPercent,
       width: widthPercent,
-      top: 10
+      top: 10,
     };
   }
 
   getUpcomingMissionsList(): Mission[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     return this.missions
-      .filter(mission => {
+      .filter((mission) => {
         const missionDate = new Date(mission.dateMission);
         missionDate.setHours(0, 0, 0, 0);
         return missionDate >= today;
       })
-      .sort((a, b) => new Date(a.dateMission).getTime() - new Date(b.dateMission).getTime());
+      .sort(
+        (a, b) =>
+          new Date(a.dateMission).getTime() - new Date(b.dateMission).getTime()
+      );
   }
 
   getMissionStatusClass(statut: string): string {
     const classes = {
-      'confirmee': 'bg-green-100 text-green-800',
-      'en_attente': 'bg-yellow-100 text-yellow-800',
-      'annulee': 'bg-red-100 text-red-800',
-      'terminee': 'bg-gray-100 text-gray-800'
+      confirmee: 'bg-green-100 text-green-800',
+      en_attente: 'bg-yellow-100 text-yellow-800',
+      annulee: 'bg-red-100 text-red-800',
+      terminee: 'bg-gray-100 text-gray-800',
     };
-    return classes[statut as keyof typeof classes] || 'bg-gray-100 text-gray-800';
+    return (
+      classes[statut as keyof typeof classes] || 'bg-gray-100 text-gray-800'
+    );
   }
 
   getMissionStatusLabel(statut: string): string {
     const labels = {
-      'confirmee': 'Confirmée',
-      'en_attente': 'En attente',
-      'annulee': 'Annulée',
-      'terminee': 'Terminée'
+      confirmee: 'Confirmée',
+      en_attente: 'En attente',
+      annulee: 'Annulée',
+      terminee: 'Terminée',
     };
     return labels[statut as keyof typeof labels] || statut;
   }
@@ -896,27 +975,27 @@ export class DashboardInterimaireComponent implements OnInit {
     });
   }
 
-  getDayMissionPosition(mission: Mission): { left: number, width: number } {
+  getDayMissionPosition(mission: Mission): { left: number; width: number } {
     const startHour = parseInt(mission.heureDebut.split(':')[0]);
     const startMinute = parseInt(mission.heureDebut.split(':')[1]);
     const endHour = parseInt(mission.heureFin.split(':')[0]);
     const endMinute = parseInt(mission.heureFin.split(':')[1]);
-    
+
     // Calculer la position par rapport à la grille 6h-22h (16 heures)
     const startTime = startHour + startMinute / 60;
     const endTime = endHour + endMinute / 60;
     const duration = endTime - startTime;
-    
+
     // Position relative dans la grille (6h = 0%, 22h = 100%)
     const gridStart = 6; // 6h du matin
     const gridDuration = 16; // 16 heures (6h-22h)
-    
+
     const leftPercent = ((startTime - gridStart) / gridDuration) * 100;
     const widthPercent = (duration / gridDuration) * 100;
-    
+
     return {
       left: Math.max(0, leftPercent),
-      width: Math.min(100 - leftPercent, widthPercent)
+      width: Math.min(100 - leftPercent, widthPercent),
     };
   }
 
@@ -929,23 +1008,30 @@ export class DashboardInterimaireComponent implements OnInit {
       email: [this.userProfile.email, [Validators.required, Validators.email]],
       telephone: [this.userProfile.telephone, [Validators.required]],
       dateNaissance: ['1990-01-01'],
-      adresse: ['123 Rue de la Paix, 75001 Paris']
+      adresse: ['123 Rue de la Paix, 75001 Paris'],
     });
   }
 
   initPasswordForm() {
-    this.passwordForm = this.fb.group({
-      currentPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordMatchValidator });
+    this.passwordForm = this.fb.group(
+      {
+        currentPassword: ['', [Validators.required]],
+        newPassword: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   passwordMatchValidator(form: any) {
     const newPassword = form.get('newPassword');
     const confirmPassword = form.get('confirmPassword');
-    
-    if (newPassword && confirmPassword && newPassword.value !== confirmPassword.value) {
+
+    if (
+      newPassword &&
+      confirmPassword &&
+      newPassword.value !== confirmPassword.value
+    ) {
       confirmPassword.setErrors({ mismatch: true });
       return { mismatch: true };
     }
@@ -956,7 +1042,7 @@ export class DashboardInterimaireComponent implements OnInit {
   loadMessages() {
     // Données de simulation - remplacez par un appel API réel
     const now = new Date();
-    
+
     this.messages = [
       {
         id: '1',
@@ -981,7 +1067,7 @@ L'équipe Planning ALENIA`,
         lu: false,
         important: true,
         urgent: false,
-        categorie: 'mission'
+        categorie: 'mission',
       },
       {
         id: '2',
@@ -1002,7 +1088,7 @@ Service RH ALENIA`,
         lu: true,
         important: false,
         urgent: false,
-        categorie: 'administrative'
+        categorie: 'administrative',
       },
       {
         id: '3',
@@ -1023,7 +1109,7 @@ Dr. Martin`,
         lu: false,
         important: false,
         urgent: true,
-        categorie: 'mission'
+        categorie: 'mission',
       },
       {
         id: '4',
@@ -1047,7 +1133,7 @@ Service Paie ALENIA`,
         important: false,
         urgent: false,
         categorie: 'administrative',
-        pieceJointe: 'feuille_paie_mai_2025.pdf'
+        pieceJointe: 'feuille_paie_mai_2025.pdf',
       },
       {
         id: '5',
@@ -1068,10 +1154,10 @@ L'équipe technique`,
         lu: true,
         important: false,
         urgent: false,
-        categorie: 'technique'
-      }
+        categorie: 'technique',
+      },
     ];
-    
+
     this.filteredMessages = [...this.messages];
   }
 
@@ -1083,31 +1169,35 @@ L'équipe technique`,
 
   filterMessages() {
     let filtered = [...this.messages];
-    
+
     // Filtrer par statut
     switch (this.messageFilter) {
       case 'non_lus':
-        filtered = filtered.filter(msg => !msg.lu);
+        filtered = filtered.filter((msg) => !msg.lu);
         break;
       case 'importants':
-        filtered = filtered.filter(msg => msg.important);
+        filtered = filtered.filter((msg) => msg.important);
         break;
       // 'tous' ne filtre rien
     }
-    
+
     // Filtrer par recherche
     if (this.messageSearchTerm.trim()) {
       const searchTerm = this.messageSearchTerm.toLowerCase();
-      filtered = filtered.filter(msg => 
-        msg.sujet.toLowerCase().includes(searchTerm) ||
-        msg.expediteur.toLowerCase().includes(searchTerm) ||
-        msg.contenu.toLowerCase().includes(searchTerm)
+      filtered = filtered.filter(
+        (msg) =>
+          msg.sujet.toLowerCase().includes(searchTerm) ||
+          msg.expediteur.toLowerCase().includes(searchTerm) ||
+          msg.contenu.toLowerCase().includes(searchTerm)
       );
     }
-    
+
     // Trier par date (plus récent en premier)
-    filtered.sort((a, b) => new Date(b.dateEnvoi).getTime() - new Date(a.dateEnvoi).getTime());
-    
+    filtered.sort(
+      (a, b) =>
+        new Date(b.dateEnvoi).getTime() - new Date(a.dateEnvoi).getTime()
+    );
+
     this.filteredMessages = filtered;
   }
 
@@ -1117,29 +1207,32 @@ L'équipe technique`,
   }
 
   getUnreadMessages(): number {
-    return this.messages.filter(msg => !msg.lu).length;
+    return this.messages.filter((msg) => !msg.lu).length;
   }
 
   getImportantMessages(): number {
-    return this.messages.filter(msg => msg.important).length;
+    return this.messages.filter((msg) => msg.important).length;
   }
 
   getWeekMessages(): number {
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    
-    return this.messages.filter(msg => 
-      new Date(msg.dateEnvoi) >= oneWeekAgo
-    ).length;
+
+    return this.messages.filter((msg) => new Date(msg.dateEnvoi) >= oneWeekAgo)
+      .length;
   }
 
   // Interface utilisateur
   getFilterTitle(): string {
     switch (this.messageFilter) {
-      case 'tous': return 'Tous les messages';
-      case 'non_lus': return 'Messages non lus';
-      case 'importants': return 'Messages importants';
-      default: return 'Messages';
+      case 'tous':
+        return 'Tous les messages';
+      case 'non_lus':
+        return 'Messages non lus';
+      case 'importants':
+        return 'Messages importants';
+      default:
+        return 'Messages';
     }
   }
 
@@ -1151,18 +1244,21 @@ L'équipe technique`,
     if (this.messageSearchTerm.trim()) {
       return 'Aucun message ne correspond à votre recherche';
     }
-    
+
     switch (this.messageFilter) {
-      case 'non_lus': return 'Tous vos messages sont lus !';
-      case 'importants': return 'Aucun message important pour le moment';
-      default: return 'Votre boîte de réception est vide';
+      case 'non_lus':
+        return 'Tous vos messages sont lus !';
+      case 'importants':
+        return 'Aucun message important pour le moment';
+      default:
+        return 'Votre boîte de réception est vide';
     }
   }
 
   getInitials(name: string): string {
     return name
       .split(' ')
-      .map(word => word[0])
+      .map((word) => word[0])
       .join('')
       .toUpperCase()
       .substring(0, 2);
@@ -1170,22 +1266,24 @@ L'équipe technique`,
 
   getMessageCategoryClass(categorie: string): string {
     const classes = {
-      'mission': 'bg-blue-100 text-blue-800',
-      'administrative': 'bg-green-100 text-green-800',
-      'planning': 'bg-purple-100 text-purple-800',
-      'generale': 'bg-gray-100 text-gray-800',
-      'technique': 'bg-orange-100 text-orange-800'
+      mission: 'bg-blue-100 text-blue-800',
+      administrative: 'bg-green-100 text-green-800',
+      planning: 'bg-purple-100 text-purple-800',
+      generale: 'bg-gray-100 text-gray-800',
+      technique: 'bg-orange-100 text-orange-800',
     };
-    return classes[categorie as keyof typeof classes] || 'bg-gray-100 text-gray-800';
+    return (
+      classes[categorie as keyof typeof classes] || 'bg-gray-100 text-gray-800'
+    );
   }
 
   getMessageCategoryLabel(categorie: string): string {
     const labels = {
-      'mission': 'Mission',
-      'administrative': 'Administratif',
-      'planning': 'Planning',
-      'generale': 'Général',
-      'technique': 'Technique'
+      mission: 'Mission',
+      administrative: 'Administratif',
+      planning: 'Planning',
+      generale: 'Général',
+      technique: 'Technique',
     };
     return labels[categorie as keyof typeof labels] || categorie;
   }
@@ -1218,14 +1316,18 @@ L'équipe technique`,
   }
 
   deleteMessage(message: Message) {
-    if (confirm(`Êtes-vous sûr de vouloir supprimer le message "${message.sujet}" ?`)) {
-      this.messages = this.messages.filter(msg => msg.id !== message.id);
+    if (
+      confirm(
+        `Êtes-vous sûr de vouloir supprimer le message "${message.sujet}" ?`
+      )
+    ) {
+      this.messages = this.messages.filter((msg) => msg.id !== message.id);
       this.filterMessages();
-      
+
       if (this.selectedMessage?.id === message.id) {
         this.closeMessage();
       }
-      
+
       alert('Message supprimé avec succès !');
     }
   }
@@ -1248,27 +1350,29 @@ L'équipe technique`,
     }
 
     const formValue = this.newMessageForm.value;
-    
+
     // Simuler l'envoi du message
     console.log('Envoi du message:', formValue);
-    
+
     // Ici vous feriez un appel API
-    alert(`Message envoyé à ${formValue.destinataire} !`);
-    
+    this.notificationService.notify(
+      `Message envoyé à ${formValue.destinataire} !`
+    );
+
     this.closeNewMessageModal();
   }
 
   replyToMessage(message: Message) {
     this.openNewMessageModal();
-    
+
     // Pré-remplir le formulaire avec les données de réponse
     this.newMessageForm.patchValue({
       destinataire: this.getReplyRecipient(message.expediteur),
       sujet: `Re: ${message.sujet}`,
       contenu: `\n\n--- Message original ---\nDe: ${message.expediteur}\nDate: ${message.dateEnvoi}\nSujet: ${message.sujet}\n\n${message.contenu}`,
-      urgent: false
+      urgent: false,
     });
-    
+
     this.closeMessage();
   }
 
@@ -1283,24 +1387,26 @@ L'équipe technique`,
 
   // ===== MÉTHODES POUR LES PARAMÈTRES =====
 
-  setParameterSection(section: 'compte' | 'notifications' | 'preferences' | 'securite' | 'support') {
+  setParameterSection(
+    section: 'compte' | 'notifications' | 'preferences' | 'securite' | 'support'
+  ) {
     this.parameterSection = section;
   }
 
   saveAccountSettings() {
     if (this.settingsForm.valid) {
       const formData = this.settingsForm.value;
-      
+
       this.userProfile = {
         ...this.userProfile,
         prenom: formData.prenom,
         nom: formData.nom,
         email: formData.email,
-        telephone: formData.telephone
+        telephone: formData.telephone,
       };
 
       console.log('Paramètres sauvegardés:', formData);
-      alert('Paramètres sauvegardés avec succès !');
+      this.notificationService.notify('Paramètres sauvegardés avec succès !');
     }
   }
 
@@ -1309,13 +1415,17 @@ L'équipe technique`,
       prenom: this.userProfile.prenom,
       nom: this.userProfile.nom,
       email: this.userProfile.email,
-      telephone: this.userProfile.telephone
+      telephone: this.userProfile.telephone,
     });
   }
 
-  updateNotificationSetting(type: 'email' | 'sms' | 'push', setting: string, event: any) {
+  updateNotificationSetting(
+    type: 'email' | 'sms' | 'push',
+    setting: string,
+    event: any
+  ) {
     const isChecked = event.target.checked;
-    
+
     if (type === 'email') {
       (this.notificationSettings.email as any)[setting] = isChecked;
     } else if (type === 'sms') {
@@ -1333,31 +1443,34 @@ L'équipe technique`,
 
   toggleZonePreference(zoneId: string, event: any) {
     const isChecked = event.target.checked;
-    
+
     if (isChecked) {
       if (!this.workPreferences.zones.includes(zoneId)) {
         this.workPreferences.zones.push(zoneId);
       }
     } else {
-      this.workPreferences.zones = this.workPreferences.zones.filter(id => id !== zoneId);
+      this.workPreferences.zones = this.workPreferences.zones.filter(
+        (id) => id !== zoneId
+      );
     }
   }
 
   toggleEtablissementPreference(typeId: string, event: any) {
     const isChecked = event.target.checked;
-    
+
     if (isChecked) {
       if (!this.workPreferences.etablissements.includes(typeId)) {
         this.workPreferences.etablissements.push(typeId);
       }
     } else {
-      this.workPreferences.etablissements = this.workPreferences.etablissements.filter(id => id !== typeId);
+      this.workPreferences.etablissements =
+        this.workPreferences.etablissements.filter((id) => id !== typeId);
     }
   }
 
   saveWorkPreferences() {
     console.log('Préférences sauvegardées:', this.workPreferences);
-    alert('Préférences de travail sauvegardées !');
+    this.notificationService.notify('Préférences de travail sauvegardées !');
   }
 
   resetWorkPreferences() {
@@ -1366,17 +1479,17 @@ L'équipe technique`,
       etablissements: ['hopital'],
       heureDebutMin: '06:00',
       heureFinMax: '22:00',
-      distanceMax: 30
+      distanceMax: 30,
     };
   }
 
   changePassword() {
     if (this.passwordForm.valid) {
       const formData = this.passwordForm.value;
-      
+
       console.log('Changement de mot de passe demandé');
-      alert('Mot de passe modifié avec succès !');
-      
+      this.notificationService.notify('Mot de passe modifié avec succès !');
+
       this.resetPasswordForm();
     }
   }
@@ -1388,11 +1501,15 @@ L'équipe technique`,
   toggleTwoFactor(event: any) {
     const isEnabled = event.target.checked;
     this.securitySettings.twoFactor.enabled = isEnabled;
-    
+
     if (isEnabled) {
-      alert('Configuration de l\'authentification à deux facteurs...');
+      alert("Configuration de l'authentification à deux facteurs...");
     } else {
-      if (confirm('Êtes-vous sûr de vouloir désactiver l\'authentification à deux facteurs ?')) {
+      if (
+        confirm(
+          "Êtes-vous sûr de vouloir désactiver l'authentification à deux facteurs ?"
+        )
+      ) {
         alert('Authentification à deux facteurs désactivée.');
       } else {
         event.target.checked = true;
@@ -1410,16 +1527,22 @@ L'équipe technique`,
   }
 
   revokeSession(session: ActiveSession) {
-    if (confirm(`Êtes-vous sûr de vouloir révoquer la session "${session.device}" ?`)) {
-      this.activeSessions = this.activeSessions.filter(s => s.id !== session.id);
-      alert('Session révoquée avec succès !');
+    if (
+      confirm(
+        `Êtes-vous sûr de vouloir révoquer la session "${session.device}" ?`
+      )
+    ) {
+      this.activeSessions = this.activeSessions.filter(
+        (s) => s.id !== session.id
+      );
+      this.notificationService.notify('Session révoquée avec succès !');
     }
   }
 
   toggleFaq(faq: FaqItem) {
     faq.open = !faq.open;
-    
-    this.faqItems.forEach(item => {
+
+    this.faqItems.forEach((item) => {
       if (item !== faq) {
         item.open = false;
       }
