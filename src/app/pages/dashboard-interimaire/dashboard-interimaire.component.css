@@ -3,10 +3,32 @@
   border-right-width: 3px;
 }
 
+/* Sidebar fixe et toujours visible */
+.sidebar-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100vh !important;
+  z-index: 1000 !important;
+  overflow-y: auto !important;
+}
+
+/* Contenu principal avec marge pour la sidebar */
+.main-content {
+  margin-left: 288px !important; /* 18rem = 288px pour w-72 */
+  min-height: 100vh !important;
+}
+
 /* Responsive pour mobile */
 @media (max-width: 768px) {
-  .ml-72 {
-    margin-left: 0;
+  .sidebar-container {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .main-content {
+    margin-left: 0 !important;
   }
 }
 

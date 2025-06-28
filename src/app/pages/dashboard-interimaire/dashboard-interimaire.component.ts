@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { InterimaireService } from '../../services/interimaire/intermaire.service';
+import { AvatarComponent } from '../../components/avatar/avatar.component';
 
 interface Document {
   id: string;
@@ -107,7 +108,7 @@ interface FaqItem {
 @Component({
   selector: 'app-dashboard-interimaire',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, AvatarComponent],
   templateUrl: './dashboard-interimaire.component.html',
   styleUrl: './dashboard-interimaire.component.css',
 })
@@ -195,6 +196,18 @@ export class DashboardInterimaireComponent implements OnInit {
 
   // Email support (pour éviter les problèmes avec @)
   supportEmail = 'support@alenia.fr';
+
+  // Méthode pour générer les initiales de l'utilisateur
+  getUserInitials(): string {
+    const prenom = this.userProfile.prenom || '';
+    const nom = this.userProfile.nom || '';
+    
+    const prenomInitial = prenom.charAt(0).toUpperCase();
+    const nomInitial = nom.charAt(0).toUpperCase();
+    
+    return `${prenomInitial}${nomInitial}`;
+  }
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
