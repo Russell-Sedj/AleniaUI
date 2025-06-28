@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth/auth.service';
+import { InterimaireService } from '../../services/interimaire/intermaire.service';
 
 interface Document {
   id: string;
@@ -182,22 +184,22 @@ export class DashboardInterimaireComponent implements OnInit {
   availableZones: Zone[] = [];
   etablissementTypes: EtablissementType[] = [];
   faqItems: FaqItem[] = [];
-
   userProfile = {
-    prenom: 'Allan',
-    nom: 'Khebab',
-    email: 'allankhebabk2b@gmail.com',
-    telephone: '07 82 01 97 64',
-    specialite: 'ASH',
-    experience: 2
+    prenom: '',
+    nom: '',
+    email: '',
+    telephone: '',
+    specialite: '',
+    experience: 0
   };
 
   // Email support (pour éviter les problèmes avec @)
   supportEmail = 'support@alenia.fr';
-
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private interimaireService: InterimaireService
   ) {
     this.currentDate = new Date();
   }
@@ -205,8 +207,8 @@ export class DashboardInterimaireComponent implements OnInit {
   getCurrentFrenchDate(): Date {
     return new Date();
   }
-
   ngOnInit() {
+    this.loadUserProfileFromAuth(); // Charger le profil utilisateur depuis l'auth
     this.initProfileForm();
     this.initUploadForm();
     this.initNewMessageForm();
@@ -1424,5 +1426,60 @@ L'équipe technique`,
         item.open = false;
       }
     });
+  }
+  // ===== CHARGEMENT DYNAMIQUE DU PROFIL UTILISATEUR =====
+  loadUserProfileFromAuth() {
+    const currentUser = this.authService.getCurrentUser();
+    
+    if (currentUser) {
+      console.log('Données utilisateur depuis getCurrentUser():', currentUser);
+      
+      // Utiliser les données disponibles dans l'objet utilisateur
+      this.userProfile.email = currentUser.email || '';
+      this.userProfile.prenom = currentUser.prenom || '';
+      this.userProfile.nom = currentUser.nom || '';
+      this.userProfile.telephone = ''; // Pas disponible dans le token
+      this.userProfile.specialite = 'ASH'; // Valeur par défaut
+      this.userProfile.experience = 2; // Valeur par défaut
+      
+      console.log('Profil utilisateur chargé dynamiquement:', this.userProfile);
+      
+      // Si on n'a pas le prénom/nom, essayer de récupérer les détails complets
+      if (!this.userProfile.prenom || !this.userProfile.nom) {
+        console.log('Prénom/nom manquants, tentative de récupération via API...');
+        this.loadCompleteUserProfile(currentUser.id);
+      }
+    } else {
+      console.log('Aucun utilisateur connecté, redirection vers la connexion...');
+      this.router.navigate(['/connexion']);
+    }
+  }
+
+  // Méthode pour charger le profil complet depuis l'API
+  loadCompleteUserProfile(userId: string) {
+    if (this.interimaireService && userId) {
+      this.interimaireService.getInterimaire(userId).subscribe({
+        next: (interimaire) => {
+          console.log('Profil complet récupéré depuis l\'API:', interimaire);
+          
+          // Mettre à jour avec les vraies données
+          this.userProfile.prenom = interimaire.prenom || this.userProfile.prenom;
+          this.userProfile.nom = interimaire.nom || this.userProfile.nom;
+          this.userProfile.telephone = interimaire.telephone || '';
+          this.userProfile.specialite = interimaire.competences?.[0] || 'ASH';
+          
+          // Réinitialiser le formulaire avec les nouvelles données
+          if (this.profileForm) {
+            this.initProfileForm();
+          }
+          
+          console.log('Profil utilisateur final:', this.userProfile);
+        },
+        error: (error) => {
+          console.error('Erreur lors du chargement du profil complet:', error);
+          // Garder les données partielles du token
+        }
+      });
+    }
   }
 }
