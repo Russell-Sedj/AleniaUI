@@ -1,84 +1,15 @@
-<div class="flex min-h-screen bg-gray-50">
-    <!-- Sidebar avec classe CSS personnalisée -->
-    <aside class="sidebar-container w-72 bg-white text-gray-700 flex flex-col shadow-lg border-r border-gray-200">
-        <div class="p-6 text-center border-b border-gray-100">
-            <img src="/assets/images/logo.png" alt="ALENIA" class="w-12 h-12 mx-auto mb-3">
-            <h3 class="text-lg font-semibold text-gray-800">Espace Établissement</h3>
-            <p class="text-sm text-gray-600">{{ etablissement.nom }}</p>
-        </div>
+<div class="flex min-h-screen bg-gray-100">
+    <!-- Nouvelle Sidebar moderne pour établissement -->
+    <app-sidebar-etablissement
+        [navigationItems]="navigationItems"
+        [activeItem]="activeSection"
+        [etablissementProfile]="sidebarEtablissementProfile"
+        (itemClick)="onSidebarItemClick($event)"
+        (logout)="onSidebarLogout()">
+    </app-sidebar-etablissement>
 
-        <nav class="flex-1 py-5">
-            <ul class="space-y-1">
-                <li>
-                    <a (click)="setActiveSection('tableau-bord')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'tableau-bord' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">📊</span>
-                        <span>Tableau de bord</span>
-                    </a>
-                </li>
-                <li>
-                    <a (click)="setActiveSection('missions')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'missions' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">💼</span>
-                        <span>Mes Missions</span>
-                    </a>
-                </li>
-                <li>
-                    <a (click)="setActiveSection('interimaires')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'interimaires' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">👥</span>
-                        <span>Intérimaires</span>
-                    </a>
-                </li>
-                <li>
-                    <a (click)="setActiveSection('candidatures')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'candidatures' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">📝</span>
-                        <span>Candidatures</span>
-                    </a>
-                </li>
-                <li>
-                    <a (click)="setActiveSection('planning')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'planning' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">📅</span>
-                        <span>Planning</span>
-                    </a>
-                </li>
-                <li>
-                    <a (click)="setActiveSection('gestion-financiere')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'gestion-financiere' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">💰</span>
-                        <span>Gestion financière</span>
-                    </a>
-                </li>
-                <li>
-                    <a (click)="setActiveSection('statistiques')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'statistiques' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">📈</span>
-                        <span>Statistiques</span>
-                    </a>
-                </li>
-                <li>
-                    <a (click)="setActiveSection('parametres')"
-                        [class]="'flex items-center px-6 py-4 text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-all duration-300 cursor-pointer ' + (activeSection === 'parametres' ? 'bg-blue-50 text-blue-600 border-r-3 border-blue-600 font-medium' : '')">
-                        <span class="w-5 h-5 mr-4 text-lg">⚙️</span>
-                        <span>Paramètres</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="p-5 border-t border-gray-100">
-            <button (click)="logout()"
-                class="flex items-center w-full p-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300">
-                <span class="w-5 h-5 mr-4 text-lg">🚪</span>
-                Déconnexion
-            </button>
-        </div>
-    </aside>
-
-    <!-- Contenu principal -->
-    <main class="flex-1 flex flex-col min-h-screen overflow-hidden">
+    <!-- Contenu principal avec marge pour la sidebar fixe -->
+    <main class="flex-1 flex flex-col min-h-screen overflow-hidden lg:ml-72">
         <header class="bg-white p-6 border-b border-gray-200 flex justify-between items-center shadow-sm">
             <h1
                 class="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] leading-normal">

@@ -1,15 +1,35 @@
-/* Classes custom pour les bordures actives */
-.border-r-3 {
-  border-right-width: 3px;
+/* Styles pour la sidebar établissement */
+:host {
+  display: contents;
+}
+
+/* Assurer que la sidebar est correctement positionnée */
+app-sidebar-etablissement {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
 }
 
 /* Responsive pour mobile */
-@media (max-width: 768px) {
-  .ml-72 {
-    margin-left: 0;
+@media (max-width: 1024px) {
+  app-sidebar-etablissement {
+    position: static;
+    height: auto;
+  }
+  
+  main {
+    margin-left: 0 !important;
   }
 }
 
-.sidebar-overlay {
-  z-index: 9999 !important;
+/* Améliorer l'apparence des icônes dans la sidebar */
+app-sidebar-etablissement svg {
+  flex-shrink: 0;
+}
+
+/* Classes custom pour des éléments spécifiques si nécessaires */
+.main-content-area {
+  min-height: calc(100vh - 80px);
 }

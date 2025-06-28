@@ -236,14 +236,15 @@ export class DashboardInterimaireComponent implements OnInit {
   activeSessions: ActiveSession[] = [];
   availableZones: Zone[] = [];
   etablissementTypes: EtablissementType[] = [];
-  faqItems: FaqItem[] = [];
-  userProfile = {
+  faqItems: FaqItem[] = [];  userProfile = {
     prenom: '',
     nom: '',
     email: '',
     telephone: '',
     specialite: '',
-    experience: 0
+    experience: 0,
+    dateNaissance: '',
+    adresse: ''
   };
 
   // Email support (pour éviter les problèmes avec @)
@@ -1008,15 +1009,14 @@ export class DashboardInterimaireComponent implements OnInit {
   }
 
   // ===== NOUVELLES MÉTHODES POUR LES PARAMÈTRES =====
-
   initSettingsForm() {
     this.settingsForm = this.fb.group({
       prenom: [this.userProfile.prenom, [Validators.required]],
       nom: [this.userProfile.nom, [Validators.required]],
       email: [this.userProfile.email, [Validators.required, Validators.email]],
       telephone: [this.userProfile.telephone, [Validators.required]],
-      dateNaissance: ['1990-01-01'],
-      adresse: ['123 Rue de la Paix, 75001 Paris']
+      dateNaissance: [this.userProfile.dateNaissance],
+      adresse: [this.userProfile.adresse]
     });
   }
 
@@ -1373,30 +1373,39 @@ L'équipe technique`,
   setParameterSection(section: 'compte' | 'notifications' | 'preferences' | 'securite' | 'support') {
     this.parameterSection = section;
   }
-
   saveAccountSettings() {
     if (this.settingsForm.valid) {
       const formData = this.settingsForm.value;
       
+      // Mettre à jour le profil utilisateur avec toutes les données
       this.userProfile = {
         ...this.userProfile,
         prenom: formData.prenom,
         nom: formData.nom,
         email: formData.email,
-        telephone: formData.telephone
+        telephone: formData.telephone,
+        dateNaissance: formData.dateNaissance,
+        adresse: formData.adresse
       };
 
-      console.log('Paramètres sauvegardés:', formData);
+      // Mettre à jour la sidebar avec les nouvelles données
+      this.updateSidebarProfile();
+
+      console.log('Paramètres sauvegardés:', this.userProfile);
       alert('Paramètres sauvegardés avec succès !');
+    } else {
+      console.log('Formulaire invalide:', this.settingsForm.errors);
+      alert('Veuillez vérifier les champs obligatoires.');
     }
   }
-
   resetAccountSettings() {
     this.settingsForm.patchValue({
       prenom: this.userProfile.prenom,
       nom: this.userProfile.nom,
       email: this.userProfile.email,
-      telephone: this.userProfile.telephone
+      telephone: this.userProfile.telephone,
+      dateNaissance: this.userProfile.dateNaissance,
+      adresse: this.userProfile.adresse
     });
   }
 
@@ -1527,9 +1536,11 @@ L'équipe technique`,
       this.userProfile.specialite = 'ASH'; // Valeur par défaut
       this.userProfile.experience = 2; // Valeur par défaut
         console.log('Profil utilisateur chargé dynamiquement:', this.userProfile);
-      
-      // Mettre à jour le profil de la sidebar après chargement des données
+        // Mettre à jour le profil de la sidebar après chargement des données
       this.updateSidebarProfile();
+      
+      // Mettre à jour le formulaire des paramètres
+      this.updateSettingsForm();
       
       // Si on n'a pas le prénom/nom, essayer de récupérer les détails complets
       if (!this.userProfile.prenom || !this.userProfile.nom) {
@@ -1558,9 +1569,11 @@ L'équipe technique`,
           if (this.profileForm) {
             this.initProfileForm();
           }
-          
-          // Mettre à jour le profil de la sidebar avec les nouvelles données
+            // Mettre à jour le profil de la sidebar avec les nouvelles données
           this.updateSidebarProfile();
+          
+          // Mettre à jour le formulaire des paramètres
+          this.updateSettingsForm();
           
           console.log('Profil utilisateur final:', this.userProfile);
         },
@@ -1568,6 +1581,20 @@ L'équipe technique`,
           console.error('Erreur lors du chargement du profil complet:', error);
           // Garder les données partielles du token
         }
+      });
+    }
+  }
+
+  // Méthode pour mettre à jour le formulaire des paramètres avec les données utilisateur
+  updateSettingsForm() {
+    if (this.settingsForm) {
+      this.settingsForm.patchValue({
+        prenom: this.userProfile.prenom,
+        nom: this.userProfile.nom,
+        email: this.userProfile.email,
+        telephone: this.userProfile.telephone,
+        dateNaissance: this.userProfile.dateNaissance,
+        adresse: this.userProfile.adresse
       });
     }
   }
