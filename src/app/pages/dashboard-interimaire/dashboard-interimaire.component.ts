@@ -6,6 +6,19 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { InterimaireService } from '../../services/interimaire/intermaire.service';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
+import { CheckboxComponent } from '../../components/checkbox/checkbox.component';
+import { CheckboxFieldComponent } from '../../components/checkbox/checkbox-field.component';
+import { CheckboxGroupComponent } from '../../components/checkbox/checkbox-group.component';
+import { FieldsetComponent } from '../../components/fieldset/fieldset.component';
+import { LegendComponent } from '../../components/fieldset/legend.component';
+import { LabelComponent } from '../../components/fieldset/label.component';
+import { DescriptionComponent } from '../../components/fieldset/description.component';
+import { TextComponent } from '../../components/text/text.component';
+import { 
+  SidebarComponent,
+  NavigationItem,
+  UserProfile
+} from '../../components/sidebar';
 
 interface Document {
   id: string;
@@ -108,11 +121,50 @@ interface FaqItem {
 @Component({
   selector: 'app-dashboard-interimaire',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, AvatarComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, AvatarComponent, CheckboxComponent, CheckboxFieldComponent, CheckboxGroupComponent, FieldsetComponent, LegendComponent, LabelComponent, DescriptionComponent, TextComponent, SidebarComponent],
   templateUrl: './dashboard-interimaire.component.html',
   styleUrl: './dashboard-interimaire.component.css',
 })
 export class DashboardInterimaireComponent implements OnInit {
+  // Propriétés pour la sidebar
+  navigationItems: NavigationItem[] = [
+    {
+      id: 'profil',
+      label: 'Mon Profil',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>'
+    },
+    {
+      id: 'missions',
+      label: 'Mes Missions',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0H8m8 0v6a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2"></path></svg>'
+    },
+    {
+      id: 'planning',
+      label: 'Planning',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>'
+    },
+    {
+      id: 'documents',
+      label: 'Documents',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>'
+    },
+    {
+      id: 'messages',
+      label: 'Messages',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>'
+    },
+    {
+      id: 'parametres',
+      label: 'Paramètres',
+      icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>'
+    }
+  ];
+  sidebarUserProfile: UserProfile = {
+    name: 'Utilisateur',
+    email: 'utilisateur@alenia.fr',
+    initials: 'U'
+  };
+
   activeSection: string = 'profil';
   isEditing: boolean = false;
   profileForm!: FormGroup;
@@ -196,16 +248,37 @@ export class DashboardInterimaireComponent implements OnInit {
 
   // Email support (pour éviter les problèmes avec @)
   supportEmail = 'support@alenia.fr';
-
   // Méthode pour générer les initiales de l'utilisateur
   getUserInitials(): string {
     const prenom = this.userProfile.prenom || '';
     const nom = this.userProfile.nom || '';
     
+    // Si on n'a pas de prénom et nom, retourner une valeur par défaut
+    if (!prenom && !nom) {
+      return 'U';
+    }
+    
     const prenomInitial = prenom.charAt(0).toUpperCase();
     const nomInitial = nom.charAt(0).toUpperCase();
     
     return `${prenomInitial}${nomInitial}`;
+  }
+
+  // Méthodes pour la sidebar
+  updateSidebarProfile() {
+    this.sidebarUserProfile = {
+      name: `${this.userProfile.prenom} ${this.userProfile.nom}`,
+      email: this.userProfile.email,
+      initials: this.getUserInitials()
+    };
+  }
+
+  onSidebarItemClick(item: NavigationItem) {
+    this.setActiveSection(item.id);
+  }
+
+  onSidebarLogout() {
+    this.logout();
   }
 
   constructor(
@@ -219,8 +292,7 @@ export class DashboardInterimaireComponent implements OnInit {
 
   getCurrentFrenchDate(): Date {
     return new Date();
-  }
-  ngOnInit() {
+  }  ngOnInit() {
     this.loadUserProfileFromAuth(); // Charger le profil utilisateur depuis l'auth
     this.initProfileForm();
     this.initUploadForm();
@@ -1454,8 +1526,10 @@ L'équipe technique`,
       this.userProfile.telephone = ''; // Pas disponible dans le token
       this.userProfile.specialite = 'ASH'; // Valeur par défaut
       this.userProfile.experience = 2; // Valeur par défaut
+        console.log('Profil utilisateur chargé dynamiquement:', this.userProfile);
       
-      console.log('Profil utilisateur chargé dynamiquement:', this.userProfile);
+      // Mettre à jour le profil de la sidebar après chargement des données
+      this.updateSidebarProfile();
       
       // Si on n'a pas le prénom/nom, essayer de récupérer les détails complets
       if (!this.userProfile.prenom || !this.userProfile.nom) {
@@ -1480,11 +1554,13 @@ L'équipe technique`,
           this.userProfile.nom = interimaire.nom || this.userProfile.nom;
           this.userProfile.telephone = interimaire.telephone || '';
           this.userProfile.specialite = interimaire.competences?.[0] || 'ASH';
-          
-          // Réinitialiser le formulaire avec les nouvelles données
+            // Réinitialiser le formulaire avec les nouvelles données
           if (this.profileForm) {
             this.initProfileForm();
           }
+          
+          // Mettre à jour le profil de la sidebar avec les nouvelles données
+          this.updateSidebarProfile();
           
           console.log('Profil utilisateur final:', this.userProfile);
         },

@@ -1,37 +1,35 @@
-/* Classes custom pour les bordures actives */
-.border-r-3 {
-  border-right-width: 3px;
+/* Styles personnalisés pour le dashboard */
+:host {
+  display: contents;
 }
 
-/* Sidebar fixe et toujours visible */
-.sidebar-container {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  height: 100vh !important;
-  z-index: 1000 !important;
-  overflow-y: auto !important;
-}
-
-/* Contenu principal avec marge pour la sidebar */
-.main-content {
-  margin-left: 288px !important; /* 18rem = 288px pour w-72 */
-  min-height: 100vh !important;
+/* Assurer que la sidebar est correctement positionnée */
+app-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
 }
 
 /* Responsive pour mobile */
-@media (max-width: 768px) {
-  .sidebar-container {
-    position: static !important;
-    width: 100% !important;
-    height: auto !important;
+@media (max-width: 1024px) {
+  app-sidebar {
+    position: static;
+    height: auto;
   }
   
-  .main-content {
+  main {
     margin-left: 0 !important;
   }
 }
 
-.sidebar-overlay {
-  z-index: 9999 !important;
+/* Améliorer l'apparence des icônes dans la sidebar */
+app-sidebar svg {
+  flex-shrink: 0;
+}
+
+/* Classes custom pour des éléments spécifiques si nécessaires */
+.main-content-area {
+  min-height: calc(100vh - 80px);
 }
