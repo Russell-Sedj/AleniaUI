@@ -1,10 +1,10 @@
-<!-- Navbar moderne unifié -->
-<app-navbar></app-navbar>
+<!-- Navbar moderne unifié - cachée sur les pages dashboard -->
+<app-navbar *ngIf="!isDashboardRoute()"></app-navbar>
 
 <!-- Contenu principal -->
 <main class="min-h-screen">
   <router-outlet></router-outlet>
 </main>
 
-<!-- Footer moderne unifié -->
-<app-footer></app-footer>
+<!-- Footer moderne unifié - caché sur les pages dashboard -->
+<app-footer *ngIf="!isDashboardRoute()"></app-footer>
