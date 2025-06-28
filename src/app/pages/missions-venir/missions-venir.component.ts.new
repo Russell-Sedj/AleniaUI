@@ -1,0 +1,99 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { CandidatureService, CandidatureDto } from '../../services/candidature/candidature.service';
+
+@Component({
+  selector: 'app-missions-venir',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  templateUrl: './missions-venir.component.html',
+  styleUrls: [],
+})
+export class MissionsVenirComponent implements OnInit {
+  missionsAcceptees: CandidatureDto[] = [];
+  isLoading = true;
+
+  constructor(
+    private candidatureService: CandidatureService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadMissionsAcceptees();
+  }
+
+  loadMissionsAcceptees() {
+    this.isLoading = true;
+    
+    // Tentative de chargement des vraies candidatures
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
+      
+      this.candidatureService.getCandidaturesByInterimaire(user.id).subscribe({
+        next: (candidatures) => {
+          // Filtrer pour n'avoir que les candidatures acceptées
+          this.missionsAcceptees = candidatures.filter(c => c.statut === 'acceptee');
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Erreur lors du chargement des missions acceptées:', error);
+          this.loadDemoMissionsAcceptees();
+        }
+      });
+    } else {
+      this.loadDemoMissionsAcceptees();
+    }
+  }
+  
+  loadDemoMissionsAcceptees() {
+    // Pour la démo, on simule des missions acceptées
+    setTimeout(() => {
+      this.missionsAcceptees = [
+        {
+          id: '1',
+          missionId: '1',
+          missionPoste: 'ASH - Agent de Service Hospitalier',
+          missionEtablissement: 'Hôpital Saint-Antoine',
+          interimaireId: 'user-1',
+          interimaireNom: 'Khebab',
+          interimairePrenom: 'Allan',
+          statut: 'acceptee',
+          dateCandidature: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // Il y a 2 jours
+          horairesChoisis: ['Lundi 8h-16h', 'Mardi 8h-16h', 'Mercredi 8h-16h']
+        },
+        {
+          id: '2',
+          missionId: '3',
+          missionPoste: 'ASH - Entretien chambres',
+          missionEtablissement: 'EHPAD Les Lilas',
+          interimaireId: 'user-1',
+          interimaireNom: 'Khebab',
+          interimairePrenom: 'Allan',
+          statut: 'acceptee',
+          dateCandidature: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // Il y a 5 jours
+          horairesChoisis: ['Jeudi 6h-14h', 'Vendredi 6h-14h']
+        }
+      ];
+      this.isLoading = false;
+    }, 1000);
+  }
+  
+  getTotalHeures(): number {
+    return this.missionsAcceptees.reduce((total, candidature) => {
+      return total + (candidature.horairesChoisis.length * 8); // 8h par créneau
+    }, 0);
+  }
+  
+  getRemunerationTotale(): number {
+    return this.getTotalHeures() * 22; // 22€/h
+  }
+  
+  getRemunerationEstimee(candidature: CandidatureDto): number {
+    return candidature.horairesChoisis.length * 8 * 22; // 8h par créneau * 22€/h
+  }
+  
+  getCurrentDate(): Date {
+    return new Date();
+  }
+}
