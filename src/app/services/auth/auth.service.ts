@@ -32,12 +32,47 @@ export interface CreateInterimaireDto {
   Disponibilites?: string;
 }
 
+export interface RegisterEtablissementDto {
+  email: string;
+  motDePasse: string;
+  confirmMotDePasse: string;
+  nom: string;
+  responsable: string;
+  adresse: string;
+  telephone?: string;
+  typeEtablissement?: string;
+  numeroSiret?: string;
+  description?: string;
+}
+
+export interface CreateEtablissementDto {
+  Email: string;
+  MotDePasse: string;
+  ConfirmMotDePasse: string;
+  Nom: string;
+  Responsable: string;
+  Adresse: string;
+  Telephone?: string;
+  TypeEtablissement?: string;
+  NumeroSiret?: string;
+  Description?: string;
+}
+
 export interface User {
   id: string;
   email: string;
   nom?: string;
   prenom?: string;
   dateCreation: Date;
+}
+
+export interface EtablissementUser extends User {
+  nom: string;
+  responsable: string;
+  adresse: string;
+  telephone?: string;
+  typeEtablissement?: string;
+  numeroSiret?: string;
 }
 
 export interface AuthResponse {
@@ -107,6 +142,53 @@ export class AuthService {
     return this.http.post<User>(`${this.API_URL}/auth/register`, createInterimaireDto);
   }
 
+  loginEtablissement(credentials: LoginDto): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/auth/login-etablissement`, credentials)
+      .pipe(
+        tap(response => {
+          // Sauvegarder l'utilisateur et le token
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+            localStorage.setItem('authToken', response.token);
+            localStorage.setItem('userType', 'etablissement');
+          }
+          this.currentUserSubject.next(response.user);
+        })
+      );
+  }
+
+  registerEtablissement(userData: RegisterEtablissementDto): Observable<EtablissementUser> {
+    // Convertir les données du format camelCase vers PascalCase pour l'API .NET
+    const createEtablissementDto: CreateEtablissementDto = {
+      Email: userData.email,
+      MotDePasse: userData.motDePasse,
+      ConfirmMotDePasse: userData.confirmMotDePasse,
+      Nom: userData.nom,
+      Responsable: userData.responsable,
+      Adresse: userData.adresse
+    };
+    
+    // N'ajouter les champs optionnels que s'ils ont une valeur non vide
+    if (userData.telephone && userData.telephone.trim().length > 0) {
+      createEtablissementDto.Telephone = userData.telephone.trim();
+    }
+    
+    if (userData.typeEtablissement && userData.typeEtablissement.trim().length > 0) {
+      createEtablissementDto.TypeEtablissement = userData.typeEtablissement.trim();
+    }
+
+    if (userData.numeroSiret && userData.numeroSiret.trim().length > 0) {
+      createEtablissementDto.NumeroSiret = userData.numeroSiret.trim();
+    }
+
+    if (userData.description && userData.description.trim().length > 0) {
+      createEtablissementDto.Description = userData.description.trim();
+    }
+    
+    console.log('Données envoyées à l\'API pour l\'inscription établissement:', createEtablissementDto);
+    return this.http.post<EtablissementUser>(`${this.API_URL}/auth/register-etablissement`, createEtablissementDto);
+  }
+
   logout(): void {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('currentUser');
@@ -128,6 +210,11 @@ export class AuthService {
 
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
+  }
+
+  getUserType(): string | null {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('userType');
   }
 
   checkEmailExists(email: string): Observable<{ exists: boolean }> {

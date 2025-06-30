@@ -10,6 +10,8 @@ import {
   NavigationItemEtablissement,
   EtablissementProfile
 } from '../../components/sidebar-etablissement';
+import { AvatarInitialsComponent } from '../../components/avatar-initials';
+import { IconComponent } from '../../components/icon';
 
 interface Interimaire {
   id: string;
@@ -144,7 +146,7 @@ interface StatistiquesDetaillees {
 @Component({
   selector: 'app-dashboard-etablissement',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, SidebarEtablissementComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, SidebarEtablissementComponent, AvatarInitialsComponent, IconComponent],
   templateUrl: './dashboard-etablissement.component.html',
   styleUrl: './dashboard-etablissement.component.css',
 })

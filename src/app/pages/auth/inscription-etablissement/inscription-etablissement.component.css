@@ -1,0 +1,93 @@
+/* Styles pour l'inscription établissement */
+
+/* Animation pour les champs de validation */
+.validation-check {
+  transition: all 0.3s ease;
+}
+
+/* Style pour les critères de mot de passe */
+.password-criteria {
+  font-size: 0.75rem;
+  transition: color 0.3s ease;
+}
+
+.password-criteria.valid {
+  color: #10b981;
+}
+
+.password-criteria.invalid {
+  color: #6b7280;
+}
+
+/* Spinner d'attente */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Focus amélioré pour les champs */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Styles pour les états de validation */
+.border-green-500 {
+  border-color: #10b981;
+}
+
+.border-red-500 {
+  border-color: #ef4444;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Toast notifications */
+.toast-notification {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  max-width: 20rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 600;
+  z-index: 9999;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.toast-notification.show {
+  transform: translateX(0);
+}
+
+.toast-notification.success {
+  background-color: #10b981;
+}
+
+.toast-notification.error {
+  background-color: #ef4444;
+}
+
+/* Amélioration de l'accessibilité */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Styles pour les icônes */
+.icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,382 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 font-inter pt-20">
+  <main class="container mx-auto max-w-3xl px-4 py-8">
+    <!-- Header avec retour -->
+    <div class="space-y-4 mb-6">
+      <button 
+        routerLink="/page-accueil"
+        class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 font-medium"
+      >
+        <app-icon name="x" size="sm" color="text-blue-600" class="mr-2"></app-icon>
+        Retour à l'accueil
+      </button>
+      
+      <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+        <!-- En-tête -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Créer un compte établissement</h1>
+            <p class="text-gray-600">Rejoignez notre plateforme pour recruter des intérimaires de santé</p>
+          </div>
+          <img 
+            src="/assets/images/logo.png" 
+            alt="Logo Alenia" 
+            class="w-16 h-16 object-contain" 
+          />
+        </div>
+
+        <!-- Liens de navigation -->
+        <div class="text-center mb-6 p-4 bg-blue-50 rounded-lg">
+          <p class="text-sm text-gray-700 mb-2">
+            Déjà un compte établissement ?
+            <a routerLink="/connexion-etablissement" class="text-blue-600 hover:text-blue-800 font-semibold">
+              Se connecter
+            </a>
+          </p>
+          <div class="border-t border-blue-200 pt-2">
+            <p class="text-sm text-gray-600">
+              Vous êtes un intérimaire ?
+              <a routerLink="/inscription" class="text-green-600 hover:text-green-800 font-semibold transition-colors">
+                Inscription intérimaire
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Zone d'affichage des notifications -->
+        <div id="toast-container" class="mb-6"></div>
+        
+        <form #registrationForm="ngForm" (ngSubmit)="onSubmit(registrationForm)" class="space-y-6" novalidate>
+          <!-- Informations de l'établissement -->
+          <div class="border-b border-gray-200 pb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <app-icon name="users" size="sm" color="text-blue-600" class="mr-2"></app-icon>
+              Informations de l'établissement
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Nom établissement -->
+              <div class="md:col-span-2">
+                <label for="nom" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Nom de l'établissement <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="nom"
+                  id="nom"
+                  [(ngModel)]="formData.nom"
+                  required
+                  #nom="ngModel"
+                  [disabled]="isLoading"
+                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                  placeholder="Hôpital Saint-Jean, Clinique du Parc..."
+                />
+                <div *ngIf="nom.invalid && nom.touched" class="mt-1 text-sm text-red-600">
+                  Le nom de l'établissement est requis
+                </div>
+              </div>
+
+              <!-- Type d'établissement -->
+              <div>
+                <label for="typeEtablissement" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Type d'établissement
+                </label>
+                <select
+                  name="typeEtablissement"
+                  id="typeEtablissement"
+                  [(ngModel)]="formData.typeEtablissement"
+                  [disabled]="isLoading"
+                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                >
+                  <option value="">Sélectionnez un type</option>
+                  <option *ngFor="let type of typesEtablissement" [value]="type.value">
+                    {{ type.label }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Numéro SIRET -->
+              <div>
+                <label for="numeroSiret" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Numéro SIRET
+                </label>
+                <input
+                  type="text"
+                  name="numeroSiret"
+                  id="numeroSiret"
+                  [(ngModel)]="formData.numeroSiret"
+                  [disabled]="isLoading"
+                  maxlength="14"
+                  pattern="[0-9]{14}"
+                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                  placeholder="12345678901234"
+                />
+              </div>
+            </div>
+
+            <!-- Adresse -->
+            <div class="mt-4">
+              <label for="adresse" class="block text-sm font-semibold text-gray-700 mb-2">
+                <app-icon name="target" size="sm" color="text-gray-500" class="inline mr-1"></app-icon>
+                Adresse complète <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                name="adresse"
+                id="adresse"
+                [(ngModel)]="formData.adresse"
+                required
+                #adresse="ngModel"
+                [disabled]="isLoading"
+                rows="2"
+                class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                placeholder="123 Avenue de la Santé, 75001 Paris"
+              ></textarea>
+              <div *ngIf="adresse.invalid && adresse.touched" class="mt-1 text-sm text-red-600">
+                L'adresse est requise
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mt-4">
+              <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+                Description de l'établissement
+              </label>
+              <textarea
+                name="description"
+                id="description"
+                [(ngModel)]="formData.description"
+                [disabled]="isLoading"
+                rows="3"
+                class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                placeholder="Décrivez votre établissement, vos spécialités, vos valeurs..."
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Contact et responsable -->
+          <div class="border-b border-gray-200 pb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <app-icon name="email" size="sm" color="text-blue-600" class="mr-2"></app-icon>
+              Contact et responsable
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Responsable -->
+              <div>
+                <label for="responsable" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Nom du responsable <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="responsable"
+                  id="responsable"
+                  [(ngModel)]="formData.responsable"
+                  required
+                  #responsable="ngModel"
+                  [disabled]="isLoading"
+                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                  placeholder="Dr. Martin Dupont"
+                />
+                <div *ngIf="responsable.invalid && responsable.touched" class="mt-1 text-sm text-red-600">
+                  Le nom du responsable est requis
+                </div>
+              </div>
+
+              <!-- Téléphone -->
+              <div>
+                <label for="telephone" class="block text-sm font-semibold text-gray-700 mb-2">
+                  <app-icon name="document" size="sm" color="text-gray-500" class="inline mr-1"></app-icon>
+                  Téléphone
+                </label>
+                <input
+                  type="tel"
+                  name="telephone"
+                  id="telephone"
+                  [(ngModel)]="formData.telephone"
+                  [disabled]="isLoading"
+                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                  placeholder="01 23 45 67 89"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Informations de connexion -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+              <app-icon name="document" size="sm" color="text-blue-600" class="mr-2"></app-icon>
+              Informations de connexion
+            </h3>
+
+            <!-- Email -->
+            <div class="mb-4">
+              <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                <app-icon name="email" size="sm" color="text-gray-500" class="inline mr-1"></app-icon>
+                Adresse email professionnelle <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  [(ngModel)]="formData.email"
+                  (input)="onEmailChange()"
+                  required
+                  email
+                  #email="ngModel"
+                  [disabled]="isLoading"
+                  class="w-full px-4 py-3 pr-10 rounded-lg border-2 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                  [class.border-red-500]="emailExists || (email.invalid && email.touched)"
+                  [class.border-green-500]="formData.email && email.valid && !emailExists && !isCheckingEmail"
+                  [class.border-gray-200]="!email.touched || isCheckingEmail"
+                  placeholder="contact@votre-etablissement.fr"
+                />
+                <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <div *ngIf="isCheckingEmail" class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+                  <app-icon *ngIf="!isCheckingEmail && formData.email && email.valid && !emailExists" name="check" size="sm" color="text-green-500"></app-icon>
+                  <app-icon *ngIf="!isCheckingEmail && emailExists" name="x" size="sm" color="text-red-500"></app-icon>
+                </div>
+              </div>
+              <div *ngIf="email.invalid && email.touched" class="mt-1 text-sm text-red-600">
+                <span *ngIf="email.errors?.['required']">L'email est requis</span>
+                <span *ngIf="email.errors?.['email']">Format d'email invalide</span>
+              </div>
+              <div *ngIf="emailExists" class="mt-1 text-sm text-red-600">
+                Cette adresse email est déjà utilisée
+              </div>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="motDePasse" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Mot de passe <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    name="motDePasse"
+                    id="motDePasse"
+                    [(ngModel)]="formData.motDePasse"
+                    required
+                    minlength="8"
+                    #motDePasse="ngModel"
+                    [disabled]="isLoading"
+                    class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    (click)="togglePasswordVisibility()"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    [disabled]="isLoading"
+                  >
+                    <app-icon [name]="showPassword ? 'x' : 'check'" size="sm" [color]="showPassword ? 'text-gray-600' : 'text-gray-400'"></app-icon>
+                  </button>
+                </div>
+                
+                <!-- Critères de sécurité -->
+                <div class="mt-2 space-y-1">
+                  <div class="flex items-center text-xs">                    <app-icon 
+                      [name]="hasValidLength ? 'check' : 'x'" 
+                      size="sm" 
+                      [color]="hasValidLength ? 'text-green-500' : 'text-gray-400'"
+                      class="mr-1">
+                    </app-icon><span [class.text-green-600]="hasValidLength" [class.text-gray-500]="!hasValidLength">
+                      Au moins 8 caractères
+                    </span>
+                  </div>                  <div class="flex items-center text-xs">
+                    <app-icon 
+                      [name]="hasUpperLowerCase ? 'check' : 'x'" 
+                      size="sm" 
+                      [color]="hasUpperLowerCase ? 'text-green-500' : 'text-gray-400'"
+                      class="mr-1">
+                    </app-icon>
+                    <span [class.text-green-600]="hasUpperLowerCase" [class.text-gray-500]="!hasUpperLowerCase">
+                      Majuscules et minuscules
+                    </span>
+                  </div>                  <div class="flex items-center text-xs">
+                    <app-icon 
+                      [name]="hasNumber ? 'check' : 'x'" 
+                      size="sm" 
+                      [color]="hasNumber ? 'text-green-500' : 'text-gray-400'"
+                      class="mr-1">
+                    </app-icon>
+                    <span [class.text-green-600]="hasNumber" [class.text-gray-500]="!hasNumber">
+                      Au moins un chiffre
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confirmation mot de passe -->
+              <div>
+                <label for="confirmMotDePasse" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Confirmer le mot de passe <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    [type]="showConfirmPassword ? 'text' : 'password'"
+                    name="confirmMotDePasse"
+                    id="confirmMotDePasse"
+                    [(ngModel)]="formData.confirmMotDePasse"
+                    required
+                    #confirmMotDePasse="ngModel"
+                    [disabled]="isLoading"
+                    class="w-full px-4 py-3 pr-12 rounded-lg border-2 focus:outline-none transition-colors duration-200 disabled:bg-gray-100"
+                    [class.border-red-500]="confirmMotDePasse.touched && !doPasswordsMatch()"
+                    [class.border-green-500]="confirmMotDePasse.touched && doPasswordsMatch() && formData.confirmMotDePasse"
+                    [class.border-gray-200]="!confirmMotDePasse.touched"
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    (click)="toggleConfirmPasswordVisibility()"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    [disabled]="isLoading"
+                  >
+                    <app-icon [name]="showConfirmPassword ? 'x' : 'check'" size="sm" [color]="showConfirmPassword ? 'text-gray-600' : 'text-gray-400'"></app-icon>
+                  </button>
+                </div>
+                <div *ngIf="confirmMotDePasse.touched && !doPasswordsMatch()" class="mt-1 text-sm text-red-600">
+                  Les mots de passe ne correspondent pas
+                </div>
+                <div *ngIf="confirmMotDePasse.touched && doPasswordsMatch() && formData.confirmMotDePasse" class="mt-1 text-sm text-green-600 flex items-center">
+                  <app-icon name="check" size="sm" color="text-green-500" class="mr-1"></app-icon>
+                  Mots de passe identiques
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bouton d'inscription -->
+          <div class="pt-6">
+            <button
+              type="submit"
+              [disabled]="!registrationForm.valid || !isPasswordValid() || !doPasswordsMatch() || emailExists || isLoading"
+              class="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors duration-200 flex items-center justify-center text-lg"
+            >
+              <div *ngIf="isLoading" class="flex items-center">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                Création du compte en cours...
+              </div>
+              <div *ngIf="!isLoading" class="flex items-center">
+                <app-icon name="check" size="lg" color="text-white" class="mr-3"></app-icon>
+                Créer mon compte établissement
+              </div>
+            </button>
+          </div>
+
+          <!-- Conditions -->
+          <div class="text-center text-sm text-gray-600">
+            <p>
+              En créant votre compte, vous acceptez nos 
+              <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold">conditions d'utilisation</a>
+              et notre 
+              <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold">politique de confidentialité</a>.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>

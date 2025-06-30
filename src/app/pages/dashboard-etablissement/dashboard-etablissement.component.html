@@ -9,14 +9,15 @@
     </app-sidebar-etablissement>
 
     <!-- Contenu principal avec marge pour la sidebar fixe -->
-    <main class="flex-1 flex flex-col min-h-screen overflow-hidden lg:ml-72">
-        <header class="bg-white p-6 border-b border-gray-200 flex justify-between items-center shadow-sm">
-            <h1
-                class="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] leading-normal">
+    <main class="flex-1 flex flex-col min-h-screen overflow-hidden lg:ml-72">        <header class="bg-white p-6 border-b border-gray-200 flex justify-between items-center shadow-sm">
+            <h1 class="text-3xl font-semibold text-gray-800 leading-normal">
                 {{ getSectionTitle() }}</h1>
             <div class="flex items-center space-x-4">
-                <img src="/assets/images/avatar-default.png" alt="Avatar"
-                    class="w-10 h-10 rounded-full border-2 border-transparent bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] p-0.5">
+                <app-avatar-initials 
+                    [fullName]="etablissement.responsable" 
+                    size="md" 
+                    backgroundColor="bg-gray-600">
+                </app-avatar-initials>
                 <span class="text-gray-700">{{ etablissement.responsable }}</span>
             </div>
         </header>
@@ -25,14 +26,13 @@
             <!-- Section Tableau de bord -->
             <div *ngIf="activeSection === 'tableau-bord'" class="space-y-6">
                 <!-- Statistiques principales -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Missions publiées</p>
                                 <p class="text-3xl font-bold text-blue-600">{{ statistiques.missionsPubliees }}</p>
                             </div>
-                            <span class="text-3xl">📢</span>
+                            <app-icon name="document" size="xl" color="text-blue-500"></app-icon>
                         </div>
                     </div>
 
@@ -42,7 +42,7 @@
                                 <p class="text-sm text-gray-600">Missions pourvues</p>
                                 <p class="text-3xl font-bold text-green-600">{{ statistiques.missionsPourvues }}</p>
                             </div>
-                            <span class="text-3xl">✅</span>
+                            <app-icon name="check" size="xl" color="text-green-500"></app-icon>
                         </div>
                     </div>
 
@@ -52,7 +52,7 @@
                                 <p class="text-sm text-gray-600">Candidatures reçues</p>
                                 <p class="text-3xl font-bold text-orange-600">{{ statistiques.candidaturesRecues }}</p>
                             </div>
-                            <span class="text-3xl">📋</span>
+                            <app-icon name="clipboard" size="xl" color="text-orange-500"></app-icon>
                         </div>
                     </div>
 
@@ -62,7 +62,7 @@
                                 <p class="text-sm text-gray-600">Taux de pourvoi</p>
                                 <p class="text-3xl font-bold text-purple-600">{{ statistiques.tauxPourvoi }}%</p>
                             </div>
-                            <span class="text-3xl">📊</span>
+                            <app-icon name="chart" size="xl" color="text-purple-500"></app-icon>
                         </div>
                     </div>
                 </div>
@@ -101,13 +101,12 @@
                         </div>
                         <div class="space-y-3">
                             <div *ngFor="let candidature of candidatures.slice(0, 5)"
-                                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                                <div class="flex items-center space-x-3">
-                                    <div
-                                        class="w-10 h-10 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                        {{ getInitials(candidature.interimaire.prenom + ' ' +
-                                        candidature.interimaire.nom) }}
-                                    </div>
+                                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">                                <div class="flex items-center space-x-3">
+                                    <app-avatar-initials 
+                                        [fullName]="candidature.interimaire.prenom + ' ' + candidature.interimaire.nom" 
+                                        size="md" 
+                                        backgroundColor="bg-blue-600">
+                                    </app-avatar-initials>
                                     <div>
                                         <h4 class="font-medium text-gray-900">{{ candidature.interimaire.prenom }} {{
                                             candidature.interimaire.nom }}</h4>
@@ -145,10 +144,9 @@
                             <option value="pourvue">Pourvue</option>
                             <option value="terminee">Terminée</option>
                         </select>
-                    </div>
-                    <button (click)="openMissionModal()"
-                        class="px-6 py-3 bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] text-white rounded-lg hover:from-[#5A94E8] hover:to-[#FF5555] transform hover:-translate-y-1 transition-all duration-300 font-medium">
-                        ➕ Nouvelle mission
+                    </div>                    <button (click)="openMissionModal()"
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transform hover:-translate-y-1 transition-all duration-300 font-medium">
+                        Nouvelle mission
                     </button>
                 </div>
 
@@ -215,20 +213,18 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="flex space-x-2 ml-4">
+                                </div>                                <div class="flex space-x-2 ml-4">
                                     <button (click)="openMissionModal(mission)"
-                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded">
-                                        ✏️
+                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Modifier">
+                                        <app-icon name="document" size="sm" color="text-blue-600"></app-icon>
                                     </button>
                                     <button *ngIf="mission.statut === 'brouillon'" (click)="publierMission(mission)"
-                                        class="p-2 text-green-600 hover:bg-green-50 rounded">
-                                        📢
+                                        class="p-2 text-green-600 hover:bg-green-50 rounded" title="Publier">
+                                        <app-icon name="check" size="sm" color="text-green-600"></app-icon>
                                     </button>
                                     <button (click)="supprimerMission(mission)"
-                                        class="p-2 text-red-600 hover:bg-red-50 rounded">
-                                        🗑️
+                                        class="p-2 text-red-600 hover:bg-red-50 rounded" title="Supprimer">
+                                        <app-icon name="x" size="sm" color="text-red-600"></app-icon>
                                     </button>
                                 </div>
                             </div>
@@ -262,18 +258,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div *ngFor="let interimaire of interimaires"
                         class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-                        <div class="p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div
-                                    class="w-16 h-16 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                    {{ getInitials(interimaire.prenom + ' ' + interimaire.nom) }}
-                                </div>
+                        <div class="p-6">                            <div class="flex items-center space-x-4 mb-4">
+                                <app-avatar-initials 
+                                    [fullName]="interimaire.prenom + ' ' + interimaire.nom" 
+                                    size="xl" 
+                                    backgroundColor="bg-blue-600">
+                                </app-avatar-initials>
                                 <div class="flex-1">
                                     <h3 class="font-semibold text-gray-900">{{ interimaire.prenom }} {{ interimaire.nom
                                         }}</h3>
-                                    <p class="text-sm text-gray-600">{{ interimaire.specialite }}</p>
-                                    <div class="flex items-center space-x-1 mt-1">
-                                        <span class="text-yellow-400">★</span>
+                                    <p class="text-sm text-gray-600">{{ interimaire.specialite }}</p>                                    <div class="flex items-center space-x-1 mt-1">
+                                        <app-icon name="star" size="sm" color="text-yellow-500"></app-icon>
                                         <span class="text-sm font-medium">{{ interimaire.note }}/5</span>
                                         <span class="w-2 h-2 rounded-full ml-2"
                                             [class]="interimaire.disponible ? 'bg-green-500' : 'bg-red-500'"></span>
@@ -290,16 +285,15 @@
                                 <p><strong>Tarif :</strong> {{ interimaire.tarif }}€/h</p>
                                 <p><strong>Dernière connexion :</strong> {{ interimaire.derniereConnexion |
                                     date:'dd/MM/yyyy à HH:mm' }}</p>
-                            </div>
-
-                            <div class="flex space-x-2">
+                            </div>                            <div class="flex space-x-2">
                                 <button
-                                    class="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">
-                                    📧 Contacter
+                                    class="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 flex items-center justify-center space-x-1">
+                                    <app-icon name="email" size="sm" color="text-white"></app-icon>
+                                    <span>Contacter</span>
                                 </button>
                                 <button
                                     class="flex-1 px-3 py-2 border border-gray-300 rounded text-sm hover:bg-gray-50">
-                                    👁️ Profil
+                                    Profil
                                 </button>
                             </div>
                         </div>
@@ -331,20 +325,18 @@
                         class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
                         <div class="p-6">
                             <div class="flex items-start justify-between">
-                                <div class="flex-1">
-                                    <div class="flex items-center space-x-4 mb-4">
-                                        <div
-                                            class="w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                            {{ getInitials(candidature.interimaire.prenom + ' ' +
-                                            candidature.interimaire.nom) }}
-                                        </div>
+                                <div class="flex-1">                                    <div class="flex items-center space-x-4 mb-4">
+                                        <app-avatar-initials 
+                                            [fullName]="candidature.interimaire.prenom + ' ' + candidature.interimaire.nom" 
+                                            size="lg" 
+                                            backgroundColor="bg-blue-600">
+                                        </app-avatar-initials>
                                         <div>
                                             <h3 class="font-semibold text-gray-900">{{ candidature.interimaire.prenom }}
                                                 {{ candidature.interimaire.nom }}</h3>
                                             <p class="text-sm text-gray-600">{{ candidature.interimaire.specialite }} •
-                                                {{ candidature.interimaire.experience }} ans d'expérience</p>
-                                            <div class="flex items-center space-x-1 mt-1">
-                                                <span class="text-yellow-400">★</span>
+                                                {{ candidature.interimaire.experience }} ans d'expérience</p>                                            <div class="flex items-center space-x-1 mt-1">
+                                                <app-icon name="star" size="sm" color="text-yellow-500"></app-icon>
                                                 <span class="text-sm">{{ candidature.interimaire.note }}/5</span>
                                             </div>
                                         </div>
@@ -380,16 +372,16 @@
                                     <span class="px-3 py-1 text-sm font-medium rounded-full"
                                         [class]="getStatutBadgeClass(candidature.statut)">
                                         {{ candidature.statut }}
-                                    </span>
-
-                                    <div *ngIf="candidature.statut === 'en_attente'" class="flex space-x-2">
+                                    </span>                                    <div *ngIf="candidature.statut === 'en_attente'" class="flex space-x-2">
                                         <button (click)="accepterCandidature(candidature)"
-                                            class="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600">
-                                            ✅ Accepter
+                                            class="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 flex items-center space-x-1">
+                                            <app-icon name="check" size="sm" color="text-white"></app-icon>
+                                            <span>Accepter</span>
                                         </button>
                                         <button (click)="refuserCandidature(candidature)"
-                                            class="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600">
-                                            ❌ Refuser
+                                            class="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 flex items-center space-x-1">
+                                            <app-icon name="x" size="sm" color="text-white"></app-icon>
+                                            <span>Refuser</span>
                                         </button>
                                     </div>
                                 </div>
@@ -589,8 +581,7 @@
             </div>
 
             <!-- Section Gestion financière -->
-            <div *ngIf="activeSection === 'gestion-financiere'" class="space-y-6">
-                <!-- Statistiques financières -->
+            <div *ngIf="activeSection === 'gestion-financiere'" class="space-y-6">                <!-- Statistiques financières -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
                         <div class="flex items-center justify-between">
@@ -601,7 +592,7 @@
                                     - 1].nombre || 0
                                     }}</p>
                             </div>
-                            <div class="text-3xl text-blue-500">💰</div>
+                            <app-icon name="chart" size="xl" color="text-blue-500"></app-icon>
                         </div>
                     </div>
 
@@ -612,7 +603,7 @@
                                 <p class="text-2xl font-bold text-green-600">{{ formatCurrency(paiementStats.totalPaye)
                                     }}</p>
                             </div>
-                            <div class="text-3xl text-green-500">✅</div>
+                            <app-icon name="check" size="xl" color="text-green-500"></app-icon>
                         </div>
                     </div>
 
@@ -623,7 +614,7 @@
                                 <p class="text-2xl font-bold text-orange-600">{{
                                     formatCurrency(paiementStats.totalEnAttente) }}</p>
                             </div>
-                            <div class="text-3xl text-orange-500">⏳</div>
+                            <app-icon name="document" size="xl" color="text-orange-500"></app-icon>
                         </div>
                     </div>
 
@@ -634,7 +625,7 @@
                                 <p class="text-2xl font-bold text-red-600">{{
                                     formatCurrency(paiementStats.totalEnRetard) }}</p>
                             </div>
-                            <div class="text-3xl text-red-500">⚠️</div>
+                            <app-icon name="target" size="xl" color="text-red-500"></app-icon>
                         </div>
                     </div>
                 </div>
@@ -662,12 +653,10 @@
                                 <option value="ce_mois">Ce mois</option>
                                 <option value="mois_dernier">Mois dernier</option>
                                 <option value="trimestre">Ce trimestre</option>
-                            </select>
-
-                            <!-- Actions -->
+                            </select>                            <!-- Actions -->
                             <button (click)="genererFacture()"
                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center space-x-2">
-                                <span>💳</span>
+                                <app-icon name="document" size="sm" color="text-white"></app-icon>
                                 <span>Générer paie</span>
                             </button>
                         </div>
@@ -746,42 +735,39 @@
                                             Payée le {{ formatDate(facture.datePaiement) }}
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="flex justify-end space-x-2" (click)="$event.stopPropagation()">
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">                                        <div class="flex justify-end space-x-2" (click)="$event.stopPropagation()">
                                             <!-- Actions selon le statut -->
                                             <button *ngIf="facture.statut === 'brouillon'"
                                                 (click)="envoyerFacture(facture)"
                                                 class="text-blue-600 hover:text-blue-900" title="Valider">
-                                                ✓
+                                                <app-icon name="check" size="sm" color="text-blue-600"></app-icon>
                                             </button>
 
                                             <button *ngIf="facture.statut === 'envoyee'"
                                                 (click)="marquerCommePayee(facture)"
                                                 class="text-green-600 hover:text-green-900" title="Marquer comme payée">
-                                                💳
+                                                <app-icon name="document" size="sm" color="text-green-600"></app-icon>
                                             </button>
 
                                             <button (click)="telechargerFacture(facture)"
                                                 class="text-gray-600 hover:text-gray-900"
                                                 title="Télécharger fiche de paie">
-                                                📥
+                                                <app-icon name="document" size="sm" color="text-gray-600"></app-icon>
                                             </button>
 
                                             <button *ngIf="facture.statut !== 'payee' && facture.statut !== 'annulee'"
                                                 (click)="annulerFacture(facture)"
                                                 class="text-red-600 hover:text-red-900" title="Annuler">
-                                                ❌
+                                                <app-icon name="x" size="sm" color="text-red-600"></app-icon>
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-
-                    <!-- Message si aucune rémunération -->
+                    </div>                    <!-- Message si aucune rémunération -->
                     <div *ngIf="facturesFiltrees.length === 0" class="text-center py-8 text-gray-500">
-                        <div class="text-4xl mb-4">💳</div>
+                        <app-icon name="document" size="xl" color="text-gray-400" class="mx-auto mb-4"></app-icon>
                         <p class="text-lg font-medium">Aucune rémunération trouvée</p>
                         <p class="text-sm">Générez vos premiers bulletins de paie pour commencer</p>
                     </div>
@@ -842,12 +828,11 @@
             <!-- Section Statistiques -->
             <div *ngIf="activeSection === 'statistiques'" class="space-y-6">
                 <!-- Indicateurs clés avec tendances -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Missions ce mois -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">                    <!-- Missions ce mois -->
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-sm font-medium text-gray-600">Missions ce mois</h4>
-                            <span class="text-2xl">📋</span>
+                            <app-icon name="clipboard" size="lg" color="text-blue-500"></app-icon>
                         </div>
                         <p class="text-3xl font-bold text-blue-600 mb-1">{{
                             statistiquesDetaillees.missionsParMois[statistiquesDetaillees.missionsParMois.length -
@@ -864,7 +849,7 @@
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-sm font-medium text-gray-600">Intérimaires actifs</h4>
-                            <span class="text-2xl">👥</span>
+                            <app-icon name="users" size="lg" color="text-green-500"></app-icon>
                         </div>
                         <p class="text-3xl font-bold text-green-600 mb-1">{{ statistiques.interimairesActifs }}</p>
                         <div class="flex items-center text-sm"
@@ -880,7 +865,7 @@
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-orange-500">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-sm font-medium text-gray-600">Coûts ce mois</h4>
-                            <span class="text-2xl">💰</span>
+                            <app-icon name="chart" size="lg" color="text-orange-500"></app-icon>
                         </div>
                         <p class="text-3xl font-bold text-orange-600 mb-1">{{
                             formatCurrency(statistiquesDetaillees.coutsMensuels[statistiquesDetaillees.coutsMensuels.length
@@ -896,7 +881,7 @@
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-purple-500">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-sm font-medium text-gray-600">Satisfaction</h4>
-                            <span class="text-2xl">⭐</span>
+                            <app-icon name="star" size="lg" color="text-purple-500"></app-icon>
                         </div>
                         <p class="text-3xl font-bold text-purple-600 mb-1">{{ getMoyenneSatisfaction().toFixed(1) }}/5
                         </p>
@@ -934,9 +919,8 @@
                             <div *ngFor="let data of statistiquesDetaillees.missionsParService"
                                 class="flex items-center justify-between">
                                 <span class="text-sm text-gray-600 w-24">{{ data.service }}</span>
-                                <div class="flex-1 mx-4">
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full"
+                                <div class="flex-1 mx-4">                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full"
                                             [style.width.%]="data.pourcentage">
                                         </div>
                                     </div>
@@ -1043,10 +1027,15 @@
                                         <div class="bg-blue-500 h-2 rounded-full"
                                             [style.width.%]="(data.tarifMoyen / data.tarifMarche) * 100">
                                         </div>
-                                    </div>
-                                    <span class="text-xs font-medium"
+                                    </div>                                    <span class="text-xs font-medium flex items-center space-x-1"
                                         [class]="data.tarifMoyen < data.tarifMarche ? 'text-green-600' : 'text-red-600'">
-                                        {{ data.tarifMoyen < data.tarifMarche ? '✓ Économique' : '⚠️ Élevé' }} </span>
+                                        <app-icon 
+                                            [name]="data.tarifMoyen < data.tarifMarche ? 'check' : 'target'" 
+                                            size="sm" 
+                                            [color]="data.tarifMoyen < data.tarifMarche ? 'text-green-600' : 'text-red-600'">
+                                        </app-icon>
+                                        <span>{{ data.tarifMoyen < data.tarifMarche ? 'Économique' : 'Élevé' }}</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -1055,27 +1044,35 @@
                     <!-- Indicateurs de performance -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Indicateurs de performance</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <!-- Délai moyen de pourvoi -->
+                        <div class="grid grid-cols-2 gap-4">                            <!-- Délai moyen de pourvoi -->
                             <div class="text-center p-4 bg-blue-50 rounded-lg">
                                 <div class="text-2xl font-bold text-blue-600">{{ getDelaiMoyenPourvoi().toFixed(1) }}
                                 </div>
                                 <div class="text-xs text-blue-800">Jours délai pourvoi</div>
-                                <div class="text-xs text-gray-500 mt-1">🎯 Objectif: &lt;2j</div>
+                                <div class="text-xs text-gray-500 mt-1 flex items-center justify-center space-x-1">
+                                    <app-icon name="target" size="sm" color="text-gray-500"></app-icon>
+                                    <span>Objectif: &lt;2j</span>
+                                </div>
                             </div>
 
                             <!-- Taux de réussite -->
                             <div class="text-center p-4 bg-green-50 rounded-lg">
                                 <div class="text-2xl font-bold text-green-600">{{ statistiques.tauxPourvoi }}%</div>
                                 <div class="text-xs text-green-800">Taux de pourvoi</div>
-                                <div class="text-xs text-gray-500 mt-1">🎯 Objectif: &gt;85%</div>
+                                <div class="text-xs text-gray-500 mt-1 flex items-center justify-center space-x-1">
+                                    <app-icon name="target" size="sm" color="text-gray-500"></app-icon>
+                                    <span>Objectif: &gt;85%</span>
+                                </div>
                             </div>
 
                             <!-- Note satisfaction -->
                             <div class="text-center p-4 bg-purple-50 rounded-lg">
                                 <div class="text-2xl font-bold text-purple-600">{{ statistiques.noteMoyenne }}/5</div>
                                 <div class="text-xs text-purple-800">Note moyenne</div>
-                                <div class="text-xs text-gray-500 mt-1">🎯 Objectif: &gt;4.2</div>
+                                <div class="text-xs text-gray-500 mt-1 flex items-center justify-center space-x-1">
+                                    <app-icon name="target" size="sm" color="text-gray-500"></app-icon>
+                                    <span>Objectif: &gt;4.2</span>
+                                </div>
                             </div>
 
                             <!-- Économies/mission -->
@@ -1083,7 +1080,10 @@
                                 <div class="text-2xl font-bold text-orange-600">{{ (getTotalEconomies() /
                                     statistiques.missionsPubliees).toFixed(0) }}€</div>
                                 <div class="text-xs text-orange-800">Économie/mission</div>
-                                <div class="text-xs text-gray-500 mt-1">📈 Progression</div>
+                                <div class="text-xs text-gray-500 mt-1 flex items-center justify-center space-x-1">
+                                    <app-icon name="trending-up" size="sm" color="text-gray-500"></app-icon>
+                                    <span>Progression</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1111,11 +1111,13 @@
                                     <td class="py-3 text-sm text-gray-900 text-right">{{ data.heures }}h</td>
                                     <td class="py-3 text-sm text-gray-900 text-right">{{ (data.montant /
                                         data.heures).toFixed(2) }}€</td>
-                                    <td class="py-3 text-sm text-right">
-                                        <span *ngIf="i > 0"
+                                    <td class="py-3 text-sm text-right">                                        <span *ngIf="i > 0"
                                             [class]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'text-red-600' : 'text-green-600'">
-                                            {{ (data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ?
-                                            '📈' : '📉' }}
+                                            <app-icon 
+                                                [name]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'trending-up' : 'trending-down'" 
+                                                size="sm" 
+                                                [color]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'text-red-600' : 'text-green-600'">
+                                            </app-icon>
                                             {{ Math.abs(((data.montant -
                                             statistiquesDetaillees.coutsMensuels[i-1].montant) /
                                             statistiquesDetaillees.coutsMensuels[i-1].montant) * 100).toFixed(1) }}%
@@ -1138,37 +1140,33 @@
                                 <option value="mois">Ce mois</option>
                                 <option value="trimestre">Ce trimestre</option>
                                 <option value="annee">Cette année</option>
-                            </select>
-
-                            <button
+                            </select>                            <button
                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center space-x-2">
-                                <span>📊</span>
+                                <app-icon name="chart" size="sm" color="text-white"></app-icon>
                                 <span>Exporter rapport</span>
                             </button>
 
                             <button
                                 class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm flex items-center space-x-2">
-                                <span>📈</span>
+                                <app-icon name="trending-up" size="sm" color="text-white"></app-icon>
                                 <span>Tableau de bord</span>
                             </button>
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    </div>                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <div class="text-2xl mb-2">📋</div>
+                            <app-icon name="clipboard" size="lg" color="text-blue-500" class="mx-auto mb-2"></app-icon>
                             <div class="text-sm font-medium text-gray-800">Rapport missions</div>
                             <div class="text-xs text-gray-500">Détail des missions par service</div>
                         </div>
 
                         <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <div class="text-2xl mb-2">💰</div>
+                            <app-icon name="chart" size="lg" color="text-green-500" class="mx-auto mb-2"></app-icon>
                             <div class="text-sm font-medium text-gray-800">Analyse financière</div>
                             <div class="text-xs text-gray-500">Coûts et économies détaillées</div>
                         </div>
 
                         <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <div class="text-2xl mb-2">👥</div>
+                            <app-icon name="users" size="lg" color="text-purple-500" class="mx-auto mb-2"></app-icon>
                             <div class="text-sm font-medium text-gray-800">Performance RH</div>
                             <div class="text-xs text-gray-500">Satisfaction et productivité</div>
                         </div>
@@ -1457,21 +1455,22 @@
                 <button (click)="closeFactureModal()"
                     class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
                     Fermer
-                </button>
-
-                <button (click)="telechargerFacture(selectedFacture)"
-                    class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
-                    📥 Télécharger bulletin
+                </button>                <button (click)="telechargerFacture(selectedFacture)"
+                    class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 flex items-center space-x-2">
+                    <app-icon name="document" size="sm" color="text-white"></app-icon>
+                    <span>Télécharger bulletin</span>
                 </button>
 
                 <button *ngIf="selectedFacture.statut === 'brouillon'" (click)="envoyerFacture(selectedFacture)"
-                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                    ✓ Valider
+                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center space-x-2">
+                    <app-icon name="check" size="sm" color="text-white"></app-icon>
+                    <span>Valider</span>
                 </button>
 
                 <button *ngIf="selectedFacture.statut === 'envoyee'" (click)="marquerCommePayee(selectedFacture)"
-                    class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
-                    💳 Marquer payée
+                    class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center space-x-2">
+                    <app-icon name="document" size="sm" color="text-white"></app-icon>
+                    <span>Marquer payée</span>
                 </button>
             </div>
         </div>
