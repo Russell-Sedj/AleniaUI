@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService, LoginDto } from '../../../services/auth/auth.service';
 import { IconComponent } from '../../../components/icon';
+import { NotificationService } from '../../../services/notification.service';
+import { NotificationComponent } from '../../../components/notification/notification.component';
 
 @Component({
   selector: 'app-login-etablissement',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, IconComponent],
+  imports: [CommonModule, FormsModule, RouterLink, IconComponent, NotificationComponent],
   templateUrl: './login-etablissement.component.html',
   styleUrls: ['./login-etablissement.component.css']
 })
@@ -24,7 +26,8 @@ export class LoginEtablissementComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   onSubmit(form: any): void {
@@ -35,7 +38,7 @@ export class LoginEtablissementComponent {
       this.authService.loginEtablissement(this.loginData).subscribe({
         next: (response) => {
           console.log('Connexion établissement réussie:', response);
-          this.showToast('Connexion réussie !', 'success');
+          this.notificationService.success('Connexion réussie !');
           setTimeout(() => {
             this.router.navigate(['/dashboard-etablissement']);
           }, 1000);
@@ -43,7 +46,7 @@ export class LoginEtablissementComponent {
         error: (error) => {
           console.error('Erreur de connexion établissement:', error);
           this.errorMessage = error.error?.message || 'Email ou mot de passe incorrect';
-          this.showToast(this.errorMessage, 'error');
+          this.notificationService.error(this.errorMessage);
           this.isLoading = false;
         }
       });
@@ -52,26 +55,5 @@ export class LoginEtablissementComponent {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
-  }
-
-  private showToast(message: string, type: 'success' | 'error'): void {
-    const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-semibold z-50 transition-all duration-300 transform translate-x-full ${
-      type === 'success' ? 'bg-green-500' : 'bg-red-500'
-    }`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.style.transform = 'translateX(0)';
-    }, 100);
-    
-    setTimeout(() => {
-      toast.style.transform = 'translateX(full)';
-      setTimeout(() => {
-        document.body.removeChild(toast);
-      }, 300);
-    }, 3000);
   }
 }

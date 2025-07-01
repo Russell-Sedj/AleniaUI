@@ -54,8 +54,10 @@ export class ConnexionComponent {
         motDePasse: this.loginModel.motDePasse
       };
 
-      this.authService.login(trimmedLoginModel).subscribe({        next: (response) => {
+      this.authService.login(trimmedLoginModel).subscribe({
+        next: (response) => {
           this.notificationService.success('Connexion réussie ! Redirection en cours...');
+          this.isLoading = false;
           setTimeout(() => {
             // Rediriger vers le dashboard intérimaire
             this.router.navigate(['/dashboard-interimaire']);
@@ -74,9 +76,7 @@ export class ConnexionComponent {
           }
           
           this.notificationService.error(errorMessage);
-        },
-        complete: () => {
-          this.isLoading = false;
+          this.isLoading = false; // Remettre à false immédiatement après l'erreur
         }
       });
     } catch (error: any) {
