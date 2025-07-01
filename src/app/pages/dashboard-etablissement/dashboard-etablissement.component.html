@@ -1,22 +1,17 @@
 <div class="flex min-h-screen bg-gray-100">
     <!-- Nouvelle Sidebar moderne pour établissement -->
-    <app-sidebar-etablissement
-        [navigationItems]="navigationItems"
-        [activeItem]="activeSection"
-        [etablissementProfile]="sidebarEtablissementProfile"
-        (itemClick)="onSidebarItemClick($event)"
+    <app-sidebar-etablissement [navigationItems]="navigationItems" [activeItem]="activeSection"
+        [etablissementProfile]="sidebarEtablissementProfile" (itemClick)="onSidebarItemClick($event)"
         (logout)="onSidebarLogout()">
     </app-sidebar-etablissement>
 
     <!-- Contenu principal avec marge pour la sidebar fixe -->
-    <main class="flex-1 flex flex-col min-h-screen overflow-hidden lg:ml-72">        <header class="bg-white p-6 border-b border-gray-200 flex justify-between items-center shadow-sm">
+    <main class="flex-1 flex flex-col min-h-screen overflow-hidden lg:ml-72">
+        <header class="bg-white p-6 border-b border-gray-200 flex justify-between items-center shadow-sm">
             <h1 class="text-3xl font-semibold text-gray-800 leading-normal">
                 {{ getSectionTitle() }}</h1>
             <div class="flex items-center space-x-4">
-                <app-avatar-initials 
-                    [fullName]="etablissement.responsable" 
-                    size="md" 
-                    backgroundColor="bg-gray-600">
+                <app-avatar-initials [fullName]="etablissement.responsable" size="md" backgroundColor="bg-gray-600">
                 </app-avatar-initials>
                 <span class="text-gray-700">{{ etablissement.responsable }}</span>
             </div>
@@ -26,7 +21,8 @@
             <!-- Section Tableau de bord -->
             <div *ngIf="activeSection === 'tableau-bord'" class="space-y-6">
                 <!-- Statistiques principales -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm text-gray-600">Missions publiées</p>
@@ -101,11 +97,11 @@
                         </div>
                         <div class="space-y-3">
                             <div *ngFor="let candidature of candidatures.slice(0, 5)"
-                                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">                                <div class="flex items-center space-x-3">
-                                    <app-avatar-initials 
-                                        [fullName]="candidature.interimaire.prenom + ' ' + candidature.interimaire.nom" 
-                                        size="md" 
-                                        backgroundColor="bg-blue-600">
+                                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                <div class="flex items-center space-x-3">
+                                    <app-avatar-initials
+                                        [fullName]="candidature.interimaire.prenom + ' ' + candidature.interimaire.nom"
+                                        size="md" backgroundColor="bg-blue-600">
                                     </app-avatar-initials>
                                     <div>
                                         <h4 class="font-medium text-gray-900">{{ candidature.interimaire.prenom }} {{
@@ -144,7 +140,7 @@
                             <option value="pourvue">Pourvue</option>
                             <option value="terminee">Terminée</option>
                         </select>
-                    </div>                    <button (click)="openMissionModal()"
+                    </div> <button (click)="openMissionModal()"
                         class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transform hover:-translate-y-1 transition-all duration-300 font-medium">
                         Nouvelle mission
                     </button>
@@ -213,7 +209,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>                                <div class="flex space-x-2 ml-4">
+                                </div>
+                                <div class="flex space-x-2 ml-4">
                                     <button (click)="openMissionModal(mission)"
                                         class="p-2 text-blue-600 hover:bg-blue-50 rounded" title="Modifier">
                                         <app-icon name="document" size="sm" color="text-blue-600"></app-icon>
@@ -258,16 +255,16 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div *ngFor="let interimaire of interimaires"
                         class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-                        <div class="p-6">                            <div class="flex items-center space-x-4 mb-4">
-                                <app-avatar-initials 
-                                    [fullName]="interimaire.prenom + ' ' + interimaire.nom" 
-                                    size="xl" 
+                        <div class="p-6">
+                            <div class="flex items-center space-x-4 mb-4">
+                                <app-avatar-initials [fullName]="interimaire.prenom + ' ' + interimaire.nom" size="xl"
                                     backgroundColor="bg-blue-600">
                                 </app-avatar-initials>
                                 <div class="flex-1">
                                     <h3 class="font-semibold text-gray-900">{{ interimaire.prenom }} {{ interimaire.nom
                                         }}</h3>
-                                    <p class="text-sm text-gray-600">{{ interimaire.specialite }}</p>                                    <div class="flex items-center space-x-1 mt-1">
+                                    <p class="text-sm text-gray-600">{{ interimaire.specialite }}</p>
+                                    <div class="flex items-center space-x-1 mt-1">
                                         <app-icon name="star" size="sm" color="text-yellow-500"></app-icon>
                                         <span class="text-sm font-medium">{{ interimaire.note }}/5</span>
                                         <span class="w-2 h-2 rounded-full ml-2"
@@ -285,7 +282,8 @@
                                 <p><strong>Tarif :</strong> {{ interimaire.tarif }}€/h</p>
                                 <p><strong>Dernière connexion :</strong> {{ interimaire.derniereConnexion |
                                     date:'dd/MM/yyyy à HH:mm' }}</p>
-                            </div>                            <div class="flex space-x-2">
+                            </div>
+                            <div class="flex space-x-2">
                                 <button
                                     class="flex-1 px-3 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 flex items-center justify-center space-x-1">
                                     <app-icon name="email" size="sm" color="text-white"></app-icon>
@@ -325,17 +323,18 @@
                         class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
                         <div class="p-6">
                             <div class="flex items-start justify-between">
-                                <div class="flex-1">                                    <div class="flex items-center space-x-4 mb-4">
-                                        <app-avatar-initials 
-                                            [fullName]="candidature.interimaire.prenom + ' ' + candidature.interimaire.nom" 
-                                            size="lg" 
-                                            backgroundColor="bg-blue-600">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-4 mb-4">
+                                        <app-avatar-initials
+                                            [fullName]="candidature.interimaire.prenom + ' ' + candidature.interimaire.nom"
+                                            size="lg" backgroundColor="bg-blue-600">
                                         </app-avatar-initials>
                                         <div>
                                             <h3 class="font-semibold text-gray-900">{{ candidature.interimaire.prenom }}
                                                 {{ candidature.interimaire.nom }}</h3>
                                             <p class="text-sm text-gray-600">{{ candidature.interimaire.specialite }} •
-                                                {{ candidature.interimaire.experience }} ans d'expérience</p>                                            <div class="flex items-center space-x-1 mt-1">
+                                                {{ candidature.interimaire.experience }} ans d'expérience</p>
+                                            <div class="flex items-center space-x-1 mt-1">
                                                 <app-icon name="star" size="sm" color="text-yellow-500"></app-icon>
                                                 <span class="text-sm">{{ candidature.interimaire.note }}/5</span>
                                             </div>
@@ -372,7 +371,8 @@
                                     <span class="px-3 py-1 text-sm font-medium rounded-full"
                                         [class]="getStatutBadgeClass(candidature.statut)">
                                         {{ candidature.statut }}
-                                    </span>                                    <div *ngIf="candidature.statut === 'en_attente'" class="flex space-x-2">
+                                    </span>
+                                    <div *ngIf="candidature.statut === 'en_attente'" class="flex space-x-2">
                                         <button (click)="accepterCandidature(candidature)"
                                             class="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 flex items-center space-x-1">
                                             <app-icon name="check" size="sm" color="text-white"></app-icon>
@@ -581,7 +581,7 @@
             </div>
 
             <!-- Section Gestion financière -->
-            <div *ngIf="activeSection === 'gestion-financiere'" class="space-y-6">                <!-- Statistiques financières -->
+            <div *ngIf="activeSection === 'gestion-financiere'" class="space-y-6"> <!-- Statistiques financières -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
                         <div class="flex items-center justify-between">
@@ -653,7 +653,7 @@
                                 <option value="ce_mois">Ce mois</option>
                                 <option value="mois_dernier">Mois dernier</option>
                                 <option value="trimestre">Ce trimestre</option>
-                            </select>                            <!-- Actions -->
+                            </select> <!-- Actions -->
                             <button (click)="genererFacture()"
                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center space-x-2">
                                 <app-icon name="document" size="sm" color="text-white"></app-icon>
@@ -735,7 +735,8 @@
                                             Payée le {{ formatDate(facture.datePaiement) }}
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">                                        <div class="flex justify-end space-x-2" (click)="$event.stopPropagation()">
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <div class="flex justify-end space-x-2" (click)="$event.stopPropagation()">
                                             <!-- Actions selon le statut -->
                                             <button *ngIf="facture.statut === 'brouillon'"
                                                 (click)="envoyerFacture(facture)"
@@ -765,7 +766,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>                    <!-- Message si aucune rémunération -->
+                    </div> <!-- Message si aucune rémunération -->
                     <div *ngIf="facturesFiltrees.length === 0" class="text-center py-8 text-gray-500">
                         <app-icon name="document" size="xl" color="text-gray-400" class="mx-auto mb-4"></app-icon>
                         <p class="text-lg font-medium">Aucune rémunération trouvée</p>
@@ -828,7 +829,7 @@
             <!-- Section Statistiques -->
             <div *ngIf="activeSection === 'statistiques'" class="space-y-6">
                 <!-- Indicateurs clés avec tendances -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">                    <!-- Missions ce mois -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"> <!-- Missions ce mois -->
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
                         <div class="flex items-center justify-between mb-2">
                             <h4 class="text-sm font-medium text-gray-600">Missions ce mois</h4>
@@ -919,9 +920,9 @@
                             <div *ngFor="let data of statistiquesDetaillees.missionsParService"
                                 class="flex items-center justify-between">
                                 <span class="text-sm text-gray-600 w-24">{{ data.service }}</span>
-                                <div class="flex-1 mx-4">                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-600 h-2 rounded-full"
-                                            [style.width.%]="data.pourcentage">
+                                <div class="flex-1 mx-4">
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full" [style.width.%]="data.pourcentage">
                                         </div>
                                     </div>
                                 </div>
@@ -1027,15 +1028,14 @@
                                         <div class="bg-blue-500 h-2 rounded-full"
                                             [style.width.%]="(data.tarifMoyen / data.tarifMarche) * 100">
                                         </div>
-                                    </div>                                    <span class="text-xs font-medium flex items-center space-x-1"
+                                    </div> <span class="text-xs font-medium flex items-center space-x-1"
                                         [class]="data.tarifMoyen < data.tarifMarche ? 'text-green-600' : 'text-red-600'">
-                                        <app-icon 
-                                            [name]="data.tarifMoyen < data.tarifMarche ? 'check' : 'target'" 
-                                            size="sm" 
+                                        <app-icon [name]="data.tarifMoyen < data.tarifMarche ? 'check' : 'target'"
+                                            size="sm"
                                             [color]="data.tarifMoyen < data.tarifMarche ? 'text-green-600' : 'text-red-600'">
                                         </app-icon>
                                         <span>{{ data.tarifMoyen < data.tarifMarche ? 'Économique' : 'Élevé' }}</span>
-                                    </span>
+                                        </span>
                                 </div>
                             </div>
                         </div>
@@ -1044,7 +1044,7 @@
                     <!-- Indicateurs de performance -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Indicateurs de performance</h3>
-                        <div class="grid grid-cols-2 gap-4">                            <!-- Délai moyen de pourvoi -->
+                        <div class="grid grid-cols-2 gap-4"> <!-- Délai moyen de pourvoi -->
                             <div class="text-center p-4 bg-blue-50 rounded-lg">
                                 <div class="text-2xl font-bold text-blue-600">{{ getDelaiMoyenPourvoi().toFixed(1) }}
                                 </div>
@@ -1111,11 +1111,11 @@
                                     <td class="py-3 text-sm text-gray-900 text-right">{{ data.heures }}h</td>
                                     <td class="py-3 text-sm text-gray-900 text-right">{{ (data.montant /
                                         data.heures).toFixed(2) }}€</td>
-                                    <td class="py-3 text-sm text-right">                                        <span *ngIf="i > 0"
+                                    <td class="py-3 text-sm text-right"> <span *ngIf="i > 0"
                                             [class]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'text-red-600' : 'text-green-600'">
-                                            <app-icon 
-                                                [name]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'trending-up' : 'trending-down'" 
-                                                size="sm" 
+                                            <app-icon
+                                                [name]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'trending-up' : 'trending-down'"
+                                                size="sm"
                                                 [color]="(data.montant - statistiquesDetaillees.coutsMensuels[i-1].montant) > 0 ? 'text-red-600' : 'text-green-600'">
                                             </app-icon>
                                             {{ Math.abs(((data.montant -
@@ -1140,7 +1140,7 @@
                                 <option value="mois">Ce mois</option>
                                 <option value="trimestre">Ce trimestre</option>
                                 <option value="annee">Cette année</option>
-                            </select>                            <button
+                            </select> <button
                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center space-x-2">
                                 <app-icon name="chart" size="sm" color="text-white"></app-icon>
                                 <span>Exporter rapport</span>
@@ -1152,7 +1152,8 @@
                                 <span>Tableau de bord</span>
                             </button>
                         </div>
-                    </div>                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         <div class="text-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
                             <app-icon name="clipboard" size="lg" color="text-blue-500" class="mx-auto mb-2"></app-icon>
                             <div class="text-sm font-medium text-gray-800">Rapport missions</div>
@@ -1178,38 +1179,112 @@
             <div *ngIf="activeSection === 'parametres'" class="space-y-6">
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Informations de l'établissement</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nom de l'établissement</label>
-                            <input type="text" [value]="etablissement.nom"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+
+                    <form [formGroup]="parametresForm" (ngSubmit)="saveParametres()" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nom de
+                                    l'établissement</label>
+                                <input type="text" formControlName="nom"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                    [class.border-red-300]="parametresForm.get('nom')?.invalid && parametresForm.get('nom')?.touched">
+                                <div *ngIf="parametresForm.get('nom')?.invalid && parametresForm.get('nom')?.touched"
+                                    class="text-red-600 text-sm mt-1">
+                                    Le nom de l'établissement est requis
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Type d'établissement</label>
+                                <select formControlName="type"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                    [class.border-red-300]="parametresForm.get('type')?.invalid && parametresForm.get('type')?.touched">
+                                    <option value="">Sélectionnez un type</option>
+                                    <option value="hopital">Hôpital</option>
+                                    <option value="clinique">Clinique</option>
+                                    <option value="ehpad">EHPAD</option>
+                                    <option value="laboratoire">Laboratoire</option>
+                                    <option value="centre_dialyse">Centre de dialyse</option>
+                                </select>
+                                <div *ngIf="parametresForm.get('type')?.invalid && parametresForm.get('type')?.touched"
+                                    class="text-red-600 text-sm mt-1">
+                                    Le type d'établissement est requis
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                                <textarea formControlName="adresse" rows="2"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                    [class.border-red-300]="parametresForm.get('adresse')?.invalid && parametresForm.get('adresse')?.touched">
+                                </textarea>
+                                <div *ngIf="parametresForm.get('adresse')?.invalid && parametresForm.get('adresse')?.touched"
+                                    class="text-red-600 text-sm mt-1">
+                                    L'adresse est requise
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                                <input type="tel" formControlName="telephone"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                    [class.border-red-300]="parametresForm.get('telephone')?.invalid && parametresForm.get('telephone')?.touched">
+                                <div *ngIf="parametresForm.get('telephone')?.invalid && parametresForm.get('telephone')?.touched"
+                                    class="text-red-600 text-sm mt-1">
+                                    Le téléphone est requis
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" formControlName="email"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                    [class.border-red-300]="parametresForm.get('email')?.invalid && parametresForm.get('email')?.touched">
+                                <div *ngIf="parametresForm.get('email')?.invalid && parametresForm.get('email')?.touched"
+                                    class="text-red-600 text-sm mt-1">
+                                    Un email valide est requis
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Responsable</label>
+                                <input type="text" formControlName="responsable"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                    [class.border-red-300]="parametresForm.get('responsable')?.invalid && parametresForm.get('responsable')?.touched">
+                                <div *ngIf="parametresForm.get('responsable')?.invalid && parametresForm.get('responsable')?.touched"
+                                    class="text-red-600 text-sm mt-1">
+                                    Le nom du responsable est requis
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Numéro SIRET</label>
+                                <input type="text" formControlName="siret"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <textarea formControlName="description" rows="4"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Décrivez votre établissement, vos spécialités...">
+                                </textarea>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                            <input type="text" [value]="etablissement.type"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
+
+                        <div class="flex justify-end space-x-3 pt-4 border-t">
+                            <button type="button" (click)="resetParametres()"
+                                class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
+                                Annuler
+                            </button>
+                            <button type="submit" [disabled]="!parametresForm.valid || isUpdatingParametres"
+                                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 flex items-center">
+                                <div *ngIf="isUpdatingParametres"
+                                    class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                {{ isUpdatingParametres ? 'Mise à jour...' : 'Sauvegarder' }}
+                            </button>
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
-                            <input type="text" [value]="etablissement.adresse"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-                            <input type="tel" [value]="etablissement.telephone"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input type="email" [value]="etablissement.email"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div class="mt-6 flex justify-end">
-                        <button class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                            Sauvegarder
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -1290,25 +1365,23 @@
             <button (click)="closeMissionModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
                 ✕
             </button>
-        </div>        <form [formGroup]="missionForm" (ngSubmit)="saveMission()" class="space-y-4">
+        </div>
+        <form [formGroup]="missionForm" (ngSubmit)="saveMission()" class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Poste recherché</label>
-                <input type="text" formControlName="poste"
-                    placeholder="Ex: Infirmier(ère) de nuit, Aide-soignant..."
+                <input type="text" formControlName="poste" placeholder="Ex: Infirmier(ère) de nuit, Aide-soignant..."
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Adresse de la mission</label>
-                <input type="text" formControlName="adresse"
-                    placeholder="Ex: 7 rue de Verdin, Paris 12ème"
+                <input type="text" formControlName="adresse" placeholder="Ex: 7 rue de Verdin, Paris 12ème"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tarif horaire (€)</label>
-                <input type="number" formControlName="tauxHoraire" min="0" step="0.5"
-                    placeholder="Ex: 25.50"
+                <input type="number" formControlName="tauxHoraire" min="0" step="0.5" placeholder="Ex: 25.50"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500">
             </div>
 
@@ -1455,7 +1528,7 @@
                 <button (click)="closeFactureModal()"
                     class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50">
                     Fermer
-                </button>                <button (click)="telechargerFacture(selectedFacture)"
+                </button> <button (click)="telechargerFacture(selectedFacture)"
                     class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 flex items-center space-x-2">
                     <app-icon name="document" size="sm" color="text-white"></app-icon>
                     <span>Télécharger bulletin</span>

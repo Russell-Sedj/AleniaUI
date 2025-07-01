@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CandidatureService } from '../../services/candidature/candidature.service';
@@ -207,20 +207,22 @@ export class DashboardEtablissementComponent implements OnInit {
   };
 
   // Données de l'établissement
-  etablissement = {
-    nom: 'CHU Saint-Antoine',
-    type: 'Hôpital public',
-    adresse: '184 Rue du Faubourg Saint-Antoine, 75012 Paris',
-    telephone: '01 49 28 20 00',
-    email: 'rh@chu-st-antoine.fr',
-    siret: '26750047600110',
-    responsable: 'Dr. Marie Dubois',
-    services: ['Cardiologie', 'Neurologie', 'Urgences', 'Réanimation', 'Orthopédie']
+  etablissement: any = {
+    nom: '',
+    type: '',
+    adresse: '',
+    telephone: '',
+    email: '',
+    siret: '',
+    responsable: '',
+    description: '',
+    services: []
   };
 
   // Formulaires
   missionForm!: FormGroup;
   rechercheForm!: FormGroup;
+  parametresForm!: FormGroup;
   
   // Données
   missions: Mission[] = [];
@@ -243,6 +245,7 @@ export class DashboardEtablissementComponent implements OnInit {
   selectedMission: Mission | null = null;
   selectedCandidature: Candidature | null = null;
   isEditingMission = false;
+  isUpdatingParametres = false;
 
   // Filtres
   filtreStatut = '';
@@ -299,8 +302,10 @@ export class DashboardEtablissementComponent implements OnInit {
   ) {}
   ngOnInit() {
     this.initForms();
+    this.initParametresForm(); // Ajoutez cette ligne si elle n'existe pas
     this.loadData();
-    this.updateSidebarEtablissementProfile(); // Initialiser le profil sidebar
+    this.loadEtablissementData(); // Ajoutez cette ligne si elle n'existe pas
+    this.updateSidebarEtablissementProfile();
   }
   initForms() {
     this.missionForm = this.fb.group({
@@ -319,6 +324,20 @@ export class DashboardEtablissementComponent implements OnInit {
       note: ['']
     });
   }
+
+  initParametresForm() {
+    this.parametresForm = this.fb.group({
+      nom: ['', [Validators.required]],
+      type: ['', [Validators.required]],
+      adresse: ['', [Validators.required]],
+      telephone: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      siret: [''],
+      responsable: ['', [Validators.required]],
+      description: ['']
+    });
+  }
+
   loadData() {
     this.loadMissions(); // loadCandidatures() sera appelé depuis loadMissions()
     this.loadInterimaires();
@@ -1398,7 +1417,7 @@ export class DashboardEtablissementComponent implements OnInit {
     
     const dernierMois = couts[couts.length - 1].montant;
     const moisPrecedent = couts[couts.length - 2].montant;
-    const pourcentage = ((dernierMois - moisPrecedent) / moisPrecedent) * 100;
+    const pourcentage = ((dernierMois - moisPrecedent) / moisPrecedent) + 100;
     
     return {
       valeur: Math.abs(pourcentage),
@@ -1471,5 +1490,88 @@ export class DashboardEtablissementComponent implements OnInit {
     const delais = this.statistiquesDetaillees.delaisPourvoi;
     if (delais.length === 0) return 0;
     return delais.reduce((sum, item) => sum + item.delaiMoyen, 0) / delais.length;
+  }
+
+ 
+
+  // Ajoutez cette méthode après initParametresForm()
+  loadEtablissementData() {
+    this.authService.getCurrentEtablissement().subscribe({
+      next: (data) => {
+        console.log('Données établissement reçues:', data);
+        this.etablissement = {
+          nom: data.nom || '',
+          type: data.typeEtablissement || '',
+          adresse: data.adresse || '',
+          telephone: data.telephone || '',
+          email: data.email || '',
+          siret: data.numeroSiret || '',
+          responsable: data.responsable || '',
+          description: data.description || '',
+          services: data.services || []
+        };
+        
+        // Mettre à jour le profil sidebar
+        this.sidebarEtablissementProfile = {
+          nom: data.nom || '',
+          responsable: data.responsable || '',
+          initials: this.getInitials(data.nom || 'ET')
+        };
+
+        // Mettre à jour le formulaire de paramètres
+        this.updateParametresForm();
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des données établissement:', error);
+        this.showNotification('Erreur lors du chargement des données', 'error');
+      }
+    });
+  }
+
+  updateParametresForm() {
+    if (this.parametresForm) {
+      this.parametresForm.patchValue({
+        nom: this.etablissement.nom,
+        type: this.etablissement.type,
+        adresse: this.etablissement.adresse,
+        telephone: this.etablissement.telephone,
+        email: this.etablissement.email,
+        siret: this.etablissement.siret,
+        responsable: this.etablissement.responsable,
+        description: this.etablissement.description
+      });
+    }
+  }
+
+  saveParametres() {
+    if (this.parametresForm.valid) {
+      this.isUpdatingParametres = true;
+      const formData = this.parametresForm.value;
+
+      this.authService.updateEtablissement(formData).subscribe({
+        next: (response) => {
+          this.showNotification('Informations mises à jour avec succès', 'success');
+          this.loadEtablissementData(); // Recharger les données
+          this.isUpdatingParametres = false;
+        },
+        error: (error) => {
+          console.error('Erreur lors de la mise à jour:', error);
+          this.showNotification('Erreur lors de la mise à jour', 'error');
+          this.isUpdatingParametres = false;
+        }
+      });
+    } else {
+      this.showNotification('Veuillez vérifier les informations saisies', 'error');
+    }
+  }
+
+  resetParametres() {
+    this.updateParametresForm();
+    this.showNotification('Modifications annulées', 'info');
+  }
+
+  private showNotification(message: string, type: 'success' | 'error' | 'info') {
+    console.log(`${type}: ${message}`);
+    alert(message); // Solution temporaire
   }
 }

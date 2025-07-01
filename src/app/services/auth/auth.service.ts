@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 export interface LoginDto {
@@ -262,6 +262,26 @@ export class AuthService {
     return this.http.post<{ message: string }>(`${this.API_URL}/auth/change-password`, passwordData, {
       headers: this.getAuthHeaders()
     });
+  }
+
+  getCurrentEtablissement(): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      return throwError(() => new Error('Aucun token trouvé'));
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<any>(`${this.API_URL}/etablissement/current`, { headers });
+  }
+
+  updateEtablissement(data: any): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      return throwError(() => new Error('Aucun token trouvé'));
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<any>(`${this.API_URL}/etablissement/update`, data, { headers });
   }
 
   // Méthode de debug pour vérifier l'état de l'authentification
