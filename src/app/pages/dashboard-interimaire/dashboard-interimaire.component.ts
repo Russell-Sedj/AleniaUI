@@ -176,6 +176,10 @@ export class DashboardInterimaireComponent implements OnInit {
   isEditing: boolean = false;
   profileForm!: FormGroup;
   
+  // Modal de contact établissement
+  showContactModal: boolean = false;
+  selectedMissionForContact: any = null;
+  
   // Documents
   documents: Document[] = [];
   filteredDocuments: Document[] = [];
@@ -1753,6 +1757,27 @@ L'équipe technique`,
 
   toggleFaq(faq: FaqItem) {
     faq.open = !faq.open;
+  }
+
+  // ===== NOUVELLES MÉTHODES POUR DÉTAIL ET CONTACT =====
+  
+  // Ouvrir le détail d'une mission
+  ouvrirDetailMission(missionId: string) {
+    console.log('Ouverture du détail de mission:', missionId);
+    this.router.navigate(['/mission-detail', missionId]);
+  }
+
+  // Ouvrir le modal de contact établissement
+  ouvrirContactEtablissement(mission: any) {
+    console.log('Ouverture contact pour mission:', mission);
+    this.selectedMissionForContact = mission;
+    this.showContactModal = true;
+  }
+
+  // Fermer le modal de contact
+  fermerContactModal() {
+    this.showContactModal = false;
+    this.selectedMissionForContact = null;
   }
 
   // Note: La méthode getInitials existe déjà plus haut dans le fichier

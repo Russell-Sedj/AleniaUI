@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
       '/missions-passes',
       '/missions-venir',
       '/missions-disponibles',
+      '/mission-detail',
       '/profil1',
       '/profil2',
       '/profil3',

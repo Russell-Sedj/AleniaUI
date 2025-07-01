@@ -520,8 +520,13 @@
                                         [class]="getMissionStatusClass(mission.statut)">
                                         {{ getMissionStatusLabel(mission.statut) }}
                                     </span>
-                                    <button class="text-blue-600 hover:text-blue-800 text-sm">
+                                    <button (click)="ouvrirDetailMission(mission.id)" 
+                                            class="text-blue-600 hover:text-blue-800 text-sm">
                                         Détails →
+                                    </button>
+                                    <button (click)="ouvrirContactEtablissement(mission)" 
+                                            class="text-green-600 hover:text-green-800 text-sm">
+                                        Contacter
                                     </button>
                                 </div>
                             </div>
@@ -1137,6 +1142,66 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <!-- Modal Contact Établissement -->
+            <div *ngIf="showContactModal"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                (click)="fermerContactModal()">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4" (click)="$event.stopPropagation()">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900">Contacter l'établissement</h3>
+                            <button (click)="fermerContactModal()" class="text-gray-400 hover:text-gray-600 text-xl">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-4">
+                        <div class="text-center mb-4">
+                            <h4 class="text-lg font-medium text-gray-900">{{ selectedMissionForContact?.etablissement || 'Établissement' }}</h4>
+                            <p class="text-sm text-gray-600">{{ selectedMissionForContact?.poste || 'Mission' }}</p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Email</p>
+                                    <p class="text-blue-600 font-medium">{{ selectedMissionForContact?.etablissementEmail || 'contact@etablissement.fr' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Téléphone</p>
+                                    <p class="text-green-600 font-medium">{{ selectedMissionForContact?.etablissementTelephone || '01 45 67 89 10' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-3 mt-6">
+                            <a [href]="'mailto:' + (selectedMissionForContact?.etablissementEmail || 'contact@etablissement.fr')"
+                               class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center">
+                                Envoyer un email
+                            </a>
+                            <a [href]="'tel:' + (selectedMissionForContact?.etablissementTelephone || '0145678910')"
+                               class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-center">
+                                Appeler
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 

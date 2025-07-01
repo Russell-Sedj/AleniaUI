@@ -3,6 +3,8 @@ import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { CandidatureService, CreateCandidatureDto } from '../../services/candidature/candidature.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from '../../services/notification.service';
+import { MissionService } from '../../services/mission/mission.service';
+import { EtablissementService } from '../../services/etablissement/etablissement.service';
 import { CommonModule } from '@angular/common';
 import { NotificationComponent } from '../../components/notification/notification.component';
 
@@ -14,13 +16,18 @@ import { NotificationComponent } from '../../components/notification/notificatio
 })
 export class MissionDetailHilguegueComponent implements OnInit {
   missionId: string = '08dd4c14-157a-4a57-83d1-bfa9f00335dc'; // Default mission ID for demo
+  mission: any = null;
+  etablissement: any = null;
+  isLoading: boolean = true;
   
   constructor(
     private candidatureService: CandidatureService,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private missionService: MissionService,
+    private etablissementService: EtablissementService
   ) {}
     ngOnInit() {
     // Get the mission ID from route parameters if available
@@ -28,6 +35,57 @@ export class MissionDetailHilguegueComponent implements OnInit {
       if (params['id']) {
         this.missionId = params['id'];
       }
+      this.loadMissionData();
+    });
+  }
+
+  loadMissionData() {
+    this.isLoading = true;
+    this.missionService.getMissionById(this.missionId).subscribe({
+      next: (mission: any) => {
+        this.mission = mission;
+        console.log('Mission chargée:', mission);
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('Erreur lors du chargement de la mission:', error);
+        this.notificationService.error('Erreur lors du chargement de la mission');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  loadEtablissementData(etablissementId: string) {
+    this.etablissementService.getEtablissement(etablissementId).subscribe({
+      next: (etablissement: any) => {
+        this.etablissement = etablissement;
+        console.log('Établissement chargé:', etablissement);
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        console.error('Erreur lors du chargement de l\'établissement:', error);
+        this.notificationService.error('Erreur lors du chargement des données de l\'établissement');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Méthode utilitaire pour calculer la durée en heures
+  getDureeHeures(): string {
+    if (!this.mission?.dureeHeures) {
+      return 'Non spécifié';
+    }
+    return `${this.mission.dureeHeures}h`;
+  }
+
+  // Méthode utilitaire pour formater les dates
+  formatDate(date: string | Date): string {
+    if (!date) return 'Non spécifié';
+    const d = new Date(date);
+    return d.toLocaleDateString('fr-FR', { 
+      day: 'numeric', 
+      month: 'long', 
+      year: 'numeric' 
     });
   }
 
@@ -115,5 +173,10 @@ export class MissionDetailHilguegueComponent implements OnInit {
         this.notificationService.error(errorMessage);
       }
     });
+  }
+
+  // Méthode pour retourner à la page précédente
+  goBack(): void {
+    this.router.navigate(['/dashboard-interimaire']);
   }
 }

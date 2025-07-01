@@ -1,12 +1,33 @@
 <!-- Mission Detail Page -->
 <div class="min-h-screen bg-gray-50">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex items-center justify-center min-h-screen">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-gray-600">Chargement des détails de la mission...</p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading">
   <!-- Header Section -->
   <div class="relative bg-white shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Bouton de retour -->
+      <div class="mb-6">
+        <button (click)="goBack()" 
+                class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all duration-200">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Retour
+        </button>
+      </div>
+      
       <div class="flex items-center space-x-4 text-sm text-gray-500 mb-6">
-        <a routerLink="/missions" class="hover:text-blue-600 transition-colors">Missions</a>
+        <span class="text-gray-900">Détail de la mission</span>
         <span>›</span>
-        <span class="text-gray-900">Établissement Hilguegue</span>
+        <span class="text-gray-900">{{ mission?.etablissementNom || etablissement?.nom || 'Établissement' }}</span>
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -23,22 +44,22 @@
         <div class="lg:col-span-2 space-y-6">
           <!-- Title and Job -->
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 font-newsreader mb-2">Établissement Hilguegue</h1>
-            <h2 class="text-xl text-[#6FA4F2] font-semibold mb-4">Médecin de santé préventive (F/H)</h2>
+            <h1 class="text-3xl font-bold text-gray-900 font-newsreader mb-2">{{ mission?.etablissementNom || etablissement?.nom || 'Établissement' }}</h1>
+            <h2 class="text-xl text-[#6FA4F2] font-semibold mb-4">{{ mission?.poste }}</h2>
             
             <!-- Quick Info Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                 <div class="text-sm text-gray-600 mb-1">Taux horaire</div>
-                <div class="text-lg font-semibold text-gray-900">35€ / heure</div>
+                <div class="text-lg font-semibold text-gray-900">{{ mission?.tauxHoraire || 0 }}€ / heure</div>
               </div>
               <div class="bg-green-50 p-4 rounded-lg border border-green-100">
                 <div class="text-sm text-gray-600 mb-1">Date de début</div>
-                <div class="text-lg font-semibold text-gray-900">1er Nov 2024</div>
+                <div class="text-lg font-semibold text-gray-900">{{ formatDate(mission?.dateMission) }}</div>
               </div>
               <div class="bg-orange-50 p-4 rounded-lg border border-orange-100">
                 <div class="text-sm text-gray-600 mb-1">Date de fin</div>
-                <div class="text-lg font-semibold text-gray-900">30 Avr 2025</div>
+                <div class="text-lg font-semibold text-gray-900">{{ formatDate(mission?.dateMission) }}</div>
               </div>
             </div>
           </div>            <!-- Action Button -->
@@ -70,12 +91,17 @@
         <div class="bg-white p-6 rounded-lg shadow-sm">
           <h3 class="text-xl font-semibold text-gray-900 mb-4 font-newsreader">Description de la mission</h3>
           <div class="prose text-gray-700 leading-relaxed">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde voluptatibus temporibus ipsam similique facere sequi praesentium assumenda. Nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet non curabitur gravida.
+            <p *ngIf="mission?.description; else defaultDescription">
+              {{ mission.description }}
             </p>
-            <p class="mt-4">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-            </p>
+            <ng-template #defaultDescription>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde voluptatibus temporibus ipsam similique facere sequi praesentium assumenda. Nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet non curabitur gravida.
+              </p>
+              <p class="mt-4">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+              </p>
+            </ng-template>
           </div>
         </div>
 
@@ -165,11 +191,11 @@
             </div>
             <div>
               <div class="text-sm text-gray-600 mb-1">Localisation</div>
-              <div class="text-gray-900 font-medium">Paris 15ème</div>
+              <div class="text-gray-900 font-medium">{{ mission?.adresse || 'Paris 15ème' }}</div>
             </div>
             <div>
               <div class="text-sm text-gray-600 mb-1">Contact</div>
-              <div class="text-gray-900 font-medium">01 45 67 89 10</div>
+              <div class="text-gray-900 font-medium">{{ mission?.etablissementTelephone || '01 45 67 89 10' }}</div>
             </div>
           </div>
         </div>
@@ -180,7 +206,7 @@
           <div class="space-y-4">
             <div class="flex justify-between items-center">
               <span class="text-gray-600">Durée</span>
-              <span class="font-medium text-gray-900">6 mois</span>
+              <span class="font-medium text-gray-900">{{ getDureeHeures() }}</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-600">Contrat</span>
@@ -192,8 +218,9 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="text-gray-600">Urgence</span>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                Haute
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                    [class]="mission?.urgente ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'">
+                {{ mission?.urgente ? 'Haute' : 'Normale' }}
               </span>
             </div>
           </div>
@@ -212,6 +239,7 @@
       </div>
     </div>
   </div>
+  </div> <!-- Fin du contenu -->
 </div>
 
 <!-- Composant de notification -->
