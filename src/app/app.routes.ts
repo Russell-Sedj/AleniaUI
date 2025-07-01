@@ -26,10 +26,13 @@ import { PlanDuSiteComponent } from './pages/plan-du-site/plan-du-site.component
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 import { DashboardInterimaireComponent } from './pages/dashboard-interimaire/dashboard-interimaire.component';
-import { AuthGuard } from './guards/auth.guard';
 import { DashboardEtablissementComponent } from './pages/dashboard-etablissement/dashboard-etablissement.component';
 import { LoginEtablissementComponent } from './pages/auth/login-etablissement/login-etablissement.component';
 import { InscriptionEtablissementComponent } from './pages/auth/inscription-etablissement/inscription-etablissement.component';
+
+// Guards spécialisés pour chaque type d'utilisateur
+import { InterimaireGuard } from './guards/interimaire.guard';
+import { EtablissementGuard } from './guards/etablissement.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/accueil', pathMatch: 'full' },
@@ -63,11 +66,33 @@ export const routes: Routes = [
   { path: 'planning-entreprise', component: PlanningEntrepriseComponent },
   { path: 'prestation', component: PrestationComponent },
   { path: 'profil1', component: Profil1Component },  { path: 'profil2', component: Profil2Component },
-  { path: 'profil3', component: Profil3Component },  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },  { path: 'qui-sommes-nous', component: QuiSommesNousComponent },  { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
+  { path: 'profil3', component: Profil3Component },  { path: 'questions-frequentes', component: QuestionsFrequentesComponent },
+  { path: 'qui-sommes-nous', component: QuiSommesNousComponent },
+  { path: 'declaration-accessibilite', component: DeclarationAccessibiliteComponent },
   { path: 'plan-du-site', component: PlanDuSiteComponent },
-  { path: 'dashboard-interimaire', component: DashboardInterimaireComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard-interimaire', component: DashboardInterimaireComponent },
-  { path: 'dashboard-etablissement', component: DashboardEtablissementComponent },
+  
+  // Routes protégées avec guards spécialisés
+  { 
+    path: 'dashboard-interimaire', 
+    component: DashboardInterimaireComponent, 
+    canActivate: [InterimaireGuard] 
+  },
+  { 
+    path: 'dashboard-etablissement', 
+    component: DashboardEtablissementComponent, 
+    canActivate: [EtablissementGuard] 
+  },
+  { 
+    path: 'missions-venir', 
+    component: MissionsVenirComponent, 
+    canActivate: [InterimaireGuard] 
+  },
+  { 
+    path: 'mission-detail/:id', 
+    component: MissionDetailHilguegueComponent, 
+    canActivate: [InterimaireGuard] 
+  },
+  
   { path: 'page-not-found', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
 ];

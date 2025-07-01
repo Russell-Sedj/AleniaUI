@@ -88,38 +88,128 @@ export class AuthService {
   private readonly API_URL = 'https://localhost:7134/api';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  
+  // Indicateur pour éviter les initialisations multiples
+  private isInitialized = false;
+  
+  // Type d'utilisateur actuel fixé pour cette session
+  private currentSessionType: 'interimaire' | 'etablissement' | null = null;
 
   constructor(private http: HttpClient) {
-    // Différer l'initialisation pour éviter les dépendances circulaires
-    this.initializeUser();
+    // Ne pas initialiser automatiquement au démarrage
+    // L'initialisation se fera lors du premier appel à un dashboard spécifique
   }
 
-  private initializeUser(): void {
-    // Charger l'utilisateur depuis le localStorage au démarrage
+  // Méthode pour initialiser explicitement le contexte utilisateur
+  initializeUserContext(userType: 'interimaire' | 'etablissement'): void {
+    if (this.isInitialized && this.currentSessionType === userType) {
+      return; // Déjà initialisé pour ce type
+    }
+
+    console.log(`🔐 Initialisation du contexte ${userType}`);
+    this.currentSessionType = userType;
+    this.isInitialized = true;
+
     if (typeof window !== 'undefined') {
-      const savedUser = localStorage.getItem('currentUser');
-      if (savedUser && savedUser !== 'undefined' && savedUser.trim() !== '') {
+      // Nettoyer d'abord le state actuel
+      this.currentUserSubject.next(null);
+      
+      // Charger uniquement l'utilisateur du type spécifié
+      const savedUser = this.getStorageItem('currentUser', userType);
+      const savedToken = this.getStorageItem('authToken', userType);
+      
+      if (savedUser && savedToken && savedUser !== 'undefined' && savedUser.trim() !== '') {
         try {
           const user = JSON.parse(savedUser);
+          
+          // Vérifier que le token n'est pas expiré
+          if (this.isTokenExpired(savedToken)) {
+            console.warn(`⚠️ Token expiré pour ${userType}, nettoyage de la session`);
+            this.clearUserSession(userType);
+            return;
+          }
+          
           // Transformer les propriétés PascalCase en camelCase si nécessaire
           const normalizedUser = {
             ...user,
             id: user.Id || user.id // Support pour les deux formats
           };
+          
+          console.log(`✅ Utilisateur ${userType} chargé:`, normalizedUser.email);
           this.currentUserSubject.next(normalizedUser);
         } catch (error) {
-          console.warn('Erreur lors du parsing du user sauvegardé:', error);
-          localStorage.removeItem('currentUser');
+          console.warn(`❌ Erreur lors du parsing du user ${userType}:`, error);
+          this.clearUserSession(userType);
         }
+      } else {
+        console.log(`ℹ️ Aucune session ${userType} trouvée`);
       }
     }
+  }
+
+  // Méthode pour nettoyer une session spécifique
+  private clearUserSession(userType: 'interimaire' | 'etablissement'): void {
+    this.removeStorageItem('currentUser', userType);
+    this.removeStorageItem('authToken', userType);
+    this.removeStorageItem('userType', userType);
+  }
+
+  // Méthodes pour gérer les clés de stockage avec un type obligatoire
+  private getStorageKey(baseKey: string, userType: 'interimaire' | 'etablissement'): string {
+    return `${baseKey}_${userType}`;
+  }
+
+  private setStorageItem(key: string, value: string, userType: 'interimaire' | 'etablissement'): void {
+    if (typeof window !== 'undefined') {
+      const storageKey = this.getStorageKey(key, userType);
+      localStorage.setItem(storageKey, value);
+    }
+  }
+
+  private getStorageItem(key: string, userType: 'interimaire' | 'etablissement'): string | null {
+    if (typeof window !== 'undefined') {
+      const storageKey = this.getStorageKey(key, userType);
+      return localStorage.getItem(storageKey);
+    }
+    return null;
+  }
+
+  private removeStorageItem(key: string, userType: 'interimaire' | 'etablissement'): void {
+    if (typeof window !== 'undefined') {
+      const storageKey = this.getStorageKey(key, userType);
+      localStorage.removeItem(storageKey);
+    }
+  }
+
+  async loginWithConflictCheck(credentials: LoginDto): Promise<Observable<any>> {
+    // Vérifier s'il y a un conflit de session
+    if (this.detectSessionConflict('interimaire')) {
+      const canProceed = await this.handleSessionConflict('interimaire');
+      if (!canProceed) {
+        throw new Error('Connexion annulée par l\'utilisateur');
+      }
+    }
+    
+    return this.login(credentials);
+  }
+
+  async loginEtablissementWithConflictCheck(credentials: LoginDto): Promise<Observable<AuthResponse>> {
+    // Vérifier s'il y a un conflit de session
+    if (this.detectSessionConflict('etablissement')) {
+      const canProceed = await this.handleSessionConflict('etablissement');
+      if (!canProceed) {
+        throw new Error('Connexion annulée par l\'utilisateur');
+      }
+    }
+    
+    return this.loginEtablissement(credentials);
   }
 
   login(credentials: LoginDto): Observable<any> {
     return this.http.post<any>(`${this.API_URL}/auth/login`, credentials)
       .pipe(
         tap(response => {
-          // Sauvegarder l'utilisateur et le token
+          // Sauvegarder l'utilisateur et le token pour intérimaires
           if (typeof window !== 'undefined') {
             const user = response.user;
             if (user) {
@@ -128,8 +218,20 @@ export class AuthService {
                 ...user,
                 id: user.Id || user.id // Support pour les deux formats
               };
-              localStorage.setItem('currentUser', JSON.stringify(normalizedUser));
-              localStorage.setItem('authToken', response.token);
+              
+              console.log('🔐 Connexion intérimaire réussie:', normalizedUser.email);
+              
+              // Nettoyer toute session établissement existante
+              this.clearUserSession('etablissement');
+              
+              // Sauvegarder la nouvelle session intérimaire
+              this.setStorageItem('currentUser', JSON.stringify(normalizedUser), 'interimaire');
+              this.setStorageItem('authToken', response.token, 'interimaire');
+              this.setStorageItem('userType', 'interimaire', 'interimaire');
+              
+              // Fixer le type de session et mettre à jour le subject
+              this.currentSessionType = 'interimaire';
+              this.isInitialized = true;
               this.currentUserSubject.next(normalizedUser);
             } else {
               console.error('Aucun utilisateur dans la réponse:', response);
@@ -172,7 +274,7 @@ export class AuthService {
     return this.http.post<any>(`${this.API_URL}/auth/login-etablissement`, credentials)
       .pipe(
         tap(response => {
-          // Sauvegarder l'utilisateur et le token
+          // Sauvegarder l'utilisateur et le token pour établissements
           if (typeof window !== 'undefined') {
             // L'API retourne 'etablissement' au lieu de 'user' pour les établissements
             const user = (response as any).etablissement || (response as any).user;
@@ -182,9 +284,20 @@ export class AuthService {
                 ...user,
                 id: user.Id || user.id // Support pour les deux formats
               };
-              localStorage.setItem('currentUser', JSON.stringify(normalizedUser));
-              localStorage.setItem('authToken', response.token);
-              localStorage.setItem('userType', 'etablissement');
+              
+              console.log('🔐 Connexion établissement réussie:', normalizedUser.email);
+              
+              // Nettoyer toute session intérimaire existante
+              this.clearUserSession('interimaire');
+              
+              // Sauvegarder la nouvelle session établissement
+              this.setStorageItem('currentUser', JSON.stringify(normalizedUser), 'etablissement');
+              this.setStorageItem('authToken', response.token, 'etablissement');
+              this.setStorageItem('userType', 'etablissement', 'etablissement');
+              
+              // Fixer le type de session et mettre à jour le subject
+              this.currentSessionType = 'etablissement';
+              this.isInitialized = true;
               this.currentUserSubject.next(normalizedUser);
             } else {
               console.error('Aucun utilisateur dans la réponse:', response);
@@ -227,22 +340,46 @@ export class AuthService {
   }
 
   logout(): void {
+    console.log('🚪 Logout - nettoyage de toutes les sessions');
+    
     if (typeof window !== 'undefined') {
+      // Nettoyer toutes les sessions possibles
+      this.clearUserSession('interimaire');
+      this.clearUserSession('etablissement');
+      
+      // Nettoyer aussi les anciennes clés (compatibilité)
       localStorage.removeItem('currentUser');
       localStorage.removeItem('authToken');
+      localStorage.removeItem('userType');
     }
+    
+    // Réinitialiser l'état interne
+    this.currentSessionType = null;
+    this.isInitialized = false;
     this.currentUserSubject.next(null);
   }
 
   isAuthenticated(): boolean {
     if (typeof window === 'undefined') return false;
-    const token = localStorage.getItem('authToken');
-    return !!token && !this.isTokenExpired(token);
+    
+    // Vérifier selon le type de session actuel
+    if (this.currentSessionType) {
+      const token = this.getStorageItem('authToken', this.currentSessionType);
+      return !!token && !this.isTokenExpired(token);
+    }
+    
+    return false;
   }
 
   getToken(): string | null {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem('authToken');
+    
+    // Retourner le token du type de session actuel uniquement
+    if (this.currentSessionType) {
+      return this.getStorageItem('authToken', this.currentSessionType);
+    }
+    
+    return null;
   }
 
   getCurrentUser(): User | null {
@@ -250,8 +387,87 @@ export class AuthService {
   }
 
   getUserType(): string | null {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('userType');
+    return this.currentSessionType;
+  }
+
+  // Méthode pour vérifier si l'utilisateur actuel correspond au type attendu
+  isUserType(expectedType: 'interimaire' | 'etablissement'): boolean {
+    return this.currentSessionType === expectedType && this.isAuthenticated();
+  }
+
+  // Méthode pour forcer la réinitialisation de la session
+  resetSession(): void {
+    console.log('🔄 Réinitialisation forcée de la session');
+    this.currentSessionType = null;
+    this.isInitialized = false;
+    this.currentUserSubject.next(null);
+  }
+
+  // Méthode pour détecter un conflit de session
+  detectSessionConflict(newUserType: 'interimaire' | 'etablissement'): boolean {
+    if (!this.isInitialized || !this.currentSessionType) {
+      return false; // Pas de conflit si aucune session active
+    }
+    
+    // Il y a conflit si on essaie de connecter un type différent
+    return this.currentSessionType !== newUserType;
+  }
+
+  // Méthode pour gérer les conflits de session
+  handleSessionConflict(newUserType: 'interimaire' | 'etablissement'): Promise<boolean> {
+    return new Promise((resolve) => {
+      const currentType = this.currentSessionType;
+      const currentUser = this.getCurrentUser();
+      
+      if (currentUser && currentType) {
+        const typeNames = {
+          'interimaire': 'intérimaire',
+          'etablissement': 'établissement'
+        };
+        
+        const message = `⚠️ Attention: vous êtes déjà connecté en tant qu'${typeNames[currentType]} (${currentUser.email}). 
+        
+Voulez-vous vous déconnecter et vous connecter en tant qu'${typeNames[newUserType]} ?`;
+        
+        if (confirm(message)) {
+          console.log(`🔄 Déconnexion forcée de ${currentType} pour permettre connexion ${newUserType}`);
+          this.logout();
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      } else {
+        resolve(true);
+      }
+    });
+  }
+
+  // Méthode pour vérifier l'intégrité de la session
+  checkSessionIntegrity(expectedType: 'interimaire' | 'etablissement'): boolean {
+    if (!this.isAuthenticated()) {
+      return false;
+    }
+    
+    const currentUser = this.getCurrentUser();
+    const currentType = this.getUserType();
+    
+    if (!currentUser || currentType !== expectedType) {
+      console.warn(`⚠️ Incohérence de session détectée: attendu ${expectedType}, trouvé ${currentType}`);
+      this.resetSession();
+      return false;
+    }
+    
+    return true;
+  }
+
+  // Méthode utilitaire pour afficher l'état de la session (debug)
+  logSessionState(): void {
+    console.log('=== ÉTAT DE LA SESSION ===');
+    console.log('Type de session actuel:', this.currentSessionType);
+    console.log('Initialisé:', this.isInitialized);
+    console.log('Authentifié:', this.isAuthenticated());
+    console.log('Utilisateur actuel:', this.getCurrentUser());
+    console.log('========================');
   }
 
   checkEmailExists(email: string): Observable<{ exists: boolean }> {

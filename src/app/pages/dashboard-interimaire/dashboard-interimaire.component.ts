@@ -311,6 +311,9 @@ export class DashboardInterimaireComponent implements OnInit {
   getCurrentFrenchDate(): Date {
     return new Date();
   }  ngOnInit() {
+    // Initialiser le contexte utilisateur intérimaire dès le début
+    this.authService.initializeUserContext('interimaire');
+    
     this.loadUserProfileFromAuth(); // Charger le profil utilisateur depuis l'auth
     this.initProfileForm();
     this.initUploadForm();

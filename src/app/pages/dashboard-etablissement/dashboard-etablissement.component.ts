@@ -314,6 +314,9 @@ export class DashboardEtablissementComponent implements OnInit {
     private messageService: MessageService
   ) {}
   ngOnInit() {
+    // Initialiser le contexte utilisateur établissement dès le début
+    this.authService.initializeUserContext('etablissement');
+    
     this.initForms();
     this.initParametresForm(); // Ajoutez cette ligne si elle n'existe pas
     this.loadData();

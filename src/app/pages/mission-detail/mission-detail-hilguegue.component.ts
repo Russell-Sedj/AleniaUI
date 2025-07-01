@@ -19,6 +19,7 @@ export class MissionDetailHilguegueComponent implements OnInit {
   mission: any = null;
   etablissement: any = null;
   isLoading: boolean = true;
+  hasAlreadyApplied: boolean = false;
   
   constructor(
     private candidatureService: CandidatureService,
@@ -45,6 +46,7 @@ export class MissionDetailHilguegueComponent implements OnInit {
       next: (mission: any) => {
         this.mission = mission;
         console.log('Mission chargée:', mission);
+        this.checkIfAlreadyApplied(); // Vérifier si déjà candidaté
         this.isLoading = false;
       },
       error: (error: any) => {
@@ -178,5 +180,22 @@ export class MissionDetailHilguegueComponent implements OnInit {
   // Méthode pour retourner à la page précédente
   goBack(): void {
     this.router.navigate(['/dashboard-interimaire']);
+  }
+
+  // Vérifier si l'utilisateur a déjà candidaté pour cette mission
+  checkIfAlreadyApplied(): void {
+    const user = this.authService.getCurrentUser();
+    if (!user) return;
+
+    this.candidatureService.getCandidaturesByInterimaire(user.id).subscribe({
+      next: (candidatures) => {
+        this.hasAlreadyApplied = candidatures.some(c => c.missionId === this.missionId);
+      },
+      error: (error) => {
+        console.log('Erreur lors de la vérification des candidatures:', error);
+        // En cas d'erreur, on laisse la possibilité de candidater
+        this.hasAlreadyApplied = false;
+      }
+    });
   }
 }
