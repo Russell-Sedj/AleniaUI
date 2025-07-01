@@ -968,7 +968,7 @@ export class DashboardEtablissementComponent implements OnInit {
     });
     
     if (confirmed) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/connexion-etablissement']);
     }
   }
 
