@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { CandidatureService, CreateCandidatureDto } from '../../services/candidature/candidature.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
+import { NotificationComponent } from '../../components/notification/notification.component';
 
 @Component({
   selector: 'app-mission-detail-hilguegue',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, NotificationComponent],
   templateUrl: './mission-detail-hilguegue.component.html',
 })
 export class MissionDetailHilguegueComponent implements OnInit {
@@ -17,7 +19,8 @@ export class MissionDetailHilguegueComponent implements OnInit {
     private candidatureService: CandidatureService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notificationService: NotificationService
   ) {}
     ngOnInit() {
     // Get the mission ID from route parameters if available
@@ -42,7 +45,7 @@ export class MissionDetailHilguegueComponent implements OnInit {
     
     if (!user || !user.id) {
       console.log('User non connecté ou pas d\'ID');
-      alert('Vous devez être connecté en tant qu\'intérimaire pour postuler à une mission');
+      this.notificationService.error('Vous devez être connecté en tant qu\'intérimaire pour postuler à une mission');
       this.router.navigate(['/connexion']);
       return;
     }
@@ -53,7 +56,7 @@ export class MissionDetailHilguegueComponent implements OnInit {
       const userObj = JSON.parse(savedUser);
       if (userObj.type === 'etablissement') {
         console.log('Utilisateur est un établissement, ne peut pas postuler');
-        alert('Seuls les intérimaires peuvent postuler à des missions. Veuillez vous connecter avec un compte intérimaire.');
+        this.notificationService.error('Seuls les intérimaires peuvent postuler à des missions. Veuillez vous connecter avec un compte intérimaire.');
         this.router.navigate(['/connexion']);
         return;
       }
@@ -67,13 +70,13 @@ export class MissionDetailHilguegueComponent implements OnInit {
     
     if (!guidRegex.test(this.missionId)) {
       console.log('Mission ID invalid:', this.missionId);
-      alert('ID de mission invalide');
+      this.notificationService.error('ID de mission invalide');
       return;
     }
     
     if (!guidRegex.test(user.id)) {
       console.log('User ID invalid:', user.id);
-      alert('ID d\'utilisateur invalide. Veuillez vous reconnecter avec un compte intérimaire valide.');
+      this.notificationService.error('ID d\'utilisateur invalide. Veuillez vous reconnecter avec un compte intérimaire valide.');
       this.router.navigate(['/connexion']);
       return;
     }
@@ -89,7 +92,7 @@ export class MissionDetailHilguegueComponent implements OnInit {
     this.candidatureService.createCandidature(candidature).subscribe({
       next: (response) => {
         console.log('Réponse de l\'API:', response);
-        alert('Votre candidature a été envoyée avec succès!');
+        this.notificationService.success('Votre candidature a été envoyée avec succès!');
         this.router.navigate(['/dashboard-interimaire']);
       },
       error: (error) => {
@@ -109,7 +112,7 @@ export class MissionDetailHilguegueComponent implements OnInit {
           errorMessage = 'Erreur serveur. Veuillez réessayer plus tard.';
         }
         
-        alert(errorMessage);
+        this.notificationService.error(errorMessage);
       }
     });
   }

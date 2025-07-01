@@ -5,6 +5,8 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { InterimaireService } from '../../services/interimaire/intermaire.service';
+import { NotificationService } from '../../services/notification.service';
+import { ConfirmationService } from '../../services/confirmation.service';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { CheckboxComponent } from '../../components/checkbox/checkbox.component';
 import { CheckboxFieldComponent } from '../../components/checkbox/checkbox-field.component';
@@ -14,6 +16,8 @@ import { LegendComponent } from '../../components/fieldset/legend.component';
 import { LabelComponent } from '../../components/fieldset/label.component';
 import { DescriptionComponent } from '../../components/fieldset/description.component';
 import { TextComponent } from '../../components/text/text.component';
+import { NotificationComponent } from '../../components/notification/notification.component';
+import { ConfirmationModalComponent } from '../../components/confirmation-modal/confirmation-modal.component';
 import { 
   SidebarComponent,
   NavigationItem,
@@ -121,7 +125,7 @@ interface FaqItem {
 @Component({
   selector: 'app-dashboard-interimaire',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, AvatarComponent, CheckboxComponent, CheckboxFieldComponent, CheckboxGroupComponent, FieldsetComponent, LegendComponent, LabelComponent, DescriptionComponent, TextComponent, SidebarComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, AvatarComponent, CheckboxComponent, CheckboxFieldComponent, CheckboxGroupComponent, FieldsetComponent, LegendComponent, LabelComponent, DescriptionComponent, TextComponent, SidebarComponent, NotificationComponent, ConfirmationModalComponent],
   templateUrl: './dashboard-interimaire.component.html',
   styleUrl: './dashboard-interimaire.component.css',
 })
@@ -286,7 +290,9 @@ export class DashboardInterimaireComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private interimaireService: InterimaireService
+    private interimaireService: InterimaireService,
+    private notificationService: NotificationService,
+    private confirmationService: ConfirmationService
   ) {
     this.currentDate = new Date();
   }
@@ -447,14 +453,22 @@ export class DashboardInterimaireComponent implements OnInit {
       this.profileForm.disable();
       
       console.log('Profile updated:', this.userProfile);
-      alert('Profil mis à jour avec succès !');
+      this.notificationService.success('Profil mis à jour avec succès !');
     } else {
       this.profileForm.markAllAsTouched();
     }
   }
 
-  logout() {
-    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+  async logout() {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Déconnexion',
+      message: 'Êtes-vous sûr de vouloir vous déconnecter ?',
+      confirmText: 'Se déconnecter',
+      cancelText: 'Annuler',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
       this.router.navigate(['/connexion']);
     }
   }
@@ -517,7 +531,7 @@ export class DashboardInterimaireComponent implements OnInit {
     const file = event.target.files[0];
     if (file) {
       if (file.size > 10 * 1024 * 1024) {
-        alert('Le fichier est trop volumineux. Taille maximum : 10MB');
+        this.notificationService.error('Le fichier est trop volumineux. Taille maximum : 10MB');
         return;
       }
 
@@ -526,7 +540,7 @@ export class DashboardInterimaireComponent implements OnInit {
                            'image/jpeg', 'image/png', 'image/jpg'];
       
       if (!allowedTypes.includes(file.type)) {
-        alert('Type de fichier non autorisé. Utilisez : PDF, DOC, DOCX, JPG, PNG');
+        this.notificationService.error('Type de fichier non autorisé. Utilisez : PDF, DOC, DOCX, JPG, PNG');
         return;
       }
 
@@ -575,30 +589,46 @@ export class DashboardInterimaireComponent implements OnInit {
 
     this.filteredDocuments = [...this.documents];
     this.closeUploadModal();
-    alert(`Document "${newDocument.nom}" ajouté avec succès !`);
+    this.notificationService.success(`Document "${newDocument.nom}" ajouté avec succès !`);
   }
 
-  replaceDocument(type: string) {
-    if (confirm('Êtes-vous sûr de vouloir remplacer ce document ?')) {
+  async replaceDocument(type: string) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Remplacer le document',
+      message: 'Êtes-vous sûr de vouloir remplacer ce document ?',
+      confirmText: 'Remplacer',
+      cancelText: 'Annuler',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
       this.openUploadModal(type);
     }
   }
 
   viewDocument(document: Document | undefined) {
     if (!document) return;
-    alert(`Ouverture du document : ${document.nom}`);
+    this.notificationService.info(`Ouverture du document : ${document.nom}`);
   }
 
   downloadDocument(document: Document | undefined) {
     if (!document) return;
-    alert(`Téléchargement du document : ${document.nom}`);
+    this.notificationService.info(`Téléchargement du document : ${document.nom}`);
   }
 
-  deleteDocument(document: Document) {
-    if (confirm(`Êtes-vous sûr de vouloir supprimer "${document.nom}" ?`)) {
+  async deleteDocument(document: Document) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Supprimer le document',
+      message: `Êtes-vous sûr de vouloir supprimer "${document.nom}" ?`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      type: 'danger'
+    });
+    
+    if (confirmed) {
       this.documents = this.documents.filter(doc => doc.id !== document.id);
       this.filteredDocuments = [...this.documents];
-      alert('Document supprimé avec succès !');
+      this.notificationService.success('Document supprimé avec succès !');
     }
   }
 
@@ -1304,8 +1334,16 @@ L'équipe technique`,
     this.filterMessages();
   }
 
-  deleteMessage(message: Message) {
-    if (confirm(`Êtes-vous sûr de vouloir supprimer le message "${message.sujet}" ?`)) {
+  async deleteMessage(message: Message) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Supprimer le message',
+      message: `Êtes-vous sûr de vouloir supprimer le message "${message.sujet}" ?`,
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      type: 'danger'
+    });
+    
+    if (confirmed) {
       this.messages = this.messages.filter(msg => msg.id !== message.id);
       this.filterMessages();
       
@@ -1313,7 +1351,7 @@ L'équipe technique`,
         this.closeMessage();
       }
       
-      alert('Message supprimé avec succès !');
+      this.notificationService.success('Message supprimé avec succès !');
     }
   }
 
@@ -1340,7 +1378,7 @@ L'équipe technique`,
     console.log('Envoi du message:', formValue);
     
     // Ici vous feriez un appel API
-    alert(`Message envoyé à ${formValue.destinataire} !`);
+    this.notificationService.success(`Message envoyé à ${formValue.destinataire} !`);
     
     this.closeNewMessageModal();
   }
@@ -1392,10 +1430,10 @@ L'équipe technique`,
       this.updateSidebarProfile();
 
       console.log('Paramètres sauvegardés:', this.userProfile);
-      alert('Paramètres sauvegardés avec succès !');
+      this.notificationService.success('Paramètres sauvegardés avec succès !');
     } else {
       console.log('Formulaire invalide:', this.settingsForm.errors);
-      alert('Veuillez vérifier les champs obligatoires.');
+      this.notificationService.warning('Veuillez vérifier les champs obligatoires.');
     }
   }
   resetAccountSettings() {
@@ -1453,7 +1491,7 @@ L'équipe technique`,
 
   saveWorkPreferences() {
     console.log('Préférences sauvegardées:', this.workPreferences);
-    alert('Préférences de travail sauvegardées !');
+    this.notificationService.success('Préférences de travail sauvegardées !');
   }
 
   resetWorkPreferences() {
@@ -1471,7 +1509,7 @@ L'équipe technique`,
       const formData = this.passwordForm.value;
       
       console.log('Changement de mot de passe demandé');
-      alert('Mot de passe modifié avec succès !');
+      this.notificationService.success('Mot de passe modifié avec succès !');
       
       this.resetPasswordForm();
     }
@@ -1481,15 +1519,23 @@ L'équipe technique`,
     this.passwordForm.reset();
   }
 
-  toggleTwoFactor(event: any) {
+  async toggleTwoFactor(event: any) {
     const isEnabled = event.target.checked;
     this.securitySettings.twoFactor.enabled = isEnabled;
     
     if (isEnabled) {
-      alert('Configuration de l\'authentification à deux facteurs...');
+      this.notificationService.info('Configuration de l\'authentification à deux facteurs...');
     } else {
-      if (confirm('Êtes-vous sûr de vouloir désactiver l\'authentification à deux facteurs ?')) {
-        alert('Authentification à deux facteurs désactivée.');
+      const confirmed = await this.confirmationService.confirm({
+        title: 'Désactiver l\'authentification 2FA',
+        message: 'Êtes-vous sûr de vouloir désactiver l\'authentification à deux facteurs ?',
+        confirmText: 'Désactiver',
+        cancelText: 'Annuler',
+        type: 'warning'
+      });
+      
+      if (confirmed) {
+        this.notificationService.info('Authentification à deux facteurs désactivée.');
       } else {
         event.target.checked = true;
         this.securitySettings.twoFactor.enabled = true;
@@ -1505,10 +1551,18 @@ L'équipe technique`,
     return '🖥️';
   }
 
-  revokeSession(session: ActiveSession) {
-    if (confirm(`Êtes-vous sûr de vouloir révoquer la session "${session.device}" ?`)) {
+  async revokeSession(session: ActiveSession) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Révoquer la session',
+      message: `Êtes-vous sûr de vouloir révoquer la session "${session.device}" ?`,
+      confirmText: 'Révoquer',
+      cancelText: 'Annuler',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
       this.activeSessions = this.activeSessions.filter(s => s.id !== session.id);
-      alert('Session révoquée avec succès !');
+      this.notificationService.success('Session révoquée avec succès !');
     }
   }
 

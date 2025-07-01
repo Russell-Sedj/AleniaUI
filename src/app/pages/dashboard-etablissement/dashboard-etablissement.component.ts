@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { CandidatureService } from '../../services/candidature/candidature.service';
 import { MissionService, MissionDto } from '../../services/mission/mission.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { NotificationService } from '../../services/notification.service';
+import { ConfirmationService } from '../../services/confirmation.service';
 import { 
   SidebarEtablissementComponent,
   NavigationItemEtablissement,
@@ -13,6 +15,8 @@ import {
 } from '../../components/sidebar-etablissement';
 import { AvatarInitialsComponent } from '../../components/avatar-initials';
 import { IconComponent } from '../../components/icon';
+import { NotificationComponent } from '../../components/notification/notification.component';
+import { ConfirmationModalComponent } from '../../components/confirmation-modal/confirmation-modal.component';
 
 interface Interimaire {
   id: string;
@@ -147,7 +151,7 @@ interface StatistiquesDetaillees {
 @Component({
   selector: 'app-dashboard-etablissement',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, SidebarEtablissementComponent, AvatarInitialsComponent, IconComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormsModule, SidebarEtablissementComponent, AvatarInitialsComponent, IconComponent, NotificationComponent, ConfirmationModalComponent],
   templateUrl: './dashboard-etablissement.component.html',
   styleUrl: './dashboard-etablissement.component.css',
 })
@@ -298,7 +302,9 @@ export class DashboardEtablissementComponent implements OnInit {
     private router: Router,
     private candidatureService: CandidatureService,
     private missionService: MissionService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private confirmationService: ConfirmationService
   ) {}
   ngOnInit() {
     this.initForms();
@@ -752,13 +758,13 @@ export class DashboardEtablissementComponent implements OnInit {
         this.missionService.updateMission(this.selectedMission.id, updateData).subscribe({
           next: (mission) => {
             console.log('Mission modifiée:', mission);
-            alert('Mission modifiée avec succès !');
+            this.notificationService.success('Mission modifiée avec succès !');
             this.closeMissionModal();
             this.loadMissions(); // Recharger les missions
           },
           error: (error) => {
             console.error('Erreur lors de la modification:', error);
-            alert('Erreur lors de la modification de la mission');
+            this.notificationService.error('Erreur lors de la modification de la mission');
           }
         });
       } else {
@@ -772,13 +778,13 @@ export class DashboardEtablissementComponent implements OnInit {
         console.log('Token présent:', !!this.authService.getToken());
         
         if (!currentUser) {
-          alert('Erreur: Utilisateur non connecté');
+          this.notificationService.error('Erreur: Utilisateur non connecté');
           console.error('Aucun utilisateur connecté détecté');
           return;
         }
         
         if (!currentUser.id) {
-          alert('Erreur: ID utilisateur manquant');
+          this.notificationService.error('Erreur: ID utilisateur manquant');
           console.error('Utilisateur sans ID:', currentUser);
           return;
         }
@@ -798,7 +804,7 @@ export class DashboardEtablissementComponent implements OnInit {
         this.missionService.createMission(newMissionData).subscribe({
           next: (mission) => {
             console.log('Mission créée avec succès:', mission);
-            alert('Mission créée avec succès !');
+            this.notificationService.success('Mission créée avec succès !');
             this.closeMissionModal();
             this.loadMissions(); // Recharger les missions
           },
@@ -816,26 +822,42 @@ export class DashboardEtablissementComponent implements OnInit {
               errorMessage += ': ' + error.message;
             }
             
-            alert(errorMessage);
+            this.notificationService.error(errorMessage);
           }
         });
       }
     } else {
-      alert('Veuillez remplir tous les champs obligatoires');
+      this.notificationService.warning('Veuillez remplir tous les champs obligatoires');
     }
   }
 
-  publierMission(mission: Mission) {
-    if (confirm('Êtes-vous sûr de vouloir publier cette mission ?')) {
+  async publierMission(mission: Mission) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Publier la mission',
+      message: 'Êtes-vous sûr de vouloir publier cette mission ?',
+      confirmText: 'Publier',
+      cancelText: 'Annuler',
+      type: 'info'
+    });
+    
+    if (confirmed) {
       mission.statut = 'publiee';
-      alert('Mission publiée avec succès !');
+      this.notificationService.success('Mission publiée avec succès !');
     }
   }
 
-  supprimerMission(mission: Mission) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette mission ?')) {
+  async supprimerMission(mission: Mission) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Supprimer la mission',
+      message: 'Êtes-vous sûr de vouloir supprimer cette mission ?',
+      confirmText: 'Supprimer',
+      cancelText: 'Annuler',
+      type: 'danger'
+    });
+    
+    if (confirmed) {
       this.missions = this.missions.filter(m => m.id !== mission.id);
-      alert('Mission supprimée avec succès !');
+      this.notificationService.success('Mission supprimée avec succès !');
     }
   }
 
@@ -848,8 +870,16 @@ export class DashboardEtablissementComponent implements OnInit {
   closeCandidatureModal() {
     this.showCandidatureModal = false;
     this.selectedCandidature = null;
-  }  accepterCandidature(candidature: Candidature) {
-    if (confirm('Êtes-vous sûr de vouloir accepter cette candidature ?')) {
+  }  async accepterCandidature(candidature: Candidature) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Accepter la candidature',
+      message: 'Êtes-vous sûr de vouloir accepter cette candidature ?',
+      confirmText: 'Accepter',
+      cancelText: 'Annuler',
+      type: 'info'
+    });
+    
+    if (confirmed) {
       // Appeler l'API pour mettre à jour le statut
       this.candidatureService.updateCandidatureStatut(candidature.id, { statut: 'Acceptée' }).subscribe({
         next: (response) => {
@@ -864,18 +894,26 @@ export class DashboardEtablissementComponent implements OnInit {
           }
           
           this.closeCandidatureModal();
-          alert('Candidature acceptée avec succès !');
+          this.notificationService.success('Candidature acceptée avec succès !');
         },
         error: (error) => {
           console.error('Erreur lors de l\'acceptation de la candidature:', error);
-          alert('Erreur lors de l\'acceptation de la candidature. Veuillez réessayer.');
+          this.notificationService.error('Erreur lors de l\'acceptation de la candidature. Veuillez réessayer.');
         }
       });
     }
   }
 
-  refuserCandidature(candidature: Candidature) {
-    if (confirm('Êtes-vous sûr de vouloir refuser cette candidature ?')) {
+  async refuserCandidature(candidature: Candidature) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Refuser la candidature',
+      message: 'Êtes-vous sûr de vouloir refuser cette candidature ?',
+      confirmText: 'Refuser',
+      cancelText: 'Annuler',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
       // Appeler l'API pour mettre à jour le statut
       this.candidatureService.updateCandidatureStatut(candidature.id, { statut: 'Refusée' }).subscribe({
         next: (response) => {
@@ -883,11 +921,11 @@ export class DashboardEtablissementComponent implements OnInit {
           candidature.statut = 'refusee';
           
           this.closeCandidatureModal();
-          alert('Candidature refusée.');
+          this.notificationService.warning('Candidature refusée.');
         },
         error: (error) => {
           console.error('Erreur lors du refus de la candidature:', error);
-          alert('Erreur lors du refus de la candidature. Veuillez réessayer.');
+          this.notificationService.error('Erreur lors du refus de la candidature. Veuillez réessayer.');
         }
       });
     }
@@ -920,8 +958,16 @@ export class DashboardEtablissementComponent implements OnInit {
     }).format(date);
   }
 
-  logout() {
-    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+  async logout() {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Déconnexion',
+      message: 'Êtes-vous sûr de vouloir vous déconnecter ?',
+      confirmText: 'Se déconnecter',
+      cancelText: 'Annuler',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
       this.router.navigate(['/login']);
     }
   }
@@ -1156,7 +1202,7 @@ export class DashboardEtablissementComponent implements OnInit {
     const nouvelleMissions = this.missions.filter(m => m.statut === 'terminee' && m.interimaire);
     
     if (nouvelleMissions.length === 0) {
-      alert('Aucune mission terminée à rémunérer.');
+      this.notificationService.warning('Aucune mission terminée à rémunérer.');
       return;
     }
 
@@ -1194,7 +1240,7 @@ export class DashboardEtablissementComponent implements OnInit {
 
     this.factures.unshift(nouvelleFacture);
     this.calculatePaiementStats();
-    alert(`Bulletin de paie ${bulletinNumber} généré avec succès !`);
+    this.notificationService.success(`Bulletin de paie ${bulletinNumber} généré avec succès !`);
   }
 
   calculateHeuresTravaillees(mission: Mission): number {
@@ -1215,33 +1261,57 @@ export class DashboardEtablissementComponent implements OnInit {
     return heures * jours;
   }
 
-  marquerCommePayee(facture: Facture) {
-    if (confirm(`Marquer la facture ${facture.numero} comme payée ?`)) {
+  async marquerCommePayee(facture: Facture) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Marquer comme payée',
+      message: `Marquer la facture ${facture.numero} comme payée ?`,
+      confirmText: 'Marquer payée',
+      cancelText: 'Annuler',
+      type: 'info'
+    });
+    
+    if (confirmed) {
       facture.statut = 'payee';
       facture.datePaiement = new Date();
       this.calculatePaiementStats();
-      alert('Facture marquée comme payée !');
+      this.notificationService.success('Facture marquée comme payée !');
     }
   }
 
-  envoyerFacture(facture: Facture) {
-    if (confirm(`Envoyer la facture ${facture.numero} ?`)) {
+  async envoyerFacture(facture: Facture) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Envoyer la facture',
+      message: `Envoyer la facture ${facture.numero} ?`,
+      confirmText: 'Envoyer',
+      cancelText: 'Annuler',
+      type: 'info'
+    });
+    
+    if (confirmed) {
       facture.statut = 'envoyee';
-      alert('Facture envoyée avec succès !');
+      this.notificationService.success('Facture envoyée avec succès !');
     }
   }
 
-  annulerFacture(facture: Facture) {
-    if (confirm(`Êtes-vous sûr de vouloir annuler la facture ${facture.numero} ?`)) {
+  async annulerFacture(facture: Facture) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Annuler la facture',
+      message: `Êtes-vous sûr de vouloir annuler la facture ${facture.numero} ?`,
+      confirmText: 'Annuler la facture',
+      cancelText: 'Retour',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
       facture.statut = 'annulee';
       this.calculatePaiementStats();
-      alert('Facture annulée.');
+      this.notificationService.warning('Facture annulée.');
     }
   }
 
   telechargerFacture(facture: Facture) {
     // Simuler le téléchargement d'une fiche de paie
-    alert(`Téléchargement du bulletin de paie ${facture.numero} (PDF)`);
+    this.notificationService.info(`Téléchargement du bulletin de paie ${facture.numero} (PDF)`);
   }
 
   getStatutFactureClass(statut: string): string {
@@ -1572,6 +1642,6 @@ export class DashboardEtablissementComponent implements OnInit {
 
   private showNotification(message: string, type: 'success' | 'error' | 'info') {
     console.log(`${type}: ${message}`);
-    alert(message); // Solution temporaire
+    this.notificationService.info(message); // Solution temporaire
   }
 }
