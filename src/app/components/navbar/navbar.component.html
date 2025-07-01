@@ -12,16 +12,10 @@
 
       <!-- Navigation principale (desktop) -->
       <div class="hidden md:block">
-        <div class="ml-10 flex items-baseline space-x-8">
-          <a routerLink="/page-accueil" 
+        <div class="ml-10 flex items-baseline space-x-8">          <a routerLink="/page-accueil" 
              routerLinkActive="text-blue-600 border-b-2 border-blue-600"
              class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
             Accueil
-          </a>
-          <a routerLink="/missions" 
-             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
-             class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors duration-200">
-            Missions
           </a>
           <a routerLink="/ce-que-lon-propose" 
              routerLinkActive="text-blue-600 border-b-2 border-blue-600"
@@ -64,18 +58,11 @@
   </div>
   <!-- Menu mobile -->
   <div *ngIf="isMenuOpen" class="md:hidden bg-white border-t border-gray-200">
-    <div class="px-2 pt-2 pb-3 space-y-1">
-      <a routerLink="/page-accueil" 
+    <div class="px-2 pt-2 pb-3 space-y-1">      <a routerLink="/page-accueil" 
          (click)="closeMenu()"
          routerLinkActive="text-blue-600 bg-blue-50"
          class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors duration-200">
         Accueil
-      </a>
-      <a routerLink="/missions" 
-         (click)="closeMenu()"
-         routerLinkActive="text-blue-600 bg-blue-50"
-         class="text-gray-700 hover:text-blue-600 hover:bg-gray-50 block px-3 py-2 text-base font-medium transition-colors duration-200">
-        Missions
       </a>
       <a routerLink="/ce-que-lon-propose" 
          (click)="closeMenu()"
