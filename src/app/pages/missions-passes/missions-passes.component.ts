@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-missions-passes',
@@ -8,4 +8,10 @@ import { RouterLink } from '@angular/router';
   templateUrl: './missions-passes.component.html',
   styleUrls: ['./missions-passes.component.css'],
 })
-export class MissionsPassesComponent {}
+export class MissionsPassesComponent {
+  constructor(private router: Router) {}
+
+  goBack(): void {
+    this.router.navigate(['/dashboard-interimaire']);
+  }
+}

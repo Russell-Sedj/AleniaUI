@@ -57,7 +57,12 @@ export class MissionsVenirComponent implements OnInit, OnDestroy {
       this.routerSubscription.unsubscribe();
     }
   }
-    loadMissions() {
+
+  goBack(): void {
+    this.router.navigate(['/dashboard-interimaire']);
+  }
+  
+  loadMissions() {
     const user = this.authService.getCurrentUser();
     if (!user) {
       this.error = true;
