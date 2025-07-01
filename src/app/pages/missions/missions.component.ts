@@ -1,8 +1,6 @@
-
-
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MissionService, MissionDto } from '../../services/mission/mission.service';
 import { CommonModule } from '@angular/common';
@@ -18,7 +16,8 @@ export class MissionsComponent implements OnInit {
   missionList: MissionDto[] = [];
   isLoading = true;
   constructor(
-    private missionService: MissionService
+    private missionService: MissionService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -33,5 +32,9 @@ export class MissionsComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/dashboard-interimaire']);
   }
 }

@@ -1,12 +1,22 @@
 <!-- Modern Missions Page -->
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
   <!-- Hero Section -->
-  <section class="bg-gradient-to-r from-[#6FA4F2] to-[#FF6B6B] relative overflow-hidden">
+  <section class="bg-gradient-to-r from-[#6FA4F2] to-[#5A94E8] relative overflow-hidden">
     <div class="absolute inset-0 opacity-10">
       <div class="absolute top-0 left-0 w-full h-full" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
     </div>
-    
-    <div class="container mx-auto px-4 py-16 relative z-10">
+      <div class="container mx-auto px-4 py-16 relative z-10">
+      <!-- Bouton de retour -->
+      <div class="mb-6">
+        <button (click)="goBack()" 
+                class="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all duration-200 backdrop-blur-sm">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Retour au dashboard
+        </button>
+      </div>
+      
       <div class="text-center max-w-4xl mx-auto">
         <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
           Missions <span class="text-white/90">disponibles</span>
@@ -113,7 +123,7 @@
            [style.animation-delay.ms]="i * 100">
         
         <!-- Mission Image -->
-        <div class="relative h-48 bg-gradient-to-br from-[#6FA4F2]/10 to-[#FF6B6B]/10 overflow-hidden">
+        <div class="relative h-48 bg-gradient-to-br from-[#6FA4F2]/10 to-[#5A94E8]/10 overflow-hidden">
           <img src="/assets/images/ephad1.jpg" 
                alt="Image de l'établissement" 
                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -207,7 +217,7 @@
         Créez votre alerte mission et nous vous notifierons dès qu'une opportunité correspondant à vos critères sera disponible.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button class="px-8 py-3 bg-[#FF6B6B] text-white font-semibold rounded-xl hover:bg-[#FF5555] transition-colors shadow-lg">
+        <button class="px-8 py-3 bg-[#6FA4F2] text-white font-semibold rounded-xl hover:bg-[#5A94E8] transition-colors shadow-lg">
           Créer une alerte
         </button>
         <button class="px-8 py-3 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-gray-900 transition-colors">

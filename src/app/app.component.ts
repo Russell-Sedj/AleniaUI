@@ -10,12 +10,13 @@ import { FooterComponent } from './components/footer/footer.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  currentUrl: string = ''; // Initialisation de currentUrl avec une chaîne vide
+  currentUrl: string = '';
 
   constructor(private router: Router) {}
+
   ngOnInit() {
     // Écouter les événements de navigation pour mettre à jour currentUrl
     this.router.events.subscribe((event) => {
@@ -23,11 +24,41 @@ export class AppComponent implements OnInit {
         this.currentUrl = event.urlAfterRedirects;
       }
     });
+  }  // ✅ Méthode pour détecter les routes dashboard (sans navbar)
+  isDashboardRoute(): boolean {
+    const dashboardRoutes = [
+      '/dashboard-interimaire',
+      '/dashboard-etablissement',
+      '/missions',
+      '/missions-passes',
+      '/missions-venir',
+      '/missions-disponibles',
+      '/profil1',
+      '/profil2',
+      '/profil3',
+      '/disponibilite',
+      '/prestation',
+      '/fiche-poste',
+      '/contrat',
+      '/parametre-entreprise',
+      '/planning-entreprise'
+    ];
+    return dashboardRoutes.some((route) => this.currentUrl.includes(route));
   }
 
-  // Méthode pour détecter si on est sur une page de dashboard
-  isDashboardRoute(): boolean {
-    return this.currentUrl.includes('/dashboard-interimaire') || 
-           this.currentUrl.includes('/dashboard-etablissement');
+  // ✅ Méthode pour détecter les routes publiques (avec navbar)
+  isPublicRoute(): boolean {
+    const publicRoutes = [
+      '/page-accueil',
+      '/ce-que-lon-propose',
+      '/qui-sommes-nous',
+      '/connexion',
+      '/inscription'
+    ];
+    
+    return (
+      publicRoutes.some((route) => this.currentUrl.includes(route)) ||
+      this.currentUrl === '/'
+    );
   }
 }
