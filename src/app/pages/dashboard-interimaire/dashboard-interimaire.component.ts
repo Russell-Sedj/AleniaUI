@@ -9,6 +9,7 @@ import { MissionService, MissionDto } from '../../services/mission/mission.servi
 import { CandidatureService, CandidatureDto } from '../../services/candidature/candidature.service';
 import { NotificationService } from '../../services/notification.service';
 import { ConfirmationService } from '../../services/confirmation.service';
+import { MessageService } from '../../services/message/message.service';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
 import { CheckboxComponent } from '../../components/checkbox/checkbox.component';
 import { CheckboxFieldComponent } from '../../components/checkbox/checkbox-field.component';
@@ -243,6 +244,7 @@ export class DashboardInterimaireComponent implements OnInit {
   availableZones: Zone[] = [];
   etablissementTypes: EtablissementType[] = [];
   faqItems: FaqItem[] = [];  userProfile = {
+    id: '',
     prenom: '',
     nom: '',
     email: '',
@@ -296,7 +298,8 @@ export class DashboardInterimaireComponent implements OnInit {
     private missionService: MissionService,
     private candidatureService: CandidatureService,
     private notificationService: NotificationService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {
     this.currentDate = new Date();
   }
@@ -312,7 +315,7 @@ export class DashboardInterimaireComponent implements OnInit {
     this.initPasswordForm();        // NOUVELLE LIGNE
     this.loadDocuments();
     this.loadMissions();
-    this.loadMessages();
+    // loadMessages() sera appelé après que le profil utilisateur soit chargé
     this.loadParametersData();      // NOUVELLE LIGNE
   }
 
@@ -1100,7 +1103,44 @@ export class DashboardInterimaireComponent implements OnInit {
 
   // ===== NOUVELLES MÉTHODES POUR LES MESSAGES =====
   loadMessages() {
-    // Données de simulation - remplacez par un appel API réel
+    // D'abord, récupérer les messages depuis l'API
+    if (this.userProfile?.id) {
+      this.messageService.getMessagesInterimaire(this.userProfile.id).subscribe({
+        next: (messages) => {
+          // Convertir les MessageDto en objets Message locaux
+          this.messages = messages.map(msg => ({
+            id: msg.id?.toString() || '',
+            expediteur: msg.expediteur,
+            sujet: msg.sujet,
+            contenu: msg.contenu,
+            dateEnvoi: msg.dateEnvoi ? new Date(msg.dateEnvoi) : new Date(),
+            lu: msg.lu || false,
+            important: msg.important || false,
+            urgent: msg.urgent || false,
+            categorie: msg.categorie as 'mission' | 'administrative' | 'planning' | 'generale' | 'technique'
+          }));
+
+          // Si pas de messages depuis l'API, charger les messages de démonstration
+          if (this.messages.length === 0) {
+            this.loadDemoMessages();
+          }
+
+          this.filterMessages();
+        },
+        error: (error) => {
+          console.error('Erreur lors du chargement des messages depuis l\'API:', error);
+          // Charger les messages de démonstration en cas d'erreur
+          this.loadDemoMessages();
+        }
+      });
+    } else {
+      // Charger les messages de démonstration si pas d'ID utilisateur
+      this.loadDemoMessages();
+    }
+  }
+
+  loadDemoMessages() {
+    // Données de simulation - messages hardcodés comme avant
     const now = new Date();
     
     this.messages = [
@@ -1557,6 +1597,7 @@ L'équipe technique`,
       console.log('Données utilisateur depuis getCurrentUser():', currentUser);
       
       // Utiliser les données disponibles dans l'objet utilisateur
+      this.userProfile.id = currentUser.id || '';
       this.userProfile.email = currentUser.email || '';
       this.userProfile.prenom = currentUser.prenom || '';
       this.userProfile.nom = currentUser.nom || '';
@@ -1564,6 +1605,10 @@ L'équipe technique`,
       this.userProfile.specialite = ''; // Initialement vide, sera rempli si disponible
       this.userProfile.experience = 0; // Initialement 0
         console.log('Profil utilisateur chargé dynamiquement:', this.userProfile);
+        
+        // Charger les messages maintenant que l'ID utilisateur est disponible
+        this.loadMessages();
+        
         // Mettre à jour le profil de la sidebar après chargement des données
       this.updateSidebarProfile();
       

@@ -8,6 +8,7 @@ import { MissionService, MissionDto } from '../../services/mission/mission.servi
 import { AuthService } from '../../services/auth/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { ConfirmationService } from '../../services/confirmation.service';
+import { MessageService } from '../../services/message/message.service';
 import { 
   SidebarEtablissementComponent,
   NavigationItemEtablissement,
@@ -309,7 +310,8 @@ export class DashboardEtablissementComponent implements OnInit {
     private missionService: MissionService,
     private authService: AuthService,
     private notificationService: NotificationService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ) {}
   ngOnInit() {
     this.initForms();
@@ -953,10 +955,31 @@ export class DashboardEtablissementComponent implements OnInit {
                 }
               });
             }
+
+            // Envoyer un message automatique à l'intérimaire
+            console.log('Nom établissement pour le message:', this.etablissement.nom);
+            const messageAcceptation = this.messageService.creerMessageAcceptationCandidature(
+              candidature.interimaire.id,
+              candidature.interimaire.prenom,
+              mission.titre,
+              this.etablissement.nom,
+              this.formatDate(mission.dateMission || mission.dateDebut),
+              mission.heureDebut,
+              mission.heureFin
+            );
+
+            this.messageService.envoyerMessage(messageAcceptation).subscribe({
+              next: () => {
+                console.log('Message d\'acceptation envoyé avec succès');
+              },
+              error: (error) => {
+                console.error('Erreur lors de l\'envoi du message:', error);
+              }
+            });
           }
           
           this.closeCandidatureModal();
-          this.notificationService.success('Candidature acceptée avec succès !');
+          this.notificationService.success('Candidature acceptée avec succès ! Un message a été envoyé à l\'intérimaire.');
           
           // Recharger les candidatures pour mettre à jour l'affichage
           this.loadCandidatures();
@@ -984,9 +1007,29 @@ export class DashboardEtablissementComponent implements OnInit {
         next: (response) => {
           // Update local data
           candidature.statut = 'refusee';
+
+          // Envoyer un message automatique à l'intérimaire
+          const mission = this.missions.find(m => m.id === candidature.missionId);
+          if (mission) {
+            const messageRefus = this.messageService.creerMessageRefusCandidature(
+              candidature.interimaire.id,
+              candidature.interimaire.prenom,
+              mission.titre,
+              this.etablissement.nom
+            );
+
+            this.messageService.envoyerMessage(messageRefus).subscribe({
+              next: () => {
+                console.log('Message de refus envoyé avec succès');
+              },
+              error: (error) => {
+                console.error('Erreur lors de l\'envoi du message:', error);
+              }
+            });
+          }
           
           this.closeCandidatureModal();
-          this.notificationService.warning('Candidature refusée.');
+          this.notificationService.warning('Candidature refusée. Un message a été envoyé à l\'intérimaire.');
           
           // Recharger les candidatures pour mettre à jour l'affichage
           this.loadCandidatures();
@@ -1185,7 +1228,7 @@ export class DashboardEtablissementComponent implements OnInit {
               dateFin: new Date('2025-05-30'),
               heureDebut: '08:00',
               heureFin: '16:00',
-              tarif: 35,
+              tarif: 30,
               statut: 'terminee',
               candidatures: 2,
               urgente: false,
