@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
@@ -25,7 +26,7 @@ import { AvatarComponent } from '../avatar/avatar.component';
               (click)="onItemClick(item)"
               [class]="getItemClasses(item)"
               class="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-all duration-200">
-              <div [innerHTML]="item.icon" class="w-5 h-5 flex-shrink-0"></div>
+              <div [innerHTML]="getSafeIcon(item.icon)" class="w-5 h-5 flex-shrink-0"></div>
               <span>{{ item.label }}</span>
             </button>
           </li>
@@ -75,6 +76,12 @@ export class SidebarComponent {
   
   @Output() itemClick = new EventEmitter<NavigationItem>();
   @Output() logout = new EventEmitter<void>();
+
+  constructor(private sanitizer: DomSanitizer) {}
+
+  getSafeIcon(icon: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(icon);
+  }
 
   onItemClick(item: NavigationItem) {
     this.itemClick.emit(item);

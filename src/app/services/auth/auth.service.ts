@@ -100,7 +100,13 @@ export class AuthService {
       const savedUser = localStorage.getItem('currentUser');
       if (savedUser && savedUser !== 'undefined' && savedUser.trim() !== '') {
         try {
-          this.currentUserSubject.next(JSON.parse(savedUser));
+          const user = JSON.parse(savedUser);
+          // Transformer les propriétés PascalCase en camelCase si nécessaire
+          const normalizedUser = {
+            ...user,
+            id: user.Id || user.id // Support pour les deux formats
+          };
+          this.currentUserSubject.next(normalizedUser);
         } catch (error) {
           console.warn('Erreur lors du parsing du user sauvegardé:', error);
           localStorage.removeItem('currentUser');
@@ -109,16 +115,26 @@ export class AuthService {
     }
   }
 
-  login(credentials: LoginDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/auth/login`, credentials)
+  login(credentials: LoginDto): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/auth/login`, credentials)
       .pipe(
         tap(response => {
           // Sauvegarder l'utilisateur et le token
           if (typeof window !== 'undefined') {
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
-            localStorage.setItem('authToken', response.token);
+            const user = response.user;
+            if (user) {
+              // Transformer les propriétés PascalCase en camelCase si nécessaire
+              const normalizedUser = {
+                ...user,
+                id: user.Id || user.id // Support pour les deux formats
+              };
+              localStorage.setItem('currentUser', JSON.stringify(normalizedUser));
+              localStorage.setItem('authToken', response.token);
+              this.currentUserSubject.next(normalizedUser);
+            } else {
+              console.error('Aucun utilisateur dans la réponse:', response);
+            }
           }
-          this.currentUserSubject.next(response.user);
         })
       );
   }  register(userData: RegisterDto): Observable<User> {
@@ -153,16 +169,27 @@ export class AuthService {
   }
 
   loginEtablissement(credentials: LoginDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/auth/login-etablissement`, credentials)
+    return this.http.post<any>(`${this.API_URL}/auth/login-etablissement`, credentials)
       .pipe(
         tap(response => {
           // Sauvegarder l'utilisateur et le token
           if (typeof window !== 'undefined') {
-            localStorage.setItem('currentUser', JSON.stringify(response.user));
-            localStorage.setItem('authToken', response.token);
-            localStorage.setItem('userType', 'etablissement');
+            // L'API retourne 'etablissement' au lieu de 'user' pour les établissements
+            const user = (response as any).etablissement || (response as any).user;
+            if (user) {
+              // Transformer les propriétés PascalCase en camelCase si nécessaire
+              const normalizedUser = {
+                ...user,
+                id: user.Id || user.id // Support pour les deux formats
+              };
+              localStorage.setItem('currentUser', JSON.stringify(normalizedUser));
+              localStorage.setItem('authToken', response.token);
+              localStorage.setItem('userType', 'etablissement');
+              this.currentUserSubject.next(normalizedUser);
+            } else {
+              console.error('Aucun utilisateur dans la réponse:', response);
+            }
           }
-          this.currentUserSubject.next(response.user);
         })
       );
   }
@@ -235,6 +262,18 @@ export class AuthService {
     return this.http.post<{ message: string }>(`${this.API_URL}/auth/change-password`, passwordData, {
       headers: this.getAuthHeaders()
     });
+  }
+
+  // Méthode de debug pour vérifier l'état de l'authentification
+  debugAuthState(): void {
+    console.log('=== DEBUG AUTH STATE ===');
+    console.log('Current user from subject:', this.currentUserSubject.value);
+    if (typeof window !== 'undefined') {
+      console.log('localStorage currentUser:', localStorage.getItem('currentUser'));
+      console.log('localStorage authToken:', localStorage.getItem('authToken'));
+      console.log('localStorage userType:', localStorage.getItem('userType'));
+    }
+    console.log('========================');
   }
 
   private getAuthHeaders(): HttpHeaders {

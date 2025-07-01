@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CandidatureService } from '../../services/candidature/candidature.service';
 import { MissionService, MissionDto } from '../../services/mission/mission.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { 
   SidebarEtablissementComponent,
   NavigationItemEtablissement,
@@ -293,7 +294,8 @@ export class DashboardEtablissementComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private candidatureService: CandidatureService,
-    private missionService: MissionService
+    private missionService: MissionService,
+    private authService: AuthService
   ) {}
   ngOnInit() {
     this.initForms();
@@ -742,27 +744,60 @@ export class DashboardEtablissementComponent implements OnInit {
         });
       } else {
         // Créer nouvelle mission
+        // Debug de l'état d'authentification
+        this.authService.debugAuthState();
+        
+        const currentUser = this.authService.getCurrentUser();
+        console.log('Utilisateur actuel récupéré:', currentUser);
+        console.log('Type d\'utilisateur:', this.authService.getUserType());
+        console.log('Token présent:', !!this.authService.getToken());
+        
+        if (!currentUser) {
+          alert('Erreur: Utilisateur non connecté');
+          console.error('Aucun utilisateur connecté détecté');
+          return;
+        }
+        
+        if (!currentUser.id) {
+          alert('Erreur: ID utilisateur manquant');
+          console.error('Utilisateur sans ID:', currentUser);
+          return;
+        }
+
         const newMissionData = {
-          etablissementId: '08dd4c13-425e-45de-8db8-fa479f17b521', // ID d'établissement par défaut pour demo
+          etablissementId: currentUser.id, // Utiliser l'ID de l'utilisateur connecté
           poste: formData.poste,
           adresse: formData.adresse,
           description: formData.description,
-          tauxHoraire: formData.tauxHoraire,
-          horaires: formData.horaires ? formData.horaires.split(',').map((h: string) => h.trim()) : []
+          tauxHoraire: parseFloat(formData.tauxHoraire), // S'assurer que c'est un nombre
+          horaires: formData.horaires ? formData.horaires.split(',').map((h: string) => h.trim()).filter((h: string) => h.length > 0) : []
         };
         
-        console.log('Création de mission:', newMissionData);
+        console.log('Création de mission avec les données:', newMissionData);
+        console.log('Utilisateur connecté:', currentUser);
         
         this.missionService.createMission(newMissionData).subscribe({
           next: (mission) => {
-            console.log('Mission créée:', mission);
+            console.log('Mission créée avec succès:', mission);
             alert('Mission créée avec succès !');
             this.closeMissionModal();
             this.loadMissions(); // Recharger les missions
           },
           error: (error) => {
-            console.error('Erreur lors de la création:', error);
-            alert('Erreur lors de la création de la mission: ' + (error.error?.message || error.message));
+            console.error('Erreur complète lors de la création:', error);
+            console.error('Status de l\'erreur:', error.status);
+            console.error('Message d\'erreur:', error.error);
+            
+            let errorMessage = 'Erreur lors de la création de la mission';
+            if (error.error?.message) {
+              errorMessage += ': ' + error.error.message;
+            } else if (error.error?.error) {
+              errorMessage += ': ' + error.error.error;
+            } else if (error.message) {
+              errorMessage += ': ' + error.message;
+            }
+            
+            alert(errorMessage);
           }
         });
       }
