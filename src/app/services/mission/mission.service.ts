@@ -7,13 +7,20 @@ export interface MissionDto {
   id: string;
   etablissementId: string;
   etablissementNom: string;
+  etablissementTelephone: string;
   poste: string;
   adresse: string;
   description?: string;
   tauxHoraire: number;
-  horaires?: string[];
   datePublication: Date;
   nombreCandidatures: number;
+  
+  // Champs de planification
+  dateMission?: Date;
+  heureDebut?: string;
+  heureFin?: string;
+  dureeHeures?: number;
+  estPlanifiee?: boolean;
 }
 
 export interface MissionDetailDto extends MissionDto {
@@ -26,7 +33,12 @@ export interface CreateMissionDto {
   adresse: string;
   description?: string;
   tauxHoraire: number;
-  horaires?: string[];
+  
+  // Champs de planification optionnels
+  dateMission?: Date;
+  heureDebut?: string;
+  heureFin?: string;
+  dureeHeures?: number;
 }
 
 export interface UpdateMissionDto {
@@ -34,7 +46,13 @@ export interface UpdateMissionDto {
   adresse?: string;
   description?: string;
   tauxHoraire?: number;
-  horaires?: string[];
+  
+  // Champs de planification pour les mises à jour
+  dateMission?: Date;
+  heureDebut?: string;
+  heureFin?: string;
+  dureeHeures?: number;
+  estPlanifiee?: boolean;
 }
 
 export interface CandidatureDto {

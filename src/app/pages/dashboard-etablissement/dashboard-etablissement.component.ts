@@ -50,6 +50,11 @@ interface Mission {
   description: string;
   competencesRequises: string[];
   interimaire?: Interimaire;
+  
+  // Champs de planification
+  dateMission?: Date;
+  dureeHeures?: number;
+  estPlanifiee?: boolean;
 }
 
 interface Candidature {
@@ -313,13 +318,62 @@ export class DashboardEtablissementComponent implements OnInit {
     this.loadEtablissementData(); // Ajoutez cette ligne si elle n'existe pas
     this.updateSidebarEtablissementProfile();
   }
+
+  // Méthode pour convertir le format time (HH:mm) en format TimeSpan .NET (HH:mm:ss)
+  convertToTimeSpanFormat(timeString: string): string {
+    if (!timeString) return '';
+    // Si le format est HH:mm, ajouter :00 pour les secondes
+    if (timeString.length === 5 && timeString.includes(':')) {
+      return timeString + ':00';
+    }
+    return timeString;
+  }
+
+  // Méthode pour calculer automatiquement la durée à partir des heures de début et fin
+  getCalculatedDuration(): number | null {
+    const heureDebut = this.missionForm.get('heureDebut')?.value;
+    const heureFin = this.missionForm.get('heureFin')?.value;
+    
+    if (!heureDebut || !heureFin) {
+      return null;
+    }
+    
+    // Convertir les heures en minutes depuis minuit
+    const [debutHour, debutMin] = heureDebut.split(':').map(Number);
+    const [finHour, finMin] = heureFin.split(':').map(Number);
+    
+    const debutMinutes = debutHour * 60 + debutMin;
+    let finMinutes = finHour * 60 + finMin;
+    
+    // Gérer le cas où la fin est le lendemain (ex: 22:00 - 06:00)
+    if (finMinutes <= debutMinutes) {
+      finMinutes += 24 * 60; // Ajouter 24 heures
+    }
+    
+    const durationMinutes = finMinutes - debutMinutes;
+    const durationHours = durationMinutes / 60;
+    
+    // Arrondir à 0.5 heure près
+    return Math.round(durationHours * 2) / 2;
+  }
+
+  // Méthode utilitaire pour obtenir la durée calculée en nombre d'heures entier
+  getCalculatedDurationHours(): number {
+    const duration = this.getCalculatedDuration();
+    return duration ? Math.round(duration) : 0;
+  }
+
   initForms() {
     this.missionForm = this.fb.group({
       poste: ['', [Validators.required]],
       adresse: ['', [Validators.required]],
       tauxHoraire: ['', [Validators.required, Validators.min(0)]],
       description: ['', [Validators.required]],
-      horaires: [''] // Optionnel
+      
+      // Champs de planification (obligatoires)
+      dateMission: ['', [Validators.required]],
+      heureDebut: ['', [Validators.required]],
+      heureFin: ['', [Validators.required]]
     });
 
     this.rechercheForm = this.fb.group({
@@ -348,7 +402,6 @@ export class DashboardEtablissementComponent implements OnInit {
     this.loadMissions(); // loadCandidatures() sera appelé depuis loadMissions()
     this.loadInterimaires();
     this.loadStatistiques();
-    this.loadPlanningData();
     this.loadFacturationData();
     this.loadStatistiquesDetaillees(); // AJOUTEZ CETTE LIGNE
   }
@@ -365,18 +418,26 @@ export class DashboardEtablissementComponent implements OnInit {
           specialite: mission.poste,
           dateDebut: new Date(mission.datePublication),
           dateFin: new Date(mission.datePublication),
-          heureDebut: '',
-          heureFin: '',
+          heureDebut: mission.heureDebut || '',
+          heureFin: mission.heureFin || '',
           tarif: mission.tauxHoraire,
           statut: 'publiee' as const,
           candidatures: mission.nombreCandidatures,
           urgente: false,
           description: mission.description || '',
           competencesRequises: [],
-          interimaire: undefined
+          interimaire: undefined,
+          
+          // *** CHAMPS DE PLANIFICATION ***
+          dateMission: mission.dateMission ? new Date(mission.dateMission) : undefined,
+          dureeHeures: mission.dureeHeures,
+          estPlanifiee: mission.estPlanifiee || false
         }));
         
         console.log('Missions formatées:', this.missions);
+        
+        // Charger les données du planning après avoir chargé les missions
+        this.loadPlanningData();
         
         // Charger les candidatures après avoir chargé les missions
         this.loadCandidatures();
@@ -509,54 +570,21 @@ export class DashboardEtablissementComponent implements OnInit {
   // ===== MÉTHODES POUR LE PLANNING =====
 
   loadPlanningData() {
-    // Générer des missions de planning basées sur les missions existantes
-    this.planningMissions = [
-      {
-        id: '1',
-        mission: this.missions[0],
-        date: new Date('2025-06-25'),
-        heureDebut: '20:00',
-        heureFin: '08:00',
-        interimaire: this.interimaires[1],
-        statut: 'confirmee',
-        couleur: '#3B82F6'
-      },
-      {
-        id: '2', 
-        mission: this.missions[1],
-        date: new Date('2025-06-24'),
-        heureDebut: '14:00',
-        heureFin: '22:00',
-        interimaire: this.interimaires[0],
-        statut: 'en_cours',
-        couleur: '#10B981'
-      },
-      {
-        id: '3',
-        mission: {
-          id: '3',
-          titre: 'Garde de nuit - Réanimation',
-          service: 'Réanimation',
-          specialite: 'Infirmier(ère)',
-          dateDebut: new Date('2025-06-26'),
-          dateFin: new Date('2025-06-26'),
-          heureDebut: '22:00',
-          heureFin: '06:00',
-          tarif: 32,
-          statut: 'pourvue',
-          candidatures: 3,
-          urgente: true,
-          description: 'Garde de nuit en réanimation',
-          competencesRequises: ['Réanimation', 'Soins intensifs']
-        },
-        date: new Date('2025-06-26'),
-        heureDebut: '22:00',
-        heureFin: '06:00',
-        statut: 'planifiee',
-        couleur: '#F59E0B'
-      }
-    ];
+    // Charger les vraies missions planifiées depuis les missions existantes
+    this.planningMissions = this.missions
+      .filter(mission => mission.estPlanifiee && mission.dateMission)
+      .map(mission => ({
+        id: mission.id,
+        mission: mission,
+        date: new Date(mission.dateMission!),
+        heureDebut: mission.heureDebut || '',
+        heureFin: mission.heureFin || '',
+        interimaire: mission.interimaire || undefined,
+        statut: mission.interimaire ? 'confirmee' : 'planifiee',
+        couleur: mission.interimaire ? '#10B981' : '#F59E0B'
+      })) as PlanningMission[];
     
+    console.log('Missions planifiées chargées:', this.planningMissions);
     this.generateCalendar();
   }
 
@@ -746,13 +774,22 @@ export class DashboardEtablissementComponent implements OnInit {
     if (this.missionForm.valid) {
       const formData = this.missionForm.value;
       
+      // Calculer automatiquement la durée
+      const calculatedDuration = this.getCalculatedDurationHours();
+      
       if (this.isEditingMission && this.selectedMission) {
         // Modifier mission existante
         const updateData = {
           poste: formData.poste,
           adresse: formData.adresse,
           description: formData.description,
-          tauxHoraire: formData.tauxHoraire
+          tauxHoraire: formData.tauxHoraire,
+          
+          // Champs de planification avec durée calculée
+          dateMission: formData.dateMission ? new Date(formData.dateMission) : undefined,
+          heureDebut: formData.heureDebut || undefined,
+          heureFin: formData.heureFin || undefined,
+          dureeHeures: calculatedDuration > 0 ? calculatedDuration : undefined
         };
         
         this.missionService.updateMission(this.selectedMission.id, updateData).subscribe({
@@ -795,10 +832,17 @@ export class DashboardEtablissementComponent implements OnInit {
           adresse: formData.adresse,
           description: formData.description,
           tauxHoraire: parseFloat(formData.tauxHoraire), // S'assurer que c'est un nombre
-          horaires: formData.horaires ? formData.horaires.split(',').map((h: string) => h.trim()).filter((h: string) => h.length > 0) : []
+          
+          // Champs de planification - convertir les heures au format TimeSpan et calculer la durée
+          dateMission: formData.dateMission ? formData.dateMission : undefined,
+          heureDebut: formData.heureDebut ? this.convertToTimeSpanFormat(formData.heureDebut) : undefined,
+          heureFin: formData.heureFin ? this.convertToTimeSpanFormat(formData.heureFin) : undefined,
+          dureeHeures: calculatedDuration > 0 ? calculatedDuration : undefined
         };
         
         console.log('Création de mission avec les données:', newMissionData);
+        console.log('Durée calculée automatiquement:', calculatedDuration, 'heures');
+        console.log('Données détaillées:', JSON.stringify(newMissionData, null, 2));
         console.log('Utilisateur connecté:', currentUser);
         
         this.missionService.createMission(newMissionData).subscribe({
@@ -812,6 +856,7 @@ export class DashboardEtablissementComponent implements OnInit {
             console.error('Erreur complète lors de la création:', error);
             console.error('Status de l\'erreur:', error.status);
             console.error('Message d\'erreur:', error.error);
+            console.error('Corps de la réponse d\'erreur:', JSON.stringify(error.error, null, 2));
             
             let errorMessage = 'Erreur lors de la création de la mission';
             if (error.error?.message) {
@@ -891,6 +936,23 @@ export class DashboardEtablissementComponent implements OnInit {
           if (mission) {
             mission.statut = 'pourvue';
             mission.interimaire = candidature.interimaire;
+            
+            // Si la mission a des informations de planification, marquer comme planifiée
+            if (mission.dateMission && mission.heureDebut) {
+              const updateData = {
+                estPlanifiee: true
+              };
+              
+              this.missionService.updateMission(mission.id, updateData).subscribe({
+                next: () => {
+                  console.log('Mission automatiquement planifiée');
+                  this.notificationService.info('Mission ajoutée au planning automatiquement');
+                },
+                error: (error) => {
+                  console.error('Erreur lors de la planification automatique:', error);
+                }
+              });
+            }
           }
           
           this.closeCandidatureModal();

@@ -5,6 +5,8 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { InterimaireService } from '../../services/interimaire/intermaire.service';
+import { MissionService, MissionDto } from '../../services/mission/mission.service';
+import { CandidatureService, CandidatureDto } from '../../services/candidature/candidature.service';
 import { NotificationService } from '../../services/notification.service';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { AvatarComponent } from '../../components/avatar/avatar.component';
@@ -291,6 +293,8 @@ export class DashboardInterimaireComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private interimaireService: InterimaireService,
+    private missionService: MissionService,
+    private candidatureService: CandidatureService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService
   ) {
@@ -676,80 +680,81 @@ export class DashboardInterimaireComponent implements OnInit {
 
   // ===== MÉTHODES PLANNING =====
   loadMissions() {
-    const today = new Date();
-    
-    this.missions = [
-      {
-        id: '1',
-        etablissement: 'Hôpital Saint-Antoine',
-        service: 'Urgences',
-        specialite: 'Infirmier',
-        dateMission: this.addDays(today, 1),
-        heureDebut: '08:00',
-        heureFin: '16:00',
-        duree: 8,
-        statut: 'confirmee',
-        adresse: '184 Rue du Faubourg Saint-Antoine, 75012 Paris',
-        contact: 'Dr. Martin - 01 49 28 20 00',
-        remuneration: 200
+    // Récupérer l'utilisateur connecté
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser || !currentUser.id) {
+      console.error('Aucun utilisateur connecté');
+      this.missions = [];
+      return;
+    }
+
+    console.log('Chargement des missions pour l\'intérimaire:', currentUser.id);
+
+    // Charger les candidatures acceptées de l'intérimaire
+    this.candidatureService.getCandidaturesByInterimaire(currentUser.id).subscribe({
+      next: (candidatures: CandidatureDto[]) => {
+        console.log('Candidatures de l\'intérimaire:', candidatures);
+
+        // Filtrer les candidatures acceptées
+        const candidaturesAcceptees = candidatures.filter(c => c.statut === 'Acceptée');
+        console.log('Candidatures acceptées:', candidaturesAcceptees);
+
+        if (candidaturesAcceptees.length === 0) {
+          this.missions = [];
+          console.log('Aucune mission acceptée trouvée');
+          return;
+        }
+
+        // Récupérer les détails des missions pour les candidatures acceptées
+        const missionIds = candidaturesAcceptees.map(c => c.missionId);
+        this.loadMissionDetails(missionIds, candidaturesAcceptees);
       },
-      {
-        id: '2',
-        etablissement: 'Clinique du Parc',
-        service: 'Chirurgie',
-        specialite: 'Infirmier',
-        dateMission: this.addDays(today, 2),
-        heureDebut: '14:00',
-        heureFin: '22:00',
-        duree: 8,
-        statut: 'confirmee',
-        adresse: '25 Boulevard Victor Hugo, 92200 Neuilly',
-        contact: 'Mme Dubois - 01 46 25 30 00',
-        remuneration: 220
-      },
-      {
-        id: '3',
-        etablissement: 'EHPAD Les Lilas',
-        service: 'Gériatrie',
-        specialite: 'Aide-soignant',
-        dateMission: this.addDays(today, 3),
-        heureDebut: '06:00',
-        heureFin: '14:00',
-        duree: 8,
-        statut: 'en_attente',
-        adresse: '12 Rue des Lilas, 93260 Les Lilas',
-        contact: 'M. Rousseau - 01 48 97 15 00',
-        remuneration: 180
-      },
-      {
-        id: '4',
-        etablissement: 'Centre Médical Voltaire',
-        service: 'Médecine générale',
-        specialite: 'Infirmier',
-        dateMission: this.addDays(today, 4),
-        heureDebut: '09:00',
-        heureFin: '17:00',
-        duree: 8,
-        statut: 'confirmee',
-        adresse: '45 Avenue Voltaire, 75011 Paris',
-        contact: 'Dr. Leroy - 01 43 79 25 00',
-        remuneration: 210
-      },
-      {
-        id: '5',
-        etablissement: 'Hôpital Tenon',
-        service: 'Cardiologie',
-        specialite: 'Infirmier',
-        dateMission: this.addDays(today, 5),
-        heureDebut: '12:00',
-        heureFin: '20:00',
-        duree: 8,
-        statut: 'en_attente',
-        adresse: '4 Rue de la Chine, 75020 Paris',
-        contact: 'Dr. Bernard - 01 56 01 70 00',
-        remuneration: 230
+      error: (error) => {
+        console.error('Erreur lors du chargement des candidatures:', error);
+        this.missions = [];
       }
-    ];
+    });
+  }
+
+  private loadMissionDetails(missionIds: string[], candidatures: CandidatureDto[]) {
+    // Charger toutes les missions depuis l'API
+    this.missionService.getAllMissions().subscribe({
+      next: (allMissions: MissionDto[]) => {
+        console.log('Toutes les missions:', allMissions);
+
+        // Filtrer les missions qui correspondent aux candidatures acceptées et qui sont planifiées
+        const missionsAcceptees = allMissions.filter(mission => 
+          missionIds.includes(mission.id) && mission.estPlanifiee && mission.dateMission
+        );
+
+        console.log('Missions acceptées et planifiées:', missionsAcceptees);
+
+        // Convertir au format attendu par le template
+        this.missions = missionsAcceptees.map(mission => {
+          const candidature = candidatures.find(c => c.missionId === mission.id);
+          return {
+            id: mission.id,
+            etablissement: mission.etablissementNom || 'Établissement',
+            service: '', // Pas disponible dans le DTO, sera masqué dans le template si vide
+            specialite: mission.poste,
+            dateMission: new Date(mission.dateMission!),
+            heureDebut: mission.heureDebut || '08:00',
+            heureFin: mission.heureFin || '16:00',
+            duree: mission.dureeHeures || 8,
+            statut: 'confirmee' as const,
+            adresse: mission.adresse,
+            contact: mission.etablissementTelephone || 'Non disponible',
+            remuneration: mission.tauxHoraire * (mission.dureeHeures || 8)
+          };
+        });
+
+        console.log('Missions formatées pour l\'intérimaire:', this.missions);
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des détails des missions:', error);
+        this.missions = [];
+      }
+    });
   }
 
   private addDays(date: Date, days: number): Date {
@@ -865,7 +870,7 @@ export class DashboardInterimaireComponent implements OnInit {
   }
 
   getWorkingHours(): number[] {
-    return Array.from({ length: 14 }, (_, i) => i + 6);
+    return Array.from({ length: 18 }, (_, i) => i + 5); // De 5h à 22h (5+18-1=22)
   }
 
   getWeekStart(): Date {
@@ -930,13 +935,13 @@ export class DashboardInterimaireComponent implements OnInit {
     return date.toDateString() === today.toDateString();
   }
 
-  // Méthode pour gérer les missions qui commencent avant 6h ou finissent après 22h
+  // Méthode pour gérer les missions qui commencent avant 5h ou finissent après 23h
   isDayMissionVisible(mission: Mission): boolean {
     const startHour = parseInt(mission.heureDebut.split(':')[0]);
     const endHour = parseInt(mission.heureFin.split(':')[0]);
     
-    // Afficher la mission si elle a au moins une partie dans la plage 6h-22h
-    return !(endHour <= 6 || startHour >= 22);
+    // Afficher la mission si elle a au moins une partie dans la plage 5h-23h
+    return !(endHour <= 5 || startHour >= 23);
   }
 
   getDayMissions(date: Date): Mission[] {
@@ -953,6 +958,30 @@ export class DashboardInterimaireComponent implements OnInit {
       const endHour = parseInt(mission.heureFin.split(':')[0]);
       return hour >= startHour && hour < endHour;
     });
+  }
+
+  // Nouvelle méthode pour la vue semaine avec positionnement des missions
+  getWeekMissionPosition(mission: Mission): { top: number, height: number } {
+    const startHour = parseInt(mission.heureDebut.split(':')[0]);
+    const startMinute = parseInt(mission.heureDebut.split(':')[1]);
+    const endHour = parseInt(mission.heureFin.split(':')[0]);
+    const endMinute = parseInt(mission.heureFin.split(':')[1]);
+    
+    // Calculer la position par rapport à la grille des heures de travail (5h-22h)
+    const gridStart = 5; // 5h du matin
+    const hourHeight = 60; // 60px par heure
+    
+    const startTime = startHour + startMinute / 60;
+    const endTime = endHour + endMinute / 60;
+    const duration = endTime - startTime;
+    
+    const topPosition = (startTime - gridStart) * hourHeight;
+    const height = duration * hourHeight - 2; // -2px pour laisser un petit espace
+    
+    return {
+      top: Math.max(0, topPosition),
+      height: Math.max(20, height) // Hauteur minimum de 20px
+    };
   }
 
   getMissionPosition(mission: Mission): { left: number, width: number, top: number } {
@@ -1007,9 +1036,9 @@ export class DashboardInterimaireComponent implements OnInit {
 
   // Méthodes spécifiques pour la vue jour
   getDayHours(): string[] {
-    // Afficher de 6h à 22h pour la vue jour
-    return Array.from({ length: 17 }, (_, i) => {
-      const hour = i + 6;
+    // Afficher de 5h à 22h pour la vue jour
+    return Array.from({ length: 18 }, (_, i) => {
+      const hour = i + 5;
       return hour.toString().padStart(2, '0') + 'h';
     });
   }
@@ -1020,14 +1049,14 @@ export class DashboardInterimaireComponent implements OnInit {
     const endHour = parseInt(mission.heureFin.split(':')[0]);
     const endMinute = parseInt(mission.heureFin.split(':')[1]);
     
-    // Calculer la position par rapport à la grille 6h-22h (16 heures)
+    // Calculer la position par rapport à la grille 5h-22h (18 heures)
     const startTime = startHour + startMinute / 60;
     const endTime = endHour + endMinute / 60;
     const duration = endTime - startTime;
     
-    // Position relative dans la grille (6h = 0%, 22h = 100%)
-    const gridStart = 6; // 6h du matin
-    const gridDuration = 16; // 16 heures (6h-22h)
+    // Position relative dans la grille (5h = 0%, 22h = 100%)
+    const gridStart = 5; // 5h du matin
+    const gridDuration = 18; // 18 heures (5h-22h + 1)
     
     const leftPercent = ((startTime - gridStart) / gridDuration) * 100;
     const widthPercent = (duration / gridDuration) * 100;
