@@ -391,7 +391,7 @@ export class DashboardInterimaireComponent implements OnInit {
       nom: [this.userProfile.nom, [Validators.required, Validators.minLength(2)]],
       email: [this.userProfile.email, [Validators.required, Validators.email]],
       telephone: [this.userProfile.telephone, [Validators.required]],
-      specialite: [this.userProfile.specialite, [Validators.required]],
+      specialite: [this.userProfile.specialite], // Pas obligatoire initialement
       experience: [this.userProfile.experience, [Validators.required, Validators.min(0)]]
     });
     this.profileForm.disable();
@@ -1041,12 +1041,12 @@ export class DashboardInterimaireComponent implements OnInit {
   // ===== NOUVELLES MÉTHODES POUR LES PARAMÈTRES =====
   initSettingsForm() {
     this.settingsForm = this.fb.group({
-      prenom: [this.userProfile.prenom, [Validators.required]],
-      nom: [this.userProfile.nom, [Validators.required]],
+      prenom: [this.userProfile.prenom, [Validators.required, Validators.minLength(2)]],
+      nom: [this.userProfile.nom, [Validators.required, Validators.minLength(2)]],
       email: [this.userProfile.email, [Validators.required, Validators.email]],
       telephone: [this.userProfile.telephone, [Validators.required]],
-      dateNaissance: [this.userProfile.dateNaissance],
-      adresse: [this.userProfile.adresse]
+      dateNaissance: [this.userProfile.dateNaissance], // Pas obligatoire mais recommandé
+      adresse: [this.userProfile.adresse] // Pas obligatoire mais recommandé
     });
   }
 
@@ -1411,31 +1411,28 @@ L'équipe technique`,
   setParameterSection(section: 'compte' | 'notifications' | 'preferences' | 'securite' | 'support') {
     this.parameterSection = section;
   }
-  saveAccountSettings() {
+  async saveAccountSettings() {
     if (this.settingsForm.valid) {
-      const formData = this.settingsForm.value;
-      
-      // Mettre à jour le profil utilisateur avec toutes les données
+      // Mettre à jour le profil utilisateur avec les nouvelles données
       this.userProfile = {
         ...this.userProfile,
-        prenom: formData.prenom,
-        nom: formData.nom,
-        email: formData.email,
-        telephone: formData.telephone,
-        dateNaissance: formData.dateNaissance,
-        adresse: formData.adresse
+        ...this.settingsForm.value
       };
 
-      // Mettre à jour la sidebar avec les nouvelles données
+      // Mettre à jour aussi le formulaire principal du profil
+      this.profileForm.patchValue(this.userProfile);
+      
+      // Mettre à jour le profil de la sidebar
       this.updateSidebarProfile();
 
-      console.log('Paramètres sauvegardés:', this.userProfile);
-      this.notificationService.success('Paramètres sauvegardés avec succès !');
+      console.log('Paramètres du compte mis à jour:', this.userProfile);
+      this.notificationService.success('Paramètres du compte mis à jour avec succès !');
     } else {
-      console.log('Formulaire invalide:', this.settingsForm.errors);
-      this.notificationService.warning('Veuillez vérifier les champs obligatoires.');
+      this.settingsForm.markAllAsTouched();
+      this.notificationService.warning('Veuillez corriger les erreurs dans le formulaire.');
     }
   }
+
   resetAccountSettings() {
     this.settingsForm.patchValue({
       prenom: this.userProfile.prenom,
@@ -1445,136 +1442,84 @@ L'équipe technique`,
       dateNaissance: this.userProfile.dateNaissance,
       adresse: this.userProfile.adresse
     });
+    this.notificationService.info('Paramètres réinitialisés.');
   }
 
+  // Méthode pour vérifier si les paramètres essentiels sont complets
+  isProfileComplete(): boolean {
+    return !!(this.userProfile.dateNaissance && this.userProfile.adresse && this.userProfile.specialite);
+  }
+
+  // Méthode pour obtenir les champs manquants
+  getMissingFields(): string[] {
+    const missing: string[] = [];
+    if (!this.userProfile.dateNaissance) missing.push('date de naissance');
+    if (!this.userProfile.adresse) missing.push('adresse');
+    if (!this.userProfile.specialite) missing.push('spécialité');
+    return missing;
+  }
+
+  // Méthode pour formater la liste des champs manquants
+  getMissingFieldsText(): string {
+    const missing = this.getMissingFields();
+    if (missing.length === 0) return '';
+    if (missing.length === 1) return missing[0];
+    if (missing.length === 2) return missing.join(' et ');
+    return missing.slice(0, -1).join(', ') + ' et ' + missing[missing.length - 1];
+  }
+
+  // Méthode pour naviguer vers les paramètres du compte
+  goToAccountSettings() {
+    this.setActiveSection('parametres');
+    this.setParameterSection('compte');
+  }
+
+  // Méthodes pour les autres sections des paramètres
   updateNotificationSetting(type: 'email' | 'sms' | 'push', setting: string, event: any) {
     const isChecked = event.target.checked;
-    
-    if (type === 'email') {
-      (this.notificationSettings.email as any)[setting] = isChecked;
-    } else if (type === 'sms') {
-      (this.notificationSettings.sms as any)[setting] = isChecked;
-    } else if (type === 'push') {
-      (this.notificationSettings.push as any)[setting] = isChecked;
-    }
-
-    this.saveNotificationSettings();
+    (this.notificationSettings[type] as any)[setting] = isChecked;
+    console.log(`Notification ${type}.${setting} mise à jour:`, isChecked);
+    this.notificationService.info(`Préférences de notification mises à jour.`);
   }
 
-  saveNotificationSettings() {
-    console.log('Notifications sauvegardées:', this.notificationSettings);
-  }
-
-  toggleZonePreference(zoneId: string, event: any) {
-    const isChecked = event.target.checked;
-    
-    if (isChecked) {
-      if (!this.workPreferences.zones.includes(zoneId)) {
-        this.workPreferences.zones.push(zoneId);
-      }
-    } else {
-      this.workPreferences.zones = this.workPreferences.zones.filter(id => id !== zoneId);
-    }
-  }
-
-  toggleEtablissementPreference(typeId: string, event: any) {
-    const isChecked = event.target.checked;
-    
-    if (isChecked) {
-      if (!this.workPreferences.etablissements.includes(typeId)) {
-        this.workPreferences.etablissements.push(typeId);
-      }
-    } else {
-      this.workPreferences.etablissements = this.workPreferences.etablissements.filter(id => id !== typeId);
-    }
-  }
-
-  saveWorkPreferences() {
-    console.log('Préférences sauvegardées:', this.workPreferences);
-    this.notificationService.success('Préférences de travail sauvegardées !');
-  }
-
-  resetWorkPreferences() {
-    this.workPreferences = {
-      zones: ['paris'],
-      etablissements: ['hopital'],
-      heureDebutMin: '06:00',
-      heureFinMax: '22:00',
-      distanceMax: 30
-    };
-  }
-
-  changePassword() {
+  async changePassword() {
     if (this.passwordForm.valid) {
-      const formData = this.passwordForm.value;
-      
-      console.log('Changement de mot de passe demandé');
-      this.notificationService.success('Mot de passe modifié avec succès !');
-      
-      this.resetPasswordForm();
-    }
-  }
-
-  resetPasswordForm() {
-    this.passwordForm.reset();
-  }
-
-  async toggleTwoFactor(event: any) {
-    const isEnabled = event.target.checked;
-    this.securitySettings.twoFactor.enabled = isEnabled;
-    
-    if (isEnabled) {
-      this.notificationService.info('Configuration de l\'authentification à deux facteurs...');
-    } else {
       const confirmed = await this.confirmationService.confirm({
-        title: 'Désactiver l\'authentification 2FA',
-        message: 'Êtes-vous sûr de vouloir désactiver l\'authentification à deux facteurs ?',
-        confirmText: 'Désactiver',
+        title: 'Changer le mot de passe',
+        message: 'Êtes-vous sûr de vouloir changer votre mot de passe ?',
+        confirmText: 'Changer',
         cancelText: 'Annuler',
         type: 'warning'
       });
       
       if (confirmed) {
-        this.notificationService.info('Authentification à deux facteurs désactivée.');
-      } else {
-        event.target.checked = true;
-        this.securitySettings.twoFactor.enabled = true;
+        console.log('Changement de mot de passe:', this.passwordForm.value);
+        this.passwordForm.reset();
+        this.notificationService.success('Mot de passe changé avec succès !');
       }
+    } else {
+      this.passwordForm.markAllAsTouched();
+      this.notificationService.warning('Veuillez corriger les erreurs dans le formulaire.');
     }
   }
 
-  getDeviceIcon(device: string): string {
-    if (device.includes('iPhone') || device.includes('Safari')) return '📱';
-    if (device.includes('Android')) return '📱';
-    if (device.includes('Chrome')) return '💻';
-    if (device.includes('Firefox')) return '💻';
-    return '🖥️';
-  }
-
-  async revokeSession(session: ActiveSession) {
+  async deleteAccount() {
     const confirmed = await this.confirmationService.confirm({
-      title: 'Révoquer la session',
-      message: `Êtes-vous sûr de vouloir révoquer la session "${session.device}" ?`,
-      confirmText: 'Révoquer',
+      title: 'Supprimer le compte',
+      message: 'Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible.',
+      confirmText: 'Supprimer',
       cancelText: 'Annuler',
-      type: 'warning'
+      type: 'danger'
     });
     
     if (confirmed) {
-      this.activeSessions = this.activeSessions.filter(s => s.id !== session.id);
-      this.notificationService.success('Session révoquée avec succès !');
+      // Ici, implémentez la logique de suppression du compte
+      this.notificationService.error('Fonctionnalité de suppression en cours d\'implémentation.');
     }
   }
 
-  toggleFaq(faq: FaqItem) {
-    faq.open = !faq.open;
-    
-    this.faqItems.forEach(item => {
-      if (item !== faq) {
-        item.open = false;
-      }
-    });
-  }
+  // Note: La méthode getInitials existe déjà plus haut dans le fichier
+
   // ===== CHARGEMENT DYNAMIQUE DU PROFIL UTILISATEUR =====
   loadUserProfileFromAuth() {
     const currentUser = this.authService.getCurrentUser();
@@ -1587,8 +1532,8 @@ L'équipe technique`,
       this.userProfile.prenom = currentUser.prenom || '';
       this.userProfile.nom = currentUser.nom || '';
       this.userProfile.telephone = ''; // Pas disponible dans le token
-      this.userProfile.specialite = 'ASH'; // Valeur par défaut
-      this.userProfile.experience = 2; // Valeur par défaut
+      this.userProfile.specialite = ''; // Initialement vide, sera rempli si disponible
+      this.userProfile.experience = 0; // Initialement 0
         console.log('Profil utilisateur chargé dynamiquement:', this.userProfile);
         // Mettre à jour le profil de la sidebar après chargement des données
       this.updateSidebarProfile();
@@ -1618,7 +1563,7 @@ L'équipe technique`,
           this.userProfile.prenom = interimaire.prenom || this.userProfile.prenom;
           this.userProfile.nom = interimaire.nom || this.userProfile.nom;
           this.userProfile.telephone = interimaire.telephone || '';
-          this.userProfile.specialite = interimaire.competences?.[0] || 'ASH';
+          this.userProfile.specialite = interimaire.competences?.[0] || ''; // Garder vide si pas de compétences
             // Réinitialiser le formulaire avec les nouvelles données
           if (this.profileForm) {
             this.initProfileForm();
@@ -1652,4 +1597,89 @@ L'équipe technique`,
       });
     }
   }
+
+  // Méthodes supplémentaires pour les paramètres
+  toggleZonePreference(zoneId: string, event: any) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      if (!this.workPreferences.zones.includes(zoneId)) {
+        this.workPreferences.zones.push(zoneId);
+      }
+    } else {
+      this.workPreferences.zones = this.workPreferences.zones.filter(id => id !== zoneId);
+    }
+    console.log('Zones préférées mises à jour:', this.workPreferences.zones);
+  }
+
+  toggleEtablissementPreference(typeId: string, event: any) {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      if (!this.workPreferences.etablissements.includes(typeId)) {
+        this.workPreferences.etablissements.push(typeId);
+      }
+    } else {
+      this.workPreferences.etablissements = this.workPreferences.etablissements.filter(id => id !== typeId);
+    }
+    console.log('Types d\'établissement préférés mis à jour:', this.workPreferences.etablissements);
+  }
+
+  saveWorkPreferences() {
+    console.log('Préférences de travail sauvegardées:', this.workPreferences);
+    this.notificationService.success('Préférences de travail mises à jour !');
+  }
+
+  resetWorkPreferences() {
+    this.workPreferences = {
+      zones: ['paris', 'hautsdeseine'],
+      etablissements: ['hopital', 'clinique'],
+      heureDebutMin: '06:00',
+      heureFinMax: '22:00',
+      distanceMax: 30
+    };
+    this.notificationService.info('Préférences réinitialisées.');
+  }
+
+  resetPasswordForm() {
+    this.passwordForm.reset();
+    this.notificationService.info('Formulaire réinitialisé.');
+  }
+
+  toggleTwoFactor(event: any) {
+    this.securitySettings.twoFactor.enabled = event.target.checked;
+    console.log('Authentification à deux facteurs:', this.securitySettings.twoFactor.enabled);
+    this.notificationService.info(
+      this.securitySettings.twoFactor.enabled ? 
+      'Authentification à deux facteurs activée.' : 
+      'Authentification à deux facteurs désactivée.'
+    );
+  }
+
+  getDeviceIcon(device: string): string {
+    if (device.toLowerCase().includes('chrome')) return '🖥️';
+    if (device.toLowerCase().includes('safari')) return '📱';
+    if (device.toLowerCase().includes('firefox')) return '🦊';
+    if (device.toLowerCase().includes('edge')) return '🔷';
+    return '💻';
+  }
+
+  async revokeSession(session: ActiveSession) {
+    const confirmed = await this.confirmationService.confirm({
+      title: 'Révoquer la session',
+      message: `Êtes-vous sûr de vouloir révoquer la session "${session.device}" ?`,
+      confirmText: 'Révoquer',
+      cancelText: 'Annuler',
+      type: 'warning'
+    });
+    
+    if (confirmed) {
+      this.activeSessions = this.activeSessions.filter(s => s.id !== session.id);
+      this.notificationService.success('Session révoquée avec succès.');
+    }
+  }
+
+  toggleFaq(faq: FaqItem) {
+    faq.open = !faq.open;
+  }
+
+  // Note: La méthode getInitials existe déjà plus haut dans le fichier
 }

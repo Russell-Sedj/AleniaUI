@@ -48,7 +48,49 @@
                             </div>
                         </div>
 
-                        <div class="mb-6">
+                        <!-- Message de profil incomplet si spécialité vide -->
+                        <div *ngIf="!userProfile.specialite && !isEditing" class="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-blue-700">
+                                        <span class="font-medium">Spécialité manquante :</span> Ajoutez votre spécialité pour recevoir des missions adaptées à vos compétences.
+                                    </p>
+                                </div>
+                                <button type="button" (click)="toggleEdit()" 
+                                    class="text-sm bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors">
+                                    Compléter
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Message global de profil incomplet -->
+                        <div *ngIf="!isProfileComplete() && !isEditing" class="mb-6 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-amber-700">
+                                        <span class="font-medium">Profil incomplet :</span> 
+                                        Il manque encore <span class="font-semibold">{{ getMissingFieldsText() }}</span> pour optimiser votre profil.
+                                    </p>
+                                </div>
+                                <button type="button" (click)="goToAccountSettings()" 
+                                    class="text-sm bg-amber-500 text-white px-3 py-1 rounded-md hover:bg-amber-600 transition-colors">
+                                    Paramètres
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Champ spécialité (affiché seulement si rempli ou en mode édition) -->
+                        <div *ngIf="userProfile.specialite || isEditing" class="mb-6">
                             <label for="specialite"
                                 class="block text-sm font-medium text-gray-700 mb-2">Spécialité</label>
                             <select id="specialite" formControlName="specialite"
@@ -58,6 +100,10 @@
                                 <option value="aide-soignant">Aide-soignant(e)</option>
                                 <option value="medecin">Médecin</option>
                                 <option value="kinesitherapeute">Kinésithérapeute</option>
+                                <option value="ash">Agent de Service Hospitalier (ASH)</option>
+                                <option value="ambulancier">Ambulancier(ère)</option>
+                                <option value="psychologue">Psychologue</option>
+                                <option value="autre">Autre</option>
                             </select>
                         </div>
 
@@ -1108,6 +1154,32 @@
 
                 <!-- Section Mon compte -->
                 <div *ngIf="parameterSection === 'compte'" class="space-y-6">
+                    <!-- Message de profil incomplet si des champs importants sont manquants -->
+                    <div *ngIf="!isProfileComplete()" class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg p-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0">
+                                <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-medium text-amber-800 mb-2">Profil incomplet</h3>
+                                <p class="text-sm text-amber-700 mb-4">
+                                    Pour optimiser votre expérience et recevoir des missions adaptées, nous vous recommandons de compléter les informations suivantes : 
+                                    <span class="font-semibold">{{ getMissingFieldsText() }}</span>.
+                                </p>
+                                <div class="text-sm text-amber-600">
+                                    <span class="font-medium">Pourquoi ces informations sont importantes :</span>
+                                    <ul class="list-disc list-inside mt-1 space-y-1">
+                                        <li *ngIf="!userProfile.dateNaissance">La date de naissance permet de vérifier votre éligibilité aux missions</li>
+                                        <li *ngIf="!userProfile.adresse">L'adresse aide à vous proposer des missions proches de chez vous</li>
+                                        <li *ngIf="!userProfile.specialite">La spécialité permet de cibler les missions correspondant à vos compétences</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Informations personnelles -->
                     <div class="bg-white rounded-lg shadow-sm">
                         <div class="px-6 py-4 border-b border-gray-200">
@@ -1118,48 +1190,131 @@
                         <form [formGroup]="settingsForm" class="p-6 space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Prénom <span class="text-red-500">*</span>
+                                    </label>
                                     <input type="text" formControlName="prenom"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <div *ngIf="settingsForm.get('prenom')?.invalid && settingsForm.get('prenom')?.touched" 
+                                         class="text-red-500 text-xs mt-1">
+                                        Le prénom est requis
+                                    </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Nom <span class="text-red-500">*</span>
+                                    </label>
                                     <input type="text" formControlName="nom"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <div *ngIf="settingsForm.get('nom')?.invalid && settingsForm.get('nom')?.touched" 
+                                         class="text-red-500 text-xs mt-1">
+                                        Le nom est requis
+                                    </div>
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Email <span class="text-red-500">*</span>
+                                </label>
                                 <input type="email" formControlName="email"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <div *ngIf="settingsForm.get('email')?.invalid && settingsForm.get('email')?.touched" 
+                                     class="text-red-500 text-xs mt-1">
+                                    <span *ngIf="settingsForm.get('email')?.errors?.['required']">L'email est requis</span>
+                                    <span *ngIf="settingsForm.get('email')?.errors?.['email']">Format d'email invalide</span>
+                                </div>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-                                    <input type="tel" formControlName="telephone"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    Téléphone <span class="text-red-500">*</span>
+                                </label>
+                                <input type="tel" formControlName="telephone"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <div *ngIf="settingsForm.get('telephone')?.invalid && settingsForm.get('telephone')?.touched" 
+                                     class="text-red-500 text-xs mt-1">
+                                    Le numéro de téléphone est requis
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Date de
-                                        naissance</label>
+                            </div>
+
+                            <!-- Section Date de naissance - Affichage conditionnel -->
+                            <div>
+                                <div *ngIf="!userProfile.dateNaissance" class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex-shrink-0">
+                                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="text-sm text-blue-700">
+                                                    <span class="font-medium">Date de naissance manquante :</span> 
+                                                    Ajoutez votre date de naissance pour vérifier votre éligibilité aux missions.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="userProfile.dateNaissance" class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">Date de naissance</label>
                                     <input type="date" formControlName="dateNaissance"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                                 </div>
+
+                                <!-- Toujours afficher le champ en mode édition -->
+                                <div *ngIf="!userProfile.dateNaissance" class="mt-3">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Date de naissance</label>
+                                    <input type="date" formControlName="dateNaissance"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="Sélectionnez votre date de naissance">
+                                </div>
                             </div>
 
+                            <!-- Section Adresse - Affichage conditionnel -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
-                                <textarea formControlName="adresse" rows="3"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                                <div *ngIf="!userProfile.adresse" class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex-shrink-0">
+                                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="text-sm text-blue-700">
+                                                    <span class="font-medium">Adresse manquante :</span> 
+                                                    Ajoutez votre adresse pour recevoir des missions proches de chez vous.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="userProfile.adresse" class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">Adresse</label>
+                                    <textarea formControlName="adresse" rows="3"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                                </div>
+
+                                <!-- Toujours afficher le champ en mode édition -->
+                                <div *ngIf="!userProfile.adresse" class="mt-3">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                                    <textarea formControlName="adresse" rows="3"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="Saisissez votre adresse complète"></textarea>
+                                </div>
                             </div>
 
                             <div class="flex justify-end space-x-3 pt-4">
                                 <button type="button" (click)="resetAccountSettings()"
                                     class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
                                     Annuler
-                                </button>                                <button type="button" (click)="saveAccountSettings()"
+                                </button>
+                                <button type="button" (click)="saveAccountSettings()"
                                     class="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-md hover:from-blue-600 hover:to-cyan-600 transition-all duration-300">
                                     Sauvegarder
                                 </button>
