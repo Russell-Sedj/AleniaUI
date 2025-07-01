@@ -895,6 +895,9 @@ export class DashboardEtablissementComponent implements OnInit {
           
           this.closeCandidatureModal();
           this.notificationService.success('Candidature acceptée avec succès !');
+          
+          // Recharger les candidatures pour mettre à jour l'affichage
+          this.loadCandidatures();
         },
         error: (error) => {
           console.error('Erreur lors de l\'acceptation de la candidature:', error);
@@ -922,6 +925,9 @@ export class DashboardEtablissementComponent implements OnInit {
           
           this.closeCandidatureModal();
           this.notificationService.warning('Candidature refusée.');
+          
+          // Recharger les candidatures pour mettre à jour l'affichage
+          this.loadCandidatures();
         },
         error: (error) => {
           console.error('Erreur lors du refus de la candidature:', error);
@@ -929,6 +935,11 @@ export class DashboardEtablissementComponent implements OnInit {
         }
       });
     }
+  }
+
+  // Getter pour les candidatures en attente uniquement
+  get candidaturesEnAttente(): Candidature[] {
+    return this.candidatures.filter(candidature => candidature.statut === 'en_attente');
   }
 
   // Utilitaires

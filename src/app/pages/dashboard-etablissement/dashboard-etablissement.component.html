@@ -96,7 +96,7 @@
                                 class="text-blue-600 hover:text-blue-800 text-sm">Voir tout →</button>
                         </div>
                         <div class="space-y-3">
-                            <div *ngFor="let candidature of candidatures.slice(0, 5)"
+                            <div *ngFor="let candidature of candidaturesEnAttente.slice(0, 5)"
                                 class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                                 <div class="flex items-center space-x-3">
                                     <app-avatar-initials
@@ -119,6 +119,11 @@
                                         Refuser
                                     </button>
                                 </div>
+                            </div>
+                            
+                            <!-- Message si aucune candidature en attente -->
+                            <div *ngIf="candidaturesEnAttente.length === 0" class="text-center py-4 text-gray-500">
+                                <p>Aucune candidature en attente</p>
                             </div>
                         </div>
                     </div>
@@ -319,7 +324,7 @@
 
                 <!-- Liste des candidatures -->
                 <div class="space-y-4">
-                    <div *ngFor="let candidature of candidatures"
+                    <div *ngFor="let candidature of candidaturesEnAttente"
                         class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
                         <div class="p-6">
                             <div class="flex items-start justify-between">
@@ -387,6 +392,15 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <!-- Message si aucune candidature en attente -->
+                    <div *ngIf="candidaturesEnAttente.length === 0" class="text-center py-8">
+                        <div class="text-gray-400 mb-2">
+                            <app-icon name="inbox" size="lg" color="text-gray-400"></app-icon>
+                        </div>
+                        <p class="text-gray-500 text-lg">Aucune candidature en attente</p>
+                        <p class="text-gray-400 text-sm">Les nouvelles candidatures apparaîtront ici</p>
                     </div>
                 </div>
             </div>
