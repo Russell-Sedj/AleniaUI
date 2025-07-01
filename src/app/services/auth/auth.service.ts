@@ -90,11 +90,21 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
+    // Différer l'initialisation pour éviter les dépendances circulaires
+    this.initializeUser();
+  }
+
+  private initializeUser(): void {
     // Charger l'utilisateur depuis le localStorage au démarrage
     if (typeof window !== 'undefined') {
       const savedUser = localStorage.getItem('currentUser');
-      if (savedUser) {
-        this.currentUserSubject.next(JSON.parse(savedUser));
+      if (savedUser && savedUser !== 'undefined' && savedUser.trim() !== '') {
+        try {
+          this.currentUserSubject.next(JSON.parse(savedUser));
+        } catch (error) {
+          console.warn('Erreur lors du parsing du user sauvegardé:', error);
+          localStorage.removeItem('currentUser');
+        }
       }
     }
   }

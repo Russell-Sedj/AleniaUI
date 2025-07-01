@@ -7,7 +7,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   
   // Vérifier si on est côté client avant d'accéder à localStorage
   if (isPlatformBrowser(platformId)) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken'); // Changé de 'token' à 'authToken'
     
     if (token) {
       req = req.clone({
